@@ -2,6 +2,8 @@ substitute characters with bullet points and indent paragraphs
 
 continous spaces and tabs before pre-defined characters are ignored
 
+you can change characters '=' and '-', bullets '*' and '+' into other symbols you like
+
 ## Before
  
 	=List 1
