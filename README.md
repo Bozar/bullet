@@ -4,7 +4,7 @@ substitute characters with bullet points and indent paragraphs
 
 continous spaces and tabs before pre-defined characters are ignored
 
-change characters ('=' and '-', '*' and '+') as you like
+change characters and bullets ('=' and '-', '*' and '+') as you like
 
 ## Before
  
