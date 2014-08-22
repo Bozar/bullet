@@ -28,9 +28,9 @@ change characters and bullets ('=' and '-', '*' and '+') as you like
 
 ## Default key mapping
 
-type `<`alt-b`>` in both Normal and Visual mode
+type `<`alt-b`>` in Normal mode or Visual mode
 
-you have to set marks in Normal mode first:
+when in Normal mode, you have to set marks first:
 
 begin <-- mark j
 
