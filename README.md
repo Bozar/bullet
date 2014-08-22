@@ -1,4 +1,6 @@
-substitute characters with bullet points and intend paragraphs
+substitute characters with bullet points and indent paragraphs
+
+continous spaces and tabs before pre-defined characters are ignored
 
 ## Before
  
