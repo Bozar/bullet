@@ -1,3 +1,5 @@
+## Usage
+
 substitute characters with bullet points and indent paragraphs
 
 continous spaces and tabs before pre-defined characters are ignored
