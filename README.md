@@ -1,3 +1,5 @@
+License: GPL v2
+
 ## Usage
 
 substitute characters with bullet points and indent paragraphs
@@ -37,3 +39,29 @@ begin <-- mark j
 ...
 
 end <-- mark k
+
+## Customize
+
+substitute ### with your own setting in the .vimrc
+
+leave the rest part unchanged
+
+### key binding
+
+" nmap <unique> <silent> ### <plug>BulletNormal
+" vmap <unique> <silent> ### <plug>BulletVisual
+
+### list characters
+
+" let g:ListBefore_Bullet = '###'
+" let g:ListAfter_Bullet = '###'
+
+" let g:ParaBefore_Bullet = '###'
+" let g:ParaAfter_Bullet = '###'
+
+" let g:SubListBefore_Bullet = '###'
+" let g:SubListAfter_Bullet = '###'
+
+" let g:SubParaBefore_Bullet = '###'
+" let g:SubParaAfter_Bullet = '###'
+
