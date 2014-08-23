@@ -2,6 +2,10 @@
 
 " header "{{{2
 
+" License: GPL v2
+
+" Author: Bozar
+
 " Vim global plugin
 " substitute characters with bullet points
 
