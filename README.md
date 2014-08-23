@@ -34,11 +34,11 @@ type `<`alt-b`>` in Normal mode or Visual mode
 
 when in Normal mode, you have to set marks first:
 
-begin <-- mark j
+	begin <-- mark j
 
-...
+	...
 
-end <-- mark k
+	end <-- mark k
 
 ## Customize
 
