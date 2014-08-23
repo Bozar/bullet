@@ -93,7 +93,7 @@ endif "}}}
 
 " main function "{{{2
 
-function! s:BulletPoint(bullet) "{{{
+function s:BulletPoint(bullet) "{{{
 
 	if a:bullet == 0
 
