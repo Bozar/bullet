@@ -48,24 +48,24 @@ leave the rest part unchanged
 
 ### key binding
 
-" nmap <unique> <silent> ### <plug>BulletNormal
+	" nmap <unique> <silent> ### <plug>BulletNormal
 
-" vmap <unique> <silent> ### <plug>BulletVisual
+	" vmap <unique> <silent> ### <plug>BulletVisual
 
 ### list characters
 
-" let g:ListBefore_Bullet = '###'
+	" let g:ListBefore_Bullet = '###'
 
-" let g:ListAfter_Bullet = '###'
+	" let g:ListAfter_Bullet = '###'
 
-" let g:ParaBefore_Bullet = '###'
+	" let g:ParaBefore_Bullet = '###'
 
-" let g:ParaAfter_Bullet = '###'
+	" let g:ParaAfter_Bullet = '###'
 
-" let g:SubListBefore_Bullet = '###'
+	" let g:SubListBefore_Bullet = '###'
 
-" let g:SubListAfter_Bullet = '###'
+	" let g:SubListAfter_Bullet = '###'
 
-" let g:SubParaBefore_Bullet = '###'
+	" let g:SubParaBefore_Bullet = '###'
 
-" let g:SubParaAfter_Bullet = '###'
+	" let g:SubParaAfter_Bullet = '###'
