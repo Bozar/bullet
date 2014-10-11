@@ -111,6 +111,16 @@ function s:BulletPoint(bullet) "{{{
 		return
 	endtry
 
+	" clear single bullets
+	execute "'j,'ks/" . g:ListBefore_Bullet .
+	\ "$//e"
+	execute "'j,'ks/" . g:ParaBefore_Bullet .
+	\ "$//e"
+	execute "'j,'ks/" . g:SubListBefore_Bullet .
+	\ "$//e"
+	execute "'j,'ks/" . g:SubParaBefore_Bullet .
+	\ "$//e"
+
 	" list
 	" substitute '=' with '*' and indent 1 tab
 	" substitute '-' with '' and indent 1 tab
