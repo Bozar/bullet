@@ -55,7 +55,7 @@ set cpoptions&vim
 " list "{{{3
 
 if !exists('g:ListBefore_Bullet')
-	let g:ListBefore_Bullet = '^\s*=\(=\)\@!'
+	let g:ListBefore_Bullet = '^\s*=\(=\)\@!\s*'
 endif
 
 if !exists('g:ListAfter_Bullet')
@@ -63,7 +63,7 @@ if !exists('g:ListAfter_Bullet')
 endif
 
 if !exists('g:ParaBefore_Bullet')
-	let g:ParaBefore_Bullet = '^\s*-\(-\)\@!'
+	let g:ParaBefore_Bullet = '^\s*-\(-\)\@!\s*'
 endif
 
 if !exists('g:ParaAfter_Bullet')
@@ -74,7 +74,8 @@ endif
 " sublist "{{{3
 
 if !exists('g:SubListBefore_Bullet')
-	let g:SubListBefore_Bullet = '^\s*==\(=\)\@!'
+	let g:SubListBefore_Bullet
+	\ = '^\s*==\(=\)\@!\s*'
 endif
 
 if !exists('g:SubListAfter_Bullet')
@@ -82,7 +83,8 @@ if !exists('g:SubListAfter_Bullet')
 endif
 
 if !exists('g:SubParaBefore_Bullet')
-	let g:SubParaBefore_Bullet = '^\s*--\(-\)\@!'
+	let g:SubParaBefore_Bullet
+	\ = '^\s*--\(-\)\@!\s*'
 endif
 
 if !exists('g:SubParaAfter_Bullet')
@@ -113,13 +115,13 @@ function s:BulletPoint(bullet) "{{{
 
 	" clear single bullets
 	execute "'j,'ks/" . g:ListBefore_Bullet .
-	\ "$//e"
+	\ "\\(\\|\\/\\)$/###MARK###/e"
 	execute "'j,'ks/" . g:ParaBefore_Bullet .
-	\ "$//e"
+	\ "\\(\\|\\/\\)$/###MARK###/e"
 	execute "'j,'ks/" . g:SubListBefore_Bullet .
-	\ "$//e"
+	\ "\\(\\|\\/\\)$/###MARK###/e"
 	execute "'j,'ks/" . g:SubParaBefore_Bullet .
-	\ "$//e"
+	\ "\\(\\|\\/\\)$/###MARK###/e"
 
 	" list
 	" substitute '=' with '*' and indent 1 tab
@@ -136,6 +138,9 @@ function s:BulletPoint(bullet) "{{{
 	\ "/" . g:SubListAfter_Bullet . "/e"
 	execute "'j,'ks/" . g:SubParaBefore_Bullet .
 	\ "/" . g:SubParaAfter_Bullet . "/e"
+
+	" clear single bullets
+	'j,'kg;###MARK###;delete
 
 	elseif a:bullet == 1
 	" visual mode
