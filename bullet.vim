@@ -144,10 +144,6 @@ endif
  "}}}3
 " text width, global "{{{3
 
-let s:TextWidth_Default_Save = &textwidth
-let s:FormatOptions_Default_Save = &formatoptions
-let s:Comments_Default_Save = &comments
-
 if !exists('g:TextWidth_Bullet')
 	if &textwidth != 0
 		let g:TextWidth_Bullet = &textwidth
@@ -184,6 +180,13 @@ function s:ChangeSetting(when) "{{{
 	" load settings
 	if a:when == 0
 
+		let s:TextWidth_Default_Save =
+		\ &textwidth
+		let s:FormatOptions_Default_Save =
+		\ &formatoptions
+		let s:Comments_Default_Save =
+		\ &comments
+
 		" textwidth
 		execute "setl textwidth=" .
 		\ g:TextWidth_Bullet
@@ -193,7 +196,7 @@ function s:ChangeSetting(when) "{{{
 		setl formatoptions+=ro2mB1j
 
 		" comments
-		setl comments&
+		setl comments=
 
 		" sublist characters, pre
 		execute "setl comments+=s:" .
@@ -259,10 +262,12 @@ endfunction "}}}
 function s:SetMarkJK() "{{{
 
 	if line("'{") == 1
-		'{mark j
+		'{
+		mark j
 		" } bracket pair
 	else
-		'{+1mark j
+		'{+1
+		mark j
 		" } bracket pair
 	endif
 	if line("'}") == line('$')
@@ -285,7 +290,7 @@ function s:ClearSingleBullet(when) "{{{
 	if a:when == 0
 		execute "'j,'ks/\\(" .
 		\ s:SearchPattern .
-		\ "\\)\\(\\|\\/\\)\\s*$/" .
+		\ "\\)\\s*\\(\\|\\/\\)\\s*$/" .
 		\ s:Mark . "/e"
 		execute "'j,'ks/^\\s*\\/\\s*$/" .
 		\ s:Mark . "/e"
@@ -303,7 +308,7 @@ function s:ClearSingleBullet(when) "{{{
 
 endfunction "}}}
 
-function s:Substitute() "{{{
+function s:SubsBullet() "{{{
 
 	" list
 	" substitute '=' with '*' and indent 1 tab
@@ -344,7 +349,7 @@ function s:NoTextWidth_Local(mode) "{{{
 			return
 		endtry
 		call <sid>ClearSingleBullet(0)
-		call <sid>Substitute()
+		call <sid>SubsBullet()
 		call <sid>ClearSingleBullet(1)
 
 	elseif a:mode == 1
@@ -377,7 +382,10 @@ function s:TextWidth_Local() "{{{
 	execute 'normal gqip'
 
 	" substitute bullets
-	call <sid>Substitute()
+	" the end of paragraph is no longer mark k
+	" after formatting
+	call <sid>SetMarkJK()
+	call <sid>SubsBullet()
 
 	" reset old textwidth & format text
 	execute 'setl textwidth=' . g:TextWidth_Bullet
