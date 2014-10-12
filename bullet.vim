@@ -315,6 +315,8 @@ function s:ClearSingleBullet(when) "{{{
 
 	" delete marked lines after substitution
 	" in case line 'j/'k contains mark
+	" and to prevent short lines seperated by
+	" single bullets ('=' or '-') to be joined
 	elseif a:when == 1
 		call search(s:Mark)
 		if substitute(getline('.'),s:Mark,'','')
@@ -404,11 +406,6 @@ function s:TextWidth_Local(pos) "{{{
 	" mark lines to be deleted
 	call <sid>SetMarkJK()
 	call <sid>ClearSingleBullet(0)
-	" delete marked lines
-	call <sid>ClearSingleBullet(1)
-	" set marker j & k again
-	" (in case marked lines are deleted)
-	call <sid>SetMarkJK()
 
 	" format text
 	call <sid>DefineVar_TextWidth()
@@ -421,6 +418,12 @@ function s:TextWidth_Local(pos) "{{{
 	" after formatting
 	call <sid>SetMarkJK()
 	call <sid>SubsBullet()
+
+	" delete marked lines
+	call <sid>ClearSingleBullet(1)
+	" set marker j & k again
+	" (in case marked lines are deleted)
+	call <sid>SetMarkJK()
 
 	" reset old textwidth & format text
 	execute 'setl textwidth=' . g:TextWidth_Bullet
