@@ -255,6 +255,11 @@ function s:DefineVar_TextWidth() "{{{
 		let s:TextWidth_New =
 		\ g:TextWidth_Bullet
 		\ - g:SubList_IndentSpace_Bullet
+
+	" there are no bullets in this paragraph
+	else
+		let s:TextWidth_New = g:TextWidth_Bullet
+
 	endif
 
 endfunction "}}}
@@ -338,7 +343,7 @@ function s:NoTextWidth_Local(mode,pos) "{{{
 	if a:mode == 0
 
 		if a:pos == 1
-			call KeepPos_MoveCursor(0)
+			call move_cursor#KeepPos(0)
 		endif
 
 		try
@@ -351,7 +356,7 @@ function s:NoTextWidth_Local(mode,pos) "{{{
 			'k
 			catch /E20/
 			if a:pos == 1
-				call KeepPos_MoveCursor(1)
+				call move_cursor#KeepPos(1)
 			endif
 			echo 'ERROR: Mark k not found!'
 			return
@@ -362,7 +367,7 @@ function s:NoTextWidth_Local(mode,pos) "{{{
 		call <sid>ClearSingleBullet(1)
 
 		if a:pos == 1
-			call KeepPos_MoveCursor(1)
+			call move_cursor#KeepPos(1)
 		endif
 
 	" visual mode
@@ -379,7 +384,7 @@ endfunction "}}}
 function s:TextWidth_Local(pos) "{{{
 
 	if a:pos == 1
-		call KeepPos_MoveCursor(0)
+		call move_cursor#KeepPos(0)
 	endif
 	call <sid>ChangeSetting(0)
 
@@ -411,14 +416,14 @@ function s:TextWidth_Local(pos) "{{{
 
 	call <sid>ChangeSetting(1)
 	if a:pos == 1
-		call KeepPos_MoveCursor(1)
+		call move_cursor#KeepPos(1)
 	endif
 
 endfunction "}}}
 
 function s:TwoInOne_Global(textwidth) "{{{
 
-	call KeepPos_MoveCursor(0)
+	call move_cursor#KeepPos(0)
 	let l:fold_pre = &foldenable
 	if l:fold_pre == 1
 		set nofoldenable
@@ -434,7 +439,7 @@ function s:TwoInOne_Global(textwidth) "{{{
 			if l:fold_pre == 1
 				set foldenable
 			endif
-			call KeepPos_MoveCursor(1)
+			call move_cursor#KeepPos(1)
 			return
 		endif
 
