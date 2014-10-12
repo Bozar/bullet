@@ -465,7 +465,8 @@ function s:TwoInOne_Global(textwidth) "{{{
 
 		" textwidth == 0
 		if a:textwidth == 0
-			call <sid>SetMarkJK()
+			1mark j
+			$mark k
 			call <sid>NoTextWidth_Local(0,0)
 		" textwidth != 0
 		elseif a:textwidth == 1
