@@ -1,6 +1,8 @@
 " bullet.vim "{{{1
 
-" summary "{{{2
+" user manual "{{{2
+
+" summary "{{{3
 
 " Vim global plugin
 " substitute characters with bullet points
@@ -8,9 +10,7 @@
 " License: GPL v2
 " Author: Bozar
 
- "}}}2
-" user manual "{{{2
-
+ "}}}3
 " turn off this plugin "{{{3
 
 " let g:Loaded_Bullet = 1
@@ -64,6 +64,19 @@
 if exists('g:Loaded_Bullet')
 	finish
 endif
+
+function s:KeepPos_IfLoaded() "{{{
+
+	let s:Loaded = 1
+	try
+		call move_cursor#KeepPos(2)
+		catch /E117/
+		let s:Loaded = 0
+	endtry
+
+endfunction "}}}
+
+autocmd VimEnter * call <sid>KeepPos_IfLoaded()
 
 let g:Loaded_Bullet = 1
 let s:Save_cpo = &cpoptions
@@ -342,7 +355,7 @@ function s:NoTextWidth_Local(mode,pos) "{{{
 	" normal mode
 	if a:mode == 0
 
-		if a:pos == 1
+		if a:pos == 1 && s:Loaded == 1
 			call move_cursor#KeepPos(0)
 		endif
 
@@ -355,7 +368,7 @@ function s:NoTextWidth_Local(mode,pos) "{{{
 		try
 			'k
 			catch /E20/
-			if a:pos == 1
+			if a:pos == 1 && s:Loaded == 1
 				call move_cursor#KeepPos(1)
 			endif
 			echo 'ERROR: Mark k not found!'
@@ -366,7 +379,7 @@ function s:NoTextWidth_Local(mode,pos) "{{{
 		call <sid>SubsBullet()
 		call <sid>ClearSingleBullet(1)
 
-		if a:pos == 1
+		if a:pos == 1 && s:Loaded == 1
 			call move_cursor#KeepPos(1)
 		endif
 
@@ -383,7 +396,7 @@ endfunction "}}}
 
 function s:TextWidth_Local(pos) "{{{
 
-	if a:pos == 1
+	if a:pos == 1 && s:Loaded == 1
 		call move_cursor#KeepPos(0)
 	endif
 	call <sid>ChangeSetting(0)
@@ -415,7 +428,7 @@ function s:TextWidth_Local(pos) "{{{
 	execute 'normal gqip'
 
 	call <sid>ChangeSetting(1)
-	if a:pos == 1
+	if a:pos == 1 && s:Loaded == 1
 		call move_cursor#KeepPos(1)
 	endif
 
@@ -423,7 +436,9 @@ endfunction "}}}
 
 function s:TwoInOne_Global(textwidth) "{{{
 
-	call move_cursor#KeepPos(0)
+	if s:Loaded == 1
+		call move_cursor#KeepPos(0)
+	endif
 	let l:fold_pre = &foldenable
 	if l:fold_pre == 1
 		set nofoldenable
@@ -439,7 +454,9 @@ function s:TwoInOne_Global(textwidth) "{{{
 			if l:fold_pre == 1
 				set foldenable
 			endif
-			call move_cursor#KeepPos(1)
+			if s:Loaded == 1
+				call move_cursor#KeepPos(1)
+			endif
 			return
 		endif
 
