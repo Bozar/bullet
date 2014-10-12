@@ -169,7 +169,7 @@ let s:SearchPattern =
 \ g:SubList_Pat_Pre_Bullet . '\|' .
 \ g:SubPara_Pat_Pre_Bullet
 
-let s:Mark = '###LOOOOOOONG_PLACEHOLDER_BULLET###'
+let s:Mark = '###LOOONG_PLACEHOLDER_FOR_BULLET###'
 
  "}}}3
  "}}}2
@@ -332,10 +332,15 @@ function s:SubsBullet() "{{{
 
 endfunction "}}}
 
-function s:NoTextWidth_Local(mode) "{{{
+function s:NoTextWidth_Local(mode,pos) "{{{
 
+	" normal mode
 	if a:mode == 0
-		" normal mode
+
+		if a:pos == 1
+			call KeepPos_MoveCursor(0)
+		endif
+
 		try
 			'j
 			catch /E20/
@@ -345,25 +350,37 @@ function s:NoTextWidth_Local(mode) "{{{
 		try
 			'k
 			catch /E20/
+			if a:pos == 1
+				call KeepPos_MoveCursor(1)
+			endif
 			echo 'ERROR: Mark k not found!'
 			return
 		endtry
+
 		call <sid>ClearSingleBullet(0)
 		call <sid>SubsBullet()
 		call <sid>ClearSingleBullet(1)
 
+		if a:pos == 1
+			call KeepPos_MoveCursor(1)
+		endif
+
+	" visual mode
 	elseif a:mode == 1
-		" visual mode
+
 		'<mark j
 		'>mark k
-		call <sid>NoTextWidth_Local(0)
+		call <sid>NoTextWidth_Local(0,1)
 
 	endif
 
 endfunction "}}}
 
-function s:TextWidth_Local() "{{{
+function s:TextWidth_Local(pos) "{{{
 
+	if a:pos == 1
+		call KeepPos_MoveCursor(0)
+	endif
 	call <sid>ChangeSetting(0)
 
 	" mark lines to be deleted
@@ -393,16 +410,20 @@ function s:TextWidth_Local() "{{{
 	execute 'normal gqip'
 
 	call <sid>ChangeSetting(1)
+	if a:pos == 1
+		call KeepPos_MoveCursor(1)
+	endif
 
 endfunction "}}}
 
 function s:TwoInOne_Global(textwidth) "{{{
 
+	call KeepPos_MoveCursor(0)
 	let l:fold_pre = &foldenable
 	if l:fold_pre == 1
 		set nofoldenable
 	endif
-	
+
 	while 1
 
 		call search(s:SearchPattern,'wc')
@@ -413,16 +434,17 @@ function s:TwoInOne_Global(textwidth) "{{{
 			if l:fold_pre == 1
 				set foldenable
 			endif
+			call KeepPos_MoveCursor(1)
 			return
 		endif
 
 		" textwidth == 0
 		if a:textwidth == 0
 			call <sid>SetMarkJK()
-			call <sid>NoTextWidth_Local(0)
+			call <sid>NoTextWidth_Local(0,0)
 		" textwidth != 0
 		elseif a:textwidth == 1
-			call <sid>TextWidth_Local()
+			call <sid>TextWidth_Local(0)
 		endif
 
 	endwhile
@@ -434,7 +456,7 @@ endfunction "}}}
 
 " nno <a-b> :call <sid>TwoInOne_Global(0)<cr>
 " vno <a-b>
-" \ <esc>:call <sid>NoTextWidth_Local(1)<cr>
+" \ <esc>:call <sid>NoTextWidth_Local(1,1)<cr>
 
 " check user settings
 
@@ -458,19 +480,19 @@ vnoremap <unique> <script> <plug>BulletVisual
 nnoremap <sid>Normal
 \ :call <sid>TwoInOne_Global(0)<cr>
 vnoremap <sid>Visual
-\ <esc>:call <sid>NoTextWidth_Local(1)<cr>
+\ <esc>:call <sid>NoTextWidth_Local(1,1)<cr>
 
  "}}}2
 " commands "{{{2
 
 if !exists(':BuLocalNoTW')
 	command BuLocalNoTW
-	\ call <sid>NoTextWidth_Local(0)
+	\ call <sid>NoTextWidth_Local(0,1)
 endif
 
 if !exists(':BuLocalTW')
 	command BuLocalTW
-	\ call <sid>TextWidth_Local()
+	\ call <sid>TextWidth_Local(1)
 endif
 
 if !exists(':BuGlobalNoTW')
