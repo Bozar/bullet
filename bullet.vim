@@ -174,6 +174,13 @@ if !exists('g:SubList_IndentSpace_Bullet')
 endif
 
  "}}}3
+" bullet mode, global "{{{3
+
+if !exists('g:SwitchBulletMode_Bullet')
+	let g:SwitchBulletMode_Bullet = 0
+endif
+
+ "}}}3
 " local "{{{3
 
 let s:SearchPattern =
@@ -189,7 +196,7 @@ let s:EndComment = '\s*\/\s*'
  "}}}2
 " function "{{{2
 
-function s:ChangeSetting(when) "{{{
+function s:ChangeSettings(when) "{{{
 
 	" load settings
 	if a:when == 0
@@ -213,22 +220,24 @@ function s:ChangeSetting(when) "{{{
 		setl comments=
 
 		" sublist characters, pre
-		execute "setl comments+=s:" .
-		\ g:SubList_Cha_Pre_Bullet . ",m:" .
-		\ g:SubPara_Cha_Pre_Bullet. ",ex:/"
+		execute "setl comments+=" .
+		\ "s:" . g:SubList_Cha_Pre_Bullet .
+		\ ",m:" . g:SubPara_Cha_Pre_Bullet.
+		\ ",ex:/"
 
 		" list characters, pre
-		execute "setl comments+=s:" .
-		\ g:List_Cha_Pre_Bullet . ",m:" .
-		\ g:Para_Cha_Pre_Bullet. ",ex:/"
+		execute "setl comments+=" .
+		\ "s:" . g:List_Cha_Pre_Bullet .
+		\ ",m:" . g:Para_Cha_Pre_Bullet.
+		\ ",ex:/"
 
 		" sublist characters, after
-		execute "setl comments+=:" .
-		\ g:SubList_Cha_After_Bullet
+		execute "setl comments+=" .
+		\ ":" . g:SubList_Cha_After_Bullet
 
 		" list characters, after
-		execute "setl comments+=:" .
-		\ g:List_Cha_After_Bullet
+		execute "setl comments+=" .
+		\ ":" . g:List_Cha_After_Bullet
 
 	" unload settings
 	elseif a:when == 1
@@ -303,7 +312,7 @@ function s:ClearSingleBullet(when) "{{{
 	" delete lines containing only such characters
 	" '^\s*=\s*$' or '^\s*\/\s*$'
 	" '/' appears in a three-piece comment
-	" which is defined in s:ChangeSetting()
+	" which is defined in s:ChangeSettings()
 	" :help format-comments
 
 	if a:when == 0
@@ -355,6 +364,24 @@ function s:SubsBullet() "{{{
 
 endfunction "}}}
 
+function s:BulletMode() "{{{
+
+	if g:SwitchBulletMode_Bullet == 0
+		return
+	endif
+
+	if !exists('g:FilePat_Bullet')
+		return
+	endif
+
+	execute 'autocmd BufRead,BufNewFile ' .
+	\ g:FilePat_Bullet .
+	\ ' call <sid>ChangeSettings(0)'
+
+endfunction "}}}
+
+autocmd VimEnter * call <sid>BulletMode()
+
 function s:NoTextWidth_Local(mode,pos) "{{{
 
 	" normal mode
@@ -404,7 +431,7 @@ function s:TextWidth_Local(pos) "{{{
 	if a:pos == 1 && s:Loaded == 1
 		call move_cursor#KeepPos(0)
 	endif
-	call <sid>ChangeSetting(0)
+	call <sid>ChangeSettings(0)
 
 	" mark lines to be deleted
 	call <sid>SetMarkJK()
@@ -433,7 +460,7 @@ function s:TextWidth_Local(pos) "{{{
 	'j
 	execute 'normal gqip'
 
-	call <sid>ChangeSetting(1)
+	call <sid>ChangeSettings(1)
 	if a:pos == 1 && s:Loaded == 1
 		call move_cursor#KeepPos(1)
 	endif
