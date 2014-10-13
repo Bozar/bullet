@@ -1,5 +1,7 @@
 " bullet.vim "{{{1
 
+" Last Update: Oct 13, Mon | 23:20:02 | 2014
+
 " user manual "{{{2
 
 " summary "{{{3
@@ -152,14 +154,6 @@ if !exists('g:TextWidth_Bullet')
 	endif
 endif
 
-if !exists('g:List_IndentSpace_Bullet')
-	let g:List_IndentSpace_Bullet = 8
-endif
-
-if !exists('g:SubList_IndentSpace_Bullet')
-	let g:SubList_IndentSpace_Bullet = 12
-endif
-
  "}}}3
 " bullet mode, global "{{{3
 
@@ -170,7 +164,7 @@ endif
  "}}}3
 " local "{{{3
 
-let s:SearchPattern =
+let s:SearchPat =
 \ g:List_Pat_Pre_Bullet . '\|' .
 \ g:Para_Pat_Pre_Bullet . '\|' .
 \ g:SubList_Pat_Pre_Bullet . '\|' .
@@ -182,6 +176,21 @@ let s:EndComment = '\s*\/\s*'
  "}}}3
  "}}}2
 " function "{{{2
+
+function s:Format(when) "{{{
+
+	" para/fold/whole text
+	"
+	" save cursor position
+	" load settings
+	" mark format range
+	" protect lines
+	" format
+	" unprotect lines
+	" unload settings
+	" reset cursor position
+
+endfunction "}}}
 
 function s:ChangeSettings(when) "{{{
 
@@ -245,35 +254,6 @@ function s:ChangeSettings(when) "{{{
 
 endfunction "}}}
 
-function s:DefineVar_TextWidth() "{{{
-
-	" set new textwidth
-	" list
-	if substitute(getline("'j"),
-	\ g:List_Pat_Pre_Bullet . '\|' .
-	\ g:Para_Pat_Pre_Bullet,'','')
-	\ != getline("'j")
-		let s:TextWidth_New =
-		\ g:TextWidth_Bullet
-		\ - g:List_IndentSpace_Bullet
-
-	" sublist
-	elseif substitute(getline("'j"),
-	\ g:SubList_Pat_Pre_Bullet . '\|' .
-	\ g:SubPara_Pat_Pre_Bullet,'','')
-	\ != getline("'j")
-		let s:TextWidth_New =
-		\ g:TextWidth_Bullet
-		\ - g:SubList_IndentSpace_Bullet
-
-	" there are no bullets in this paragraph
-	else
-		let s:TextWidth_New = g:TextWidth_Bullet
-
-	endif
-
-endfunction "}}}
-
 function s:DelBullet(when) "{{{
 
 	" suppose '=' will be replaced with bullet '*'
@@ -285,20 +265,18 @@ function s:DelBullet(when) "{{{
 
 	if a:when == 0
 		execute "'j,'ks/\\(" .
-		\ s:SearchPattern .
+		\ s:SearchPat .
 		\ '\)\s*\(\|\/\)\s*$/' .
 		\ s:Mark . '/e'
 		execute "'j,'ks/^" . s:EndComment . '$/'
 		\ s:Mark . '/e'
-		if search(s:SearchPattern,'cnw') != 0
-			execute "'j,'kg/" . s:SearchPattern .
+		if search(s:SearchPat,'cnw') != 0
+			execute "'j,'kg/" . s:SearchPat .
 			\ '/s/' . s:EndComment . '$//'
 		endif
 
 	" delete marked lines after substitution
 	" in case line 'j/'k contains mark
-	" and to prevent short lines seperated by
-	" single bullets ('=' or '-') to be joined
 	elseif a:when == 1
 		if search(s:Mark,'cnw') != 0
 			execute "'j,'kg/" . s:Mark . '/delete'
@@ -405,16 +383,7 @@ function s:TextWidth_Local(pos) "{{{
 	call move_cursor#Para_SetMarkJK()
 	call <sid>DelBullet(0)
 
-	" format text
-	call <sid>DefineVar_TextWidth()
-	execute 'setl textwidth=' . s:TextWidth_New
-	'j
-	execute 'normal gqip'
-
 	" substitute bullets
-	" the end of paragraph is no longer mark k
-	" after formatting
-	call move_cursor#Para_SetMarkJK()
 	call <sid>SubsBullet()
 
 	" delete marked lines
@@ -423,8 +392,6 @@ function s:TextWidth_Local(pos) "{{{
 	" (in case marked lines are deleted)
 	call move_cursor#Para_SetMarkJK()
 
-	" reset old textwidth & format text
-	execute 'setl textwidth=' . g:TextWidth_Bullet
 	'j
 	execute 'normal gqip'
 
@@ -438,21 +405,13 @@ endfunction "}}}
 function s:TwoInOne_Global(textwidth) "{{{
 
 	call move_cursor#KeepPos(0)
-	let l:fold_pre = &foldenable
-	if l:fold_pre == 1
-		set nofoldenable
-	endif
+	let l:fold_save = &foldenable
+	set nofoldenable
 
 	while 1
 
-		call search(s:SearchPattern,'wc')
-		let l:check = substitute(getline('.'),
-		\ s:SearchPattern,'','')
-
-		if l:check == getline('.')
-			if l:fold_pre == 1
-				set foldenable
-			endif
+		if search(s:SearchPat,'wc') == 0
+			let &foldenable = l:fold_save
 			call move_cursor#KeepPos(1)
 			return
 		endif
