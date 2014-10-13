@@ -183,6 +183,7 @@ let s:SearchPattern =
 \ g:SubPara_Pat_Pre_Bullet
 
 let s:Mark = '###LOOONG_PLACEHOLDER_FOR_BULLET###'
+let s:EndComment = '\s*\/\s*'
 
  "}}}3
  "}}}2
@@ -302,7 +303,7 @@ function s:ClearSingleBullet(when) "{{{
 	" delete lines containing only such characters
 	" '^\s*=\s*$' or '^\s*\/\s*$'
 	" '/' appears in a three-piece comment
-	" which is defined in s:FormatOptions()
+	" which is defined in s:ChangeSetting()
 	" :help format-comments
 
 	if a:when == 0
@@ -310,8 +311,10 @@ function s:ClearSingleBullet(when) "{{{
 		\ s:SearchPattern .
 		\ "\\)\\s*\\(\\|\\/\\)\\s*$/" .
 		\ s:Mark . "/e"
-		execute "'j,'ks/^\\s*\\/\\s*$/" .
+		execute "'j,'ks/^" . s:EndComment . "$/"
 		\ s:Mark . "/e"
+		execute "'j,'kg/" . s:SearchPattern .
+		\ "/s/" . s:EndComment . "$//e"
 
 	" delete marked lines after substitution
 	" in case line 'j/'k contains mark
