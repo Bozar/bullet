@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 13, Mon | 23:20:02 | 2014
+" Last Update: Oct 14, Tue | 00:41:11 | 2014
 
 " user manual "{{{2
 
@@ -155,6 +155,19 @@ if !exists('g:TextWidth_Bullet')
 endif
 
  "}}}3
+" protect lines "{{{3
+
+if !exists('g:Pat_Protect_Bullet')
+	" let g:Pat_Protect_Bullet = '{{{\|}}}'
+	let g:Pat_Protect_Bullet = '\({\{3}\|}\{3}\)'
+	let g:Pat_Protect_Bullet .= '\d\{0,2}$'
+endif
+
+if !exists('g:Cha_Protect_Bullet')
+	let g:Cha_Protect_Bullet = '@'
+endif
+
+ "}}}3
 " bullet mode, global "{{{3
 
 if !exists('g:SwitchBulletMode_Bullet')
@@ -177,22 +190,7 @@ let s:EndComment = '\s*\/\s*'
  "}}}2
 " function "{{{2
 
-function s:Format(when) "{{{
-
-	" para/fold/whole text
-	"
-	" save cursor position
-	" load settings
-	" mark format range
-	" protect lines
-	" format
-	" unprotect lines
-	" unload settings
-	" reset cursor position
-
-endfunction "}}}
-
-function s:ChangeSettings(when) "{{{
+function s:LoadSettings(when) "{{{
 
 	" load settings
 	if a:when == 0
@@ -235,6 +233,10 @@ function s:ChangeSettings(when) "{{{
 		execute 'setl comments+=' .
 		\ 'f:' . g:List_Cha_After_Bullet
 
+		" protect characters
+		execute 'setl comments+=' .
+		\ ':' . g:Cha_Protect_Bullet
+
 	" unload settings
 	elseif a:when == 1
 
@@ -260,7 +262,7 @@ function s:DelBullet(when) "{{{
 	" delete lines containing only such characters
 	" '^\s*=\s*$' or '^\s*\/\s*$'
 	" '/' appears in a three-piece comment
-	" which is defined in s:ChangeSettings()
+	" which is defined in s:LoadSettings()
 	" :help format-comments
 
 	if a:when == 0
@@ -322,7 +324,7 @@ function s:BulletMode() "{{{
 
 	execute 'autocmd BufRead,BufNewFile ' .
 	\ g:FilePat_Bullet .
-	\ ' call <sid>ChangeSettings(0)'
+	\ ' call <sid>LoadSettings(0)'
 
 endfunction "}}}
 
@@ -377,7 +379,7 @@ function s:TextWidth_Local(pos) "{{{
 	if a:pos == 1
 		call move_cursor#KeepPos(0)
 	endif
-	call <sid>ChangeSettings(0)
+	call <sid>LoadSettings(0)
 
 	" mark lines to be deleted
 	call move_cursor#Para_SetMarkJK()
@@ -395,7 +397,7 @@ function s:TextWidth_Local(pos) "{{{
 	'j
 	execute 'normal gqip'
 
-	call <sid>ChangeSettings(1)
+	call <sid>LoadSettings(1)
 	if a:pos == 1
 		call move_cursor#KeepPos(1)
 	endif
@@ -427,6 +429,52 @@ function s:TwoInOne_Global(textwidth) "{{{
 		endif
 
 	endwhile
+
+endfunction "}}}
+
+function s:FormatText() "{{{
+
+	" para/fold/whole text
+	"
+	" save cursor position
+	" load settings
+	" mark format range
+	" protect lines
+	" format
+	" unprotect lines
+	" unload settings
+	" reset cursor position
+
+	" save cursor position
+	call move_cursor#KeepPos(0)
+
+	" load settings
+	call <sid>LoadSettings(0)
+
+	" mark format range
+	call move_cursor#Para_SetMarkJK()
+
+	" protect lines
+	'j
+	if search(g:Pat_Protect_Bullet,'c',line("'k"))
+	\ != 0
+		execute "'j,'kg/" . g:Pat_Protect_Bullet .
+		\ '/s/^/' . g:Cha_Protect_Bullet . '/'
+	endif
+
+	" format
+	'j
+	execute "normal gq'k"
+
+	" unprotect lines
+	execute "'j,'ks/^" . g:Cha_Protect_Bullet .
+	\ '//e'
+
+	" unload settings
+	call <sid>LoadSettings(1)
+
+	" reset cursor position
+	call move_cursor#KeepPos(1)
 
 endfunction "}}}
 
@@ -482,6 +530,11 @@ endif
 if !exists(':BuGlobalTW')
 	command BuGlobalTW
 	\ call <sid>TwoInOne_Global(1)
+endif
+
+if !exists(':FoPara')
+	command FoPara
+	\ call <sid>FormatText()
 endif
 
  "}}}2
