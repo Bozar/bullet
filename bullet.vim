@@ -65,19 +65,6 @@ if exists('g:Loaded_Bullet')
 	finish
 endif
 
-function s:KeepPos_IfLoaded() "{{{
-
-	let s:Loaded = 1
-	try
-		call move_cursor#KeepPos(2)
-		catch /E117/
-		let s:Loaded = 0
-	endtry
-
-endfunction "}}}
-
-autocmd VimEnter * call <sid>KeepPos_IfLoaded()
-
 let g:Loaded_Bullet = 1
 let s:Save_cpo = &cpoptions
 set cpoptions&vim
@@ -209,7 +196,7 @@ function s:ChangeSettings(when) "{{{
 		\ &comments
 
 		" textwidth
-		execute "setl textwidth=" .
+		execute 'setl textwidth=' .
 		\ g:TextWidth_Bullet
 
 		" formatoptions
@@ -220,38 +207,38 @@ function s:ChangeSettings(when) "{{{
 		setl comments=
 
 		" sublist characters, pre
-		execute "setl comments+=" .
-		\ "s:" . g:SubList_Cha_Pre_Bullet .
-		\ ",m:" . g:SubPara_Cha_Pre_Bullet.
-		\ ",ex:/"
+		execute 'setl comments+=' .
+		\ 's:' . g:SubList_Cha_Pre_Bullet .
+		\ ',m:' . g:SubPara_Cha_Pre_Bullet.
+		\ ',ex:/'
 
 		" list characters, pre
-		execute "setl comments+=" .
-		\ "s:" . g:List_Cha_Pre_Bullet .
-		\ ",m:" . g:Para_Cha_Pre_Bullet.
-		\ ",ex:/"
+		execute 'setl comments+=' .
+		\ 's:' . g:List_Cha_Pre_Bullet .
+		\ ',m:' . g:Para_Cha_Pre_Bullet.
+		\ ',ex:/'
 
 		" sublist characters, after
-		execute "setl comments+=" .
-		\ ":" . g:SubList_Cha_After_Bullet
+		execute 'setl comments+=' .
+		\ 'f:' . g:SubList_Cha_After_Bullet
 
 		" list characters, after
-		execute "setl comments+=" .
-		\ ":" . g:List_Cha_After_Bullet
+		execute 'setl comments+=' .
+		\ 'f:' . g:List_Cha_After_Bullet
 
 	" unload settings
 	elseif a:when == 1
 
 		" textwidth
-		execute "setl textwidth=" .
+		execute 'setl textwidth=' .
 		\ s:TextWidth_Default_Save
 
 		" formatoptions
-		execute "setl formatoptions=" .
+		execute 'setl formatoptions=' .
 		\ s:FormatOptions_Default_Save
 
 		" comments
-		execute "setl comments=" .
+		execute 'setl comments=' .
 		\ s:Comments_Default_Save
 
 	endif
@@ -263,8 +250,8 @@ function s:DefineVar_TextWidth() "{{{
 	" set new textwidth
 	" list
 	if substitute(getline("'j"),
-	\ g:List_Pat_Pre_Bullet . "\\|" .
-	\ g:Para_Pat_Pre_Bullet,"","")
+	\ g:List_Pat_Pre_Bullet . '\|' .
+	\ g:Para_Pat_Pre_Bullet,'','')
 	\ != getline("'j")
 		let s:TextWidth_New =
 		\ g:TextWidth_Bullet
@@ -272,8 +259,8 @@ function s:DefineVar_TextWidth() "{{{
 
 	" sublist
 	elseif substitute(getline("'j"),
-	\ g:SubList_Pat_Pre_Bullet . "\\|" .
-	\ g:SubPara_Pat_Pre_Bullet,"","")
+	\ g:SubList_Pat_Pre_Bullet . '\|' .
+	\ g:SubPara_Pat_Pre_Bullet,'','')
 	\ != getline("'j")
 		let s:TextWidth_New =
 		\ g:TextWidth_Bullet
@@ -287,26 +274,7 @@ function s:DefineVar_TextWidth() "{{{
 
 endfunction "}}}
 
-function s:SetMarkJK() "{{{
-
-	if line("'{") == 1
-		'{
-		mark j
-		" } bracket pair
-	else
-		'{+1
-		mark j
-		" } bracket pair
-	endif
-	if line("'}") == line('$')
-		'}mark k
-	else
-		'}-1mark k
-	endif
-
-endfunction "}}}
-
-function s:ClearSingleBullet(when) "{{{
+function s:DelBullet(when) "{{{
 
 	" suppose '=' will be replaced with bullet '*'
 	" delete lines containing only such characters
@@ -318,22 +286,22 @@ function s:ClearSingleBullet(when) "{{{
 	if a:when == 0
 		execute "'j,'ks/\\(" .
 		\ s:SearchPattern .
-		\ "\\)\\s*\\(\\|\\/\\)\\s*$/" .
-		\ s:Mark . "/e"
-		execute "'j,'ks/^" . s:EndComment . "$/"
-		\ s:Mark . "/e"
-		execute "'j,'kg/" . s:SearchPattern .
-		\ "/s/" . s:EndComment . "$//e"
+		\ '\)\s*\(\|\/\)\s*$/' .
+		\ s:Mark . '/e'
+		execute "'j,'ks/^" . s:EndComment . '$/'
+		\ s:Mark . '/e'
+		if search(s:SearchPattern,'cnw') != 0
+			execute "'j,'kg/" . s:SearchPattern .
+			\ '/s/' . s:EndComment . '$//'
+		endif
 
 	" delete marked lines after substitution
 	" in case line 'j/'k contains mark
 	" and to prevent short lines seperated by
 	" single bullets ('=' or '-') to be joined
 	elseif a:when == 1
-		call search(s:Mark)
-		if substitute(getline('.'),s:Mark,'','')
-		\ != getline('.')
-			execute "'j,'kg/" . s:Mark . "/delete"
+		if search(s:Mark,'cnw') != 0
+			execute "'j,'kg/" . s:Mark . '/delete'
 		endif
 
 	endif
@@ -346,21 +314,21 @@ function s:SubsBullet() "{{{
 	" substitute '=' with '*' and indent 1 tab
 	" substitute '-' with '' and indent 1 tab
 	execute "'j,'ks/" .
-	\ g:List_Pat_Pre_Bullet .  "/" .
-	\ g:List_Pat_After_Bullet . "/e"
+	\ g:List_Pat_Pre_Bullet .  '/' .
+	\ g:List_Pat_After_Bullet . '/e'
 	execute "'j,'ks/" .
-	\ g:Para_Pat_Pre_Bullet . "/" .
-	\ g:Para_Pat_After_Bullet . "/e"
+	\ g:Para_Pat_Pre_Bullet . '/' .
+	\ g:Para_Pat_After_Bullet . '/e'
 
 	" sub list
 	" substitute '==' with '+' and indent 2 tabs
 	" substitute '--' with '' and indent 2 tabs
 	execute "'j,'ks/" .
-	\ g:SubList_Pat_Pre_Bullet . "/" .
-	\ g:SubList_Pat_After_Bullet . "/e"
+	\ g:SubList_Pat_Pre_Bullet . '/' .
+	\ g:SubList_Pat_After_Bullet . '/e'
 	execute "'j,'ks/" .
-	\ g:SubPara_Pat_Pre_Bullet . "/" .
-	\ g:SubPara_Pat_After_Bullet . "/e"
+	\ g:SubPara_Pat_Pre_Bullet . '/' .
+	\ g:SubPara_Pat_After_Bullet . '/e'
 
 endfunction "}}}
 
@@ -387,7 +355,7 @@ function s:NoTextWidth_Local(mode,pos) "{{{
 	" normal mode
 	if a:mode == 0
 
-		if a:pos == 1 && s:Loaded == 1
+		if a:pos == 1
 			call move_cursor#KeepPos(0)
 		endif
 
@@ -400,18 +368,18 @@ function s:NoTextWidth_Local(mode,pos) "{{{
 		try
 			'k
 			catch /E20/
-			if a:pos == 1 && s:Loaded == 1
+			if a:pos == 1
 				call move_cursor#KeepPos(1)
 			endif
 			echo 'ERROR: Mark k not found!'
 			return
 		endtry
 
-		call <sid>ClearSingleBullet(0)
+		call <sid>DelBullet(0)
 		call <sid>SubsBullet()
-		call <sid>ClearSingleBullet(1)
+		call <sid>DelBullet(1)
 
-		if a:pos == 1 && s:Loaded == 1
+		if a:pos == 1
 			call move_cursor#KeepPos(1)
 		endif
 
@@ -428,14 +396,14 @@ endfunction "}}}
 
 function s:TextWidth_Local(pos) "{{{
 
-	if a:pos == 1 && s:Loaded == 1
+	if a:pos == 1
 		call move_cursor#KeepPos(0)
 	endif
 	call <sid>ChangeSettings(0)
 
 	" mark lines to be deleted
-	call <sid>SetMarkJK()
-	call <sid>ClearSingleBullet(0)
+	call move_cursor#Para_SetMarkJK()
+	call <sid>DelBullet(0)
 
 	" format text
 	call <sid>DefineVar_TextWidth()
@@ -446,14 +414,14 @@ function s:TextWidth_Local(pos) "{{{
 	" substitute bullets
 	" the end of paragraph is no longer mark k
 	" after formatting
-	call <sid>SetMarkJK()
+	call move_cursor#Para_SetMarkJK()
 	call <sid>SubsBullet()
 
 	" delete marked lines
-	call <sid>ClearSingleBullet(1)
+	call <sid>DelBullet(1)
 	" set marker j & k again
 	" (in case marked lines are deleted)
-	call <sid>SetMarkJK()
+	call move_cursor#Para_SetMarkJK()
 
 	" reset old textwidth & format text
 	execute 'setl textwidth=' . g:TextWidth_Bullet
@@ -461,7 +429,7 @@ function s:TextWidth_Local(pos) "{{{
 	execute 'normal gqip'
 
 	call <sid>ChangeSettings(1)
-	if a:pos == 1 && s:Loaded == 1
+	if a:pos == 1
 		call move_cursor#KeepPos(1)
 	endif
 
@@ -469,9 +437,7 @@ endfunction "}}}
 
 function s:TwoInOne_Global(textwidth) "{{{
 
-	if s:Loaded == 1
-		call move_cursor#KeepPos(0)
-	endif
+	call move_cursor#KeepPos(0)
 	let l:fold_pre = &foldenable
 	if l:fold_pre == 1
 		set nofoldenable
@@ -487,9 +453,7 @@ function s:TwoInOne_Global(textwidth) "{{{
 			if l:fold_pre == 1
 				set foldenable
 			endif
-			if s:Loaded == 1
-				call move_cursor#KeepPos(1)
-			endif
+			call move_cursor#KeepPos(1)
 			return
 		endif
 
