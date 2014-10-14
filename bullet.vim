@@ -1,13 +1,15 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 14, Tue | 10:24:31 | 2014
+" Last Update: Oct 14, Tue | 16:48:07 | 2014
 
 " user manual "{{{2
 
 " summary "{{{3
 
 " Vim global plugin
+
 " substitute characters with bullet points
+" format paragraph/fold block/whole text
 
 " License: GPL v2
 " Author: Bozar
@@ -31,32 +33,32 @@
  "}}}4
 " bullet characters "{{{4
 
-" let g:List_Cha_Pre_Bullet = '###'
-" let g:List_Cha_After_Bullet = '###'
+" let g:Cha_List_Pre_Bullet = '###'
+" let g:Cha_List_After_Bullet = '###'
 
-" let g:Para_Cha_Pre_Bullet = '###'
-" let g:Para_Cha_After_Bullet = '###'
+" let g:Cha_Para_Pre_Bullet = '###'
+" let g:Cha_Para_After_Bullet = '###'
 
-" let g:SubList_Cha_Pre_Bullet = '###'
-" let g:SubList_Cha_After_Bullet = '###'
+" let g:Cha_SubList_Pre_Bullet = '###'
+" let g:Cha_SubList_After_Bullet = '###'
 
-" let g:SubPara_Cha_Pre_Bullet = '###'
-" let g:SubPara_Cha_After_Bullet = '###'
+" let g:Cha_SubPara_Pre_Bullet = '###'
+" let g:Cha_SubPara_After_Bullet = '###'
 
  "}}}4
 " bullet search patterns "{{{4
 
-" let g:List_Pat_Pre_Bullet = '###'
-" let g:List_Pat_After_Bullet = '###'
+" let g:Pat_List_Pre_Bullet = '###'
+" let g:Pat_List_After_Bullet = '###'
 
-" let g:Para_Pat_Pre_Bullet = '###'
-" let g:Para_Pat_After_Bullet = '###'
+" let g:Pat_Para_Pre_Bullet = '###'
+" let g:Pat_Para_After_Bullet = '###'
 
-" let g:SubList_Pat_Pre_Bullet = '###'
-" let g:SubList_Pat_After_Bullet = '###'
+" let g:Pat_SubList_Pre_Bullet = '###'
+" let g:Pat_SubList_After_Bullet = '###'
 
-" let g:SubPara_Pat_Pre_Bullet = '###'
-" let g:SubPara_Pat_After_Bullet = '###'
+" let g:Pat_SubPara_Pre_Bullet = '###'
+" let g:Pat_SubPara_After_Bullet = '###'
 
  "}}}4
  "}}}3
@@ -76,89 +78,100 @@ set cpoptions&vim
 
 " list character, global "{{{3
 
-if !exists('g:List_Cha_Pre_Bullet')
-	let g:List_Cha_Pre_Bullet = '='
+if !exists('g:Cha_List_Pre_Bullet')
+	let g:Cha_List_Pre_Bullet = '='
 endif
 
-if !exists('g:List_Cha_After_Bullet')
-	let g:List_Cha_After_Bullet = '*'
+if !exists('g:Cha_List_After_Bullet')
+	let g:Cha_List_After_Bullet = '*'
 endif
 
-if !exists('g:Para_Cha_Pre_Bullet')
-	let g:Para_Cha_Pre_Bullet = '-'
+if !exists('g:Cha_Para_Pre_Bullet')
+	let g:Cha_Para_Pre_Bullet = '-'
 endif
 
  "}}}3
 " sublist character, global "{{{3
 
-if !exists('g:SubList_Cha_Pre_Bullet')
-	let g:SubList_Cha_Pre_Bullet = '=='
+if !exists('g:Cha_SubList_Pre_Bullet')
+	let g:Cha_SubList_Pre_Bullet = '=='
 endif
 
-if !exists('g:SubList_Cha_After_Bullet')
-	let g:SubList_Cha_After_Bullet = '+'
+if !exists('g:Cha_SubList_After_Bullet')
+	let g:Cha_SubList_After_Bullet = '+'
 endif
 
-if !exists('g:SubPara_Cha_Pre_Bullet')
-	let g:SubPara_Cha_Pre_Bullet = '--'
+if !exists('g:Cha_SubPara_Pre_Bullet')
+	let g:Cha_SubPara_Pre_Bullet = '--'
 endif
 
  "}}}3
 " list pattern, global "{{{3
 
-if !exists('g:List_Pat_Pre_Bullet')
-	let g:List_Pat_Pre_Bullet = '^\s*=\(=\)\@!\s*'
+if !exists('g:Pat_List_Pre_Bullet')
+	let g:Pat_List_Pre_Bullet = '^\s*=\(=\)\@!\s*'
 endif
 
-if !exists('g:List_Pat_After_Bullet')
-	let g:List_Pat_After_Bullet = '\t*\t'
+if !exists('g:Pat_List_After_Bullet')
+	let g:Pat_List_After_Bullet = '\t*\t'
 endif
 
-if !exists('g:Para_Pat_Pre_Bullet')
-	let g:Para_Pat_Pre_Bullet = '^\s*-\(-\)\@!\s*'
+if !exists('g:Pat_Para_Pre_Bullet')
+	let g:Pat_Para_Pre_Bullet = '^\s*-\(-\)\@!\s*'
 endif
 
-if !exists('g:Para_Pat_After_Bullet')
-	let g:Para_Pat_After_Bullet = '\t\t'
+if !exists('g:Pat_Para_After_Bullet')
+	let g:Pat_Para_After_Bullet = '\t\t'
 endif
 
  "}}}3
 " sublist pattern, global "{{{3
 
-if !exists('g:SubList_Pat_Pre_Bullet')
-	let g:SubList_Pat_Pre_Bullet
+if !exists('g:Pat_SubList_Pre_Bullet')
+	let g:Pat_SubList_Pre_Bullet
 	\ = '^\s*==\(=\)\@!\s*'
 endif
 
-if !exists('g:SubList_Pat_After_Bullet')
-	let g:SubList_Pat_After_Bullet = '\t\t+\t'
+if !exists('g:Pat_SubList_After_Bullet')
+	let g:Pat_SubList_After_Bullet = '\t\t+\t'
 endif
 
-if !exists('g:SubPara_Pat_Pre_Bullet')
-	let g:SubPara_Pat_Pre_Bullet
+if !exists('g:Pat_SubPara_Pre_Bullet')
+	let g:Pat_SubPara_Pre_Bullet
 	\ = '^\s*--\(-\)\@!\s*'
 endif
 
-if !exists('g:SubPara_Pat_After_Bullet')
-	let g:SubPara_Pat_After_Bullet = '\t\t\t'
+if !exists('g:Pat_SubPara_After_Bullet')
+	let g:Pat_SubPara_After_Bullet = '\t\t\t'
 endif
 
  "}}}3
 " text width, global "{{{3
 
-if !exists('g:TextWidth_Bullet')
-	if &textwidth != 0
-		let g:TextWidth_Bullet = &textwidth
-	else
-		let g:TextWidth_Bullet = 50
-	endif
+if !exists('g:TextWidth_Opt_Bullet')
+	let g:TextWidth_Opt_Bullet = -1
+endif
+
+ "}}}3
+" format options, global "{{{3
+
+if !exists('g:FormatOptions_Opt_Bullet')
+	let g:FormatOptions_Opt_Bullet = ''
+endif
+
+ "}}}3
+" comments "{{{3
+
+if !exists('g:Comments_Opt_Bullet')
+	let g:Comments_Opt_Bullet = ''
 endif
 
  "}}}3
 " protect lines, global "{{{3
 
 if !exists('g:Pat_Protect_Bullet')
-	let g:Pat_Protect_Bullet = '\(\({\{3}\|}\{3}\)'
+	let g:Pat_Protect_Bullet = '\(\({\{3}'
+	let g:Pat_Protect_Bullet .=  '\|}\{3}\)'
 	let g:Pat_Protect_Bullet .= '\d\{0,2}$\)'
 endif
 
@@ -173,14 +186,18 @@ if !exists('g:SwitchBulletMode_Bullet')
 	let g:SwitchBulletMode_Bullet = 0
 endif
 
+if !exists('g:Pat_File_Bullet')
+	let g:Pat_File_Bullet == ''
+endif
+
  "}}}3
 " local "{{{3
 
 let s:SearchPat =
-\ g:List_Pat_Pre_Bullet . '\|' .
-\ g:Para_Pat_Pre_Bullet . '\|' .
-\ g:SubList_Pat_Pre_Bullet . '\|' .
-\ g:SubPara_Pat_Pre_Bullet
+\ g:Pat_List_Pre_Bullet . '\|' .
+\ g:Pat_Para_Pre_Bullet . '\|' .
+\ g:Pat_SubList_Pre_Bullet . '\|' .
+\ g:Pat_SubPara_Pre_Bullet
 
 let s:Mark = '###LOOONG_PLACEHOLDER_FOR_BULLET###'
 let s:EndComment = '\s*\/\s*'
@@ -194,64 +211,81 @@ function s:LoadSettings(when) "{{{
 	" load settings
 	if a:when == 0
 
-		let s:TextWidth_Default_Save =
+		let s:TextWidth_Save =
 		\ &textwidth
-		let s:FormatOptions_Default_Save =
+		let s:FormatOptions_Save =
 		\ &formatoptions
-		let s:Comments_Default_Save =
+		let s:Comments_Save =
 		\ &comments
 
 		" textwidth
-		execute 'setl textwidth=' .
-		\ g:TextWidth_Bullet
+		if g:TextWidth_Opt_Bullet < 0
+			let &l:textwidth = &textwidth
+		else
+			let &l:textwidth =
+			\ g:TextWidth_Opt_Bullet
+		endif
 
 		" formatoptions
 		setl formatoptions&
-		setl formatoptions+=ro2mB1j
+		if g:FormatOptions_Opt_Bullet != ''
+			let &l:formatoptions =
+			\ g:FormatOptions_Opt_Bullet
+		else
+			let &l:formatoptions .= 'ro2mB1j'
+		endif
 
 		" comments
 		setl comments=
 
 		" sublist characters, pre
-		execute 'setl comments+=' .
-		\ 's:' . g:SubList_Cha_Pre_Bullet .
-		\ ',m:' . g:SubPara_Cha_Pre_Bullet.
+		let &l:comments .=
+		\ 's:' . g:Cha_SubList_Pre_Bullet .
+		\ ',m:' . g:Cha_SubPara_Pre_Bullet.
 		\ ',ex:/'
 
 		" list characters, pre
-		execute 'setl comments+=' .
-		\ 's:' . g:List_Cha_Pre_Bullet .
-		\ ',m:' . g:Para_Cha_Pre_Bullet.
+		let &l:comments .=
+		\ 's:' . g:Cha_List_Pre_Bullet .
+		\ ',m:' . g:Cha_Para_Pre_Bullet.
 		\ ',ex:/'
 
 		" sublist characters, after
-		execute 'setl comments+=' .
-		\ 'f:' . g:SubList_Cha_After_Bullet
+		let &l:comments .=
+		\ 'f:' . g:Cha_SubList_After_Bullet
 
 		" list characters, after
-		execute 'setl comments+=' .
-		\ 'f:' . g:List_Cha_After_Bullet
+		let &l:comments .=
+		\ 'f:' . g:Cha_List_After_Bullet
 
 		" protect characters
-		execute 'setl comments+=' .
+		let &l:comments .=
 		\ 's:' . g:Cha_Protect_Bullet .
 		\ ',m:' . g:Cha_Protect_Bullet .
 		\ ',ex:' . g:Cha_Protect_Bullet
 
+		" comments
+		if g:Comments_Opt_Bullet != ''
+			let &l:comments .=
+			\ g:Comments_Opt_Bullet
+		endif
+
+	endif
+
 	" unload settings
-	elseif a:when == 1
+	if a:when == 1
 
 		" textwidth
-		execute 'setl textwidth=' .
-		\ s:TextWidth_Default_Save
+		let &l:textwidth =
+		\ s:TextWidth_Save
 
 		" formatoptions
-		execute 'setl formatoptions=' .
-		\ s:FormatOptions_Default_Save
+		let &l:formatoptions =
+		\ s:FormatOptions_Save
 
 		" comments
-		execute 'setl comments=' .
-		\ s:Comments_Default_Save
+		let &l:comments =
+		\ s:Comments_Save
 
 	endif
 
@@ -267,24 +301,27 @@ function s:DelBullet(when) "{{{
 	" :help format-comments
 
 	if a:when == 0
+		" only bullet
 		execute "'j,'ks/\\(" .
 		\ s:SearchPat .
 		\ '\)\s*\(\|\/\)\s*$/' .
 		\ s:Mark . '/e'
+		" only s:EndComment
 		execute "'j,'ks/^" . s:EndComment . '$/'
 		\ s:Mark . '/e'
+		" s:EndComment at the end of line
 		if search(s:SearchPat,'cnw') != 0
 			execute "'j,'kg/" . s:SearchPat .
 			\ '/s/' . s:EndComment . '$//'
 		endif
+	endif
 
 	" delete marked lines after substitution
 	" in case line 'j/'k contains mark
-	elseif a:when == 1
+	if a:when == 1
 		if search(s:Mark,'cnw') != 0
 			execute "'j,'kg/" . s:Mark . '/delete'
 		endif
-
 	endif
 
 endfunction "}}}
@@ -295,21 +332,21 @@ function s:SubsBullet() "{{{
 	" substitute '=' with '*' and indent 1 tab
 	" substitute '-' with '' and indent 1 tab
 	execute "'j,'ks/" .
-	\ g:List_Pat_Pre_Bullet .  '/' .
-	\ g:List_Pat_After_Bullet . '/e'
+	\ g:Pat_List_Pre_Bullet .  '/' .
+	\ g:Pat_List_After_Bullet . '/e'
 	execute "'j,'ks/" .
-	\ g:Para_Pat_Pre_Bullet . '/' .
-	\ g:Para_Pat_After_Bullet . '/e'
+	\ g:Pat_Para_Pre_Bullet . '/' .
+	\ g:Pat_Para_After_Bullet . '/e'
 
 	" sub list
 	" substitute '==' with '+' and indent 2 tabs
 	" substitute '--' with '' and indent 2 tabs
 	execute "'j,'ks/" .
-	\ g:SubList_Pat_Pre_Bullet . '/' .
-	\ g:SubList_Pat_After_Bullet . '/e'
+	\ g:Pat_SubList_Pre_Bullet . '/' .
+	\ g:Pat_SubList_After_Bullet . '/e'
 	execute "'j,'ks/" .
-	\ g:SubPara_Pat_Pre_Bullet . '/' .
-	\ g:SubPara_Pat_After_Bullet . '/e'
+	\ g:Pat_SubPara_Pre_Bullet . '/' .
+	\ g:Pat_SubPara_After_Bullet . '/e'
 
 endfunction "}}}
 
@@ -319,12 +356,12 @@ function s:BulletMode() "{{{
 		return
 	endif
 
-	if !exists('g:FilePat_Bullet')
+	if g:Pat_File_Bullet == ''
 		return
 	endif
 
 	execute 'autocmd BufRead,BufNewFile ' .
-	\ g:FilePat_Bullet .
+	\ g:Pat_File_Bullet .
 	\ ' call <sid>LoadSettings(0)'
 
 endfunction "}}}
@@ -419,12 +456,10 @@ function s:TwoInOne_Global(textwidth) "{{{
 			return
 		endif
 
-		" textwidth == 0
 		if a:textwidth == 0
 			1mark j
 			$mark k
 			call <sid>NoTextWidth_Local(0,0)
-		" textwidth != 0
 		elseif a:textwidth == 1
 			call <sid>TextWidth_Local(0)
 		endif
@@ -434,17 +469,6 @@ function s:TwoInOne_Global(textwidth) "{{{
 endfunction "}}}
 
 function s:FormatText(range) "{{{
-
-	" para/fold/whole text
-	"
-	" save cursor position
-	" load settings
-	" mark format range
-	" protect lines
-	" format
-	" unprotect lines
-	" unload settings
-	" reset cursor position
 
 	" save cursor position
 	call move_cursor#KeepPos(0)
@@ -478,8 +502,9 @@ function s:FormatText(range) "{{{
 	endif
 
 	" format
-	'j
-	execute "normal gq'k"
+	" 'jgq'k doesn't work for the last line: 'k
+	'k
+	execute "normal lgq'j"
 
 	" unprotect lines
 	if a:range == 0
@@ -498,6 +523,55 @@ function s:FormatText(range) "{{{
 
 	" reset cursor position
 	call move_cursor#KeepPos(1)
+
+endfunction "}}}
+
+function s:EchoVars() "{{{
+
+	call <sid>LoadSettings(0)
+		let l:fo = &formatoptions
+		let l:tw = &textwidth
+		let l:com = &comments
+	call <sid>LoadSettings(1)
+
+	let l:fo_o = g:FormatOptions_Opt_Bullet
+	let l:tw_o = g:TextWidth_Opt_Bullet
+	let l:com_o = g:Comments_Opt_Bullet
+
+	let l:pat_pro = g:Pat_Protect_Bullet
+	let l:cha_pro = g:Cha_Protect_Bullet
+
+	if g:SwitchBulletMode_Bullet != 0
+		let l:switch = 'ON'
+	else
+		let l:switch = 'OFF'
+	endif
+	let l:mode = g:SwitchBulletMode_Bullet
+	let l:file = g:Pat_File_Bullet
+
+	echo '--------------------'
+	echo "&formatoptions == '" . l:fo . "'"
+	echo "g:FormatOptions_Opt_Bullet == '" .
+	\ l:fo_o . "'"
+	echo '--------------------'
+	echo "&textwidth == '" . l:tw . "'"
+	echo "g:TextWidth_Opt_Bullet == '" .
+	\ l:tw_o ."'"
+	echo '--------------------'
+	echo "&comments == '" . l:com . "'"
+	echo "g:Comments_Opt_Bullet == '" .
+	\ l:com_o . "'"
+	echo '--------------------'
+	echo "g:Pat_Protect_Bullet == '" .
+	\ l:pat_pro . "'"
+	echo "g:Cha_Protect_Bullet == '" .
+	\ l:cha_pro . "'"
+	echo '--------------------'
+	echo 'Auto load bullet settings: ' . l:switch
+	echo "g:SwitchBulletMode_Bullet == '" .
+	\ l:mode . "'"
+	echo "g:Pat_File_Bullet == '" . l:file . "'"
+	echo '--------------------'
 
 endfunction "}}}
 
@@ -568,6 +642,10 @@ endif
 if !exists(':FoWholeText')
 	command FoWholeText
 	\ call <sid>FormatText(2)
+endif
+
+if !exists(':BuEchoVars')
+	command BuEchoVars call <sid>EchoVars()
 endif
 
  "}}}2
