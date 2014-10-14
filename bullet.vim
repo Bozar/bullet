@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 14, Tue | 16:48:07 | 2014
+" Last Update: Oct 15, Wed | 01:47:48 | 2014
 
 " user manual "{{{2
 
@@ -162,21 +162,25 @@ endif
  "}}}3
 " comments "{{{3
 
-if !exists('g:Comments_Opt_Bullet')
-	let g:Comments_Opt_Bullet = ''
+if !exists('g:Comments_Add_Opt_Bullet')
+	let g:Comments_Add_Opt_Bullet = ''
+endif
+if !exists('g:Comments_Overwrite_Opt_Bullet')
+	let g:Comments_Overwrite_Opt_Bullet = ''
 endif
 
  "}}}3
 " protect lines, global "{{{3
 
-if !exists('g:Pat_Protect_Bullet')
-	let g:Pat_Protect_Bullet = '\(\({\{3}'
-	let g:Pat_Protect_Bullet .=  '\|}\{3}\)'
-	let g:Pat_Protect_Bullet .= '\d\{0,2}$\)'
+if !exists('g:Pat_Protect_Add_Bullet')
+	let g:Pat_Protect_Add_Bullet = ''
+endif
+if !exists('g:Pat_Protect_Overwrite_Bullet')
+	let g:Pat_Protect_Overwrite_Bullet = ''
 endif
 
 if !exists('g:Cha_Protect_Bullet')
-	let g:Cha_Protect_Bullet = '@'
+	let g:Cha_Protect_Bullet = ''
 endif
 
  "}}}3
@@ -187,7 +191,7 @@ if !exists('g:SwitchBulletMode_Bullet')
 endif
 
 if !exists('g:Pat_File_Bullet')
-	let g:Pat_File_Bullet == ''
+	let g:Pat_File_Bullet = ''
 endif
 
  "}}}3
@@ -235,6 +239,14 @@ function s:LoadSettings(when) "{{{
 			let &l:formatoptions .= 'ro2mB1j'
 		endif
 
+		" protect lines, character
+		if g:Cha_Protect_Bullet != ''
+			let s:Cha_Protect =
+			\ g:Cha_Protect_Bullet
+		else
+			let s:Cha_Protect = '@'
+		endif
+
 		" comments
 		setl comments=
 
@@ -246,28 +258,45 @@ function s:LoadSettings(when) "{{{
 
 		" list characters, pre
 		let &l:comments .=
-		\ 's:' . g:Cha_List_Pre_Bullet .
+		\ ',s:' . g:Cha_List_Pre_Bullet .
 		\ ',m:' . g:Cha_Para_Pre_Bullet.
 		\ ',ex:/'
 
 		" sublist characters, after
 		let &l:comments .=
-		\ 'f:' . g:Cha_SubList_After_Bullet
+		\ ',f:' . g:Cha_SubList_After_Bullet
 
 		" list characters, after
 		let &l:comments .=
-		\ 'f:' . g:Cha_List_After_Bullet
+		\ ',f:' . g:Cha_List_After_Bullet
 
 		" protect characters
 		let &l:comments .=
-		\ 's:' . g:Cha_Protect_Bullet .
-		\ ',m:' . g:Cha_Protect_Bullet .
-		\ ',ex:' . g:Cha_Protect_Bullet
+		\ ',s:' . s:Cha_Protect .
+		\ ',m:' . s:Cha_Protect .
+		\ ',ex:' . s:Cha_Protect
 
-		" comments
-		if g:Comments_Opt_Bullet != ''
-			let &l:comments .=
-			\ g:Comments_Opt_Bullet
+		if g:Comments_Add_Opt_Bullet != ''
+			let &l:comments .= ',' .
+			\ g:Comments_Add_Opt_Bullet
+		endif
+		if g:Comments_Overwrite_Opt_Bullet != ''
+			let &l:comments =
+			\ g:Comments_Overwrite_Opt_Bullet
+		endif
+
+		" protect lines, pattern
+		let s:Pat_Protect_Origin = '\(\({\{3}'
+		let s:Pat_Protect_Origin .=  '\|}\{3}\)'
+		let s:Pat_Protect_Origin .= '\d\{0,2}$\)'
+
+		let s:Pat_Protect_Final =
+		\ s:Pat_Protect_Origin .
+		\ g:Pat_Protect_Add_Bullet
+
+		if g:Pat_Protect_Overwrite_Bullet != ''
+			let s:Pat_Protect_Final =
+			\ g:Pat_Protect_Overwrite_Bullet
 		endif
 
 	endif
@@ -495,10 +524,10 @@ function s:FormatText(range) "{{{
 
 	" protect lines
 	'j
-	if search(g:Pat_Protect_Bullet,'c',line("'k"))
+	if search(s:Pat_Protect_Final,'c',line("'k"))
 	\ != 0
-		execute "'j,'kg/" . g:Pat_Protect_Bullet .
-		\ '/s/^/' . g:Cha_Protect_Bullet . '/'
+		execute "'j,'kg/" . s:Pat_Protect_Final .
+		\ '/s/^/' . s:Cha_Protect . '/'
 	endif
 
 	" format
@@ -515,7 +544,7 @@ function s:FormatText(range) "{{{
 		1mark j
 		$mark k
 	endif
-	execute "'j,'ks/^" . g:Cha_Protect_Bullet .
+	execute "'j,'ks/^" . s:Cha_Protect .
 	\ '//e'
 
 	" unload settings
@@ -526,51 +555,68 @@ function s:FormatText(range) "{{{
 
 endfunction "}}}
 
+function s:ShowValue(name) "{{{
+
+	echo a:name . " == '" . eval(a:name) ."'"
+
+endfunction "}}}
+
 function s:EchoVars() "{{{
 
 	call <sid>LoadSettings(0)
-		let l:fo = &formatoptions
-		let l:tw = &textwidth
-		let l:com = &comments
+
+	let l:fo = &formatoptions
+	let l:tw = &textwidth
+	let l:com = &comments
+	let l:pat_pro = s:Pat_Protect_Final
+	let l:cha_pro = s:Cha_Protect
+
 	call <sid>LoadSettings(1)
 
-	let l:fo_o = g:FormatOptions_Opt_Bullet
-	let l:tw_o = g:TextWidth_Opt_Bullet
-	let l:com_o = g:Comments_Opt_Bullet
-
-	let l:pat_pro = g:Pat_Protect_Bullet
-	let l:cha_pro = g:Cha_Protect_Bullet
-
 	if g:SwitchBulletMode_Bullet != 0
+	\ && g:Pat_File_Bullet != ''
 		let l:switch = 'ON'
 	else
 		let l:switch = 'OFF'
 	endif
-	let l:mode = g:SwitchBulletMode_Bullet
-	let l:file = g:Pat_File_Bullet
 
 	echo '--------------------'
 	echo "&formatoptions == '" . l:fo . "'"
-	echo "g:FormatOptions_Opt_Bullet == '" .
-	\ l:fo_o . "'"
+	call <sid>ShowValue(
+	\'g:FormatOptions_Opt_Bullet')
+
 	echo '--------------------'
 	echo "&textwidth == '" . l:tw . "'"
-	echo "g:TextWidth_Opt_Bullet == '" .
-	\ l:tw_o ."'"
+	call <sid>ShowValue(
+	\'g:TextWidth_Opt_Bullet')
+
 	echo '--------------------'
 	echo "&comments == '" . l:com . "'"
-	echo "g:Comments_Opt_Bullet == '" .
-	\ l:com_o . "'"
+	call <sid>ShowValue(
+	\'g:Comments_Add_Opt_Bullet')
+	call <sid>ShowValue(
+	\'g:Comments_Overwrite_Opt_Bullet')
+
 	echo '--------------------'
-	echo "g:Pat_Protect_Bullet == '" .
+	echo "s:Pat_Protect_Final == '" .
 	\ l:pat_pro . "'"
-	echo "g:Cha_Protect_Bullet == '" .
-	\ l:cha_pro . "'"
+	call <sid>ShowValue(
+	\'g:Pat_Protect_Add_Bullet')
+	call <sid>ShowValue(
+	\'g:Pat_Protect_Overwrite_Bullet')
+
+	echo '--------------------'
+	echo "s:Cha_Protect == '" . l:cha_pro . "'"
+	call <sid>ShowValue(
+	\'g:Cha_Protect_Bullet')
+
 	echo '--------------------'
 	echo 'Auto load bullet settings: ' . l:switch
-	echo "g:SwitchBulletMode_Bullet == '" .
-	\ l:mode . "'"
-	echo "g:Pat_File_Bullet == '" . l:file . "'"
+	call <sid>ShowValue(
+	\'g:SwitchBulletMode_Bullet')
+	call <sid>ShowValue(
+	\'g:Pat_File_Bullet')
+
 	echo '--------------------'
 
 endfunction "}}}
