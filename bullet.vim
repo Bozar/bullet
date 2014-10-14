@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 14, Tue | 00:41:11 | 2014
+" Last Update: Oct 14, Tue | 08:24:13 | 2014
 
 " user manual "{{{2
 
@@ -159,8 +159,8 @@ endif
 
 if !exists('g:Pat_Protect_Bullet')
 	" let g:Pat_Protect_Bullet = '{{{\|}}}'
-	let g:Pat_Protect_Bullet = '\({\{3}\|}\{3}\)'
-	let g:Pat_Protect_Bullet .= '\d\{0,2}$'
+	let g:Pat_Protect_Bullet = '\(\({\{3}\|}\{3}\)'
+	let g:Pat_Protect_Bullet .= '\d\{0,2}$\)'
 endif
 
 if !exists('g:Cha_Protect_Bullet')
@@ -432,7 +432,7 @@ function s:TwoInOne_Global(textwidth) "{{{
 
 endfunction "}}}
 
-function s:FormatText() "{{{
+function s:FormatText(range) "{{{
 
 	" para/fold/whole text
 	"
@@ -452,7 +452,21 @@ function s:FormatText() "{{{
 	call <sid>LoadSettings(0)
 
 	" mark format range
-	call move_cursor#Para_SetMarkJK()
+	" paragraph
+	if a:range == 0
+		call move_cursor#Para_SetMarkJK()
+	" fold block
+	elseif a:range == 1
+		if move_cursor#Fold_SetMarkJK() == 1
+			call <sid>LoadSettings(1)
+			call move_cursor#KeepPos(1)
+			return
+		endif
+	" whole text
+	elseif a:range == 2
+		1mark j
+		$mark k
+	endif
 
 	" protect lines
 	'j
@@ -467,6 +481,14 @@ function s:FormatText() "{{{
 	execute "normal gq'k"
 
 	" unprotect lines
+	if a:range == 0
+		call move_cursor#Para_SetMarkJK()
+	elseif a:range == 1
+		call move_cursor#Fold_SetMarkJK()
+	elseif a:range == 2
+		1mark j
+		$mark k
+	endif
 	execute "'j,'ks/^" . g:Cha_Protect_Bullet .
 	\ '//e'
 
@@ -532,9 +554,19 @@ if !exists(':BuGlobalTW')
 	\ call <sid>TwoInOne_Global(1)
 endif
 
-if !exists(':FoPara')
-	command FoPara
-	\ call <sid>FormatText()
+if !exists(':FoParagraph')
+	command FoParagraph
+	\ call <sid>FormatText(0)
+endif
+
+if !exists(':FoFoldBlock')
+	command FoFoldBlock
+	\ call <sid>FormatText(1)
+endif
+
+if !exists(':FoWholeText')
+	command FoWholeText
+	\ call <sid>FormatText(2)
 endif
 
  "}}}2
