@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 14, Tue | 08:24:13 | 2014
+" Last Update: Oct 14, Tue | 10:24:31 | 2014
 
 " user manual "{{{2
 
@@ -155,10 +155,9 @@ if !exists('g:TextWidth_Bullet')
 endif
 
  "}}}3
-" protect lines "{{{3
+" protect lines, global "{{{3
 
 if !exists('g:Pat_Protect_Bullet')
-	" let g:Pat_Protect_Bullet = '{{{\|}}}'
 	let g:Pat_Protect_Bullet = '\(\({\{3}\|}\{3}\)'
 	let g:Pat_Protect_Bullet .= '\d\{0,2}$\)'
 endif
@@ -235,7 +234,9 @@ function s:LoadSettings(when) "{{{
 
 		" protect characters
 		execute 'setl comments+=' .
-		\ ':' . g:Cha_Protect_Bullet
+		\ 's:' . g:Cha_Protect_Bullet .
+		\ ',m:' . g:Cha_Protect_Bullet .
+		\ ',ex:' . g:Cha_Protect_Bullet
 
 	" unload settings
 	elseif a:when == 1
