@@ -1,12 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 15, Wed | 18:07:56 | 2014
-"
-" TODO:
-"
-" rename functions
-" subs bullets in a range: jk, para, fold, whole
-" change fold level
+" Last Update: Oct 16, Thu | 00:38:42 | 2014
 
 " user manual "{{{2
 
@@ -31,12 +25,6 @@
 " substitute ### with your own setting
 " in the .vimrc, leave the rest part unchanged
 
-" key mapping "{{{4
-
-" nmap <unique> <silent> ### <plug>BulletNormal
-" vmap <unique> <silent> ### <plug>BulletVisual
-
- "}}}4
 " bullet characters "{{{4
 
 " let g:Cha_List_Pre_Bullet = '###'
@@ -154,25 +142,29 @@ endif
  "}}}3
 " text width, global "{{{3
 
-if !exists('g:TextWidth_Opt_Bullet')
-	let g:TextWidth_Opt_Bullet = -1
+if !exists('g:TextWidth_Bullet')
+	let g:TextWidth_Bullet = -1
 endif
 
  "}}}3
 " format options, global "{{{3
 
-if !exists('g:FormatOptions_Opt_Bullet')
-	let g:FormatOptions_Opt_Bullet = ''
+if !exists('g:FormatOptions_Bullet')
+	let g:FormatOptions_Bullet = ''
 endif
+if !exists('g:FormatOptions_Minus_Bullet')
+	let g:FormatOptions_Minus_Bullet = ''
+endif
+
 
  "}}}3
 " comments "{{{3
 
-if !exists('g:Comments_Add_Opt_Bullet')
-	let g:Comments_Add_Opt_Bullet = ''
+if !exists('g:Comments_Add_Bullet')
+	let g:Comments_Add_Bullet = ''
 endif
-if !exists('g:Comments_Overwrite_Opt_Bullet')
-	let g:Comments_Overwrite_Opt_Bullet = ''
+if !exists('g:Comments_Overwrite_Bullet')
+	let g:Comments_Overwrite_Bullet = ''
 endif
 
  "}}}3
@@ -216,6 +208,8 @@ let s:EndComment = '\s*\/\s*'
  "}}}2
 " function "{{{2
 
+" parts "{{{3
+
 function s:LoadSettings(when) "{{{
 
 	" load settings
@@ -229,21 +223,26 @@ function s:LoadSettings(when) "{{{
 		\ &comments
 
 		" textwidth
-		if g:TextWidth_Opt_Bullet < 0
+		if g:TextWidth_Bullet < 0
 			let &l:textwidth = &textwidth
 		else
 			let &l:textwidth =
-			\ g:TextWidth_Opt_Bullet
+			\ g:TextWidth_Bullet
 		endif
 
 		" formatoptions
 		setl formatoptions&
-		if g:FormatOptions_Opt_Bullet != ''
+		if g:FormatOptions_Bullet != ''
 			let &l:formatoptions =
-			\ g:FormatOptions_Opt_Bullet
+			\ g:FormatOptions_Bullet
 		else
 			let &l:formatoptions .= 'ro2mB1j'
+			let g:FormatOptions_Bullet =
+			\ &l:formatoptions
 		endif
+		let &l:formatoptions =
+		\ substitute(&l:formatoptions,
+		\ g:FormatOptions_Minus_Bullet,'','')
 
 		" protect lines, character
 		if g:Cha_Protect_Bullet != ''
@@ -282,13 +281,13 @@ function s:LoadSettings(when) "{{{
 		\ ',m:' . s:Cha_Protect .
 		\ ',ex:' . s:Cha_Protect
 
-		if g:Comments_Add_Opt_Bullet != ''
+		if g:Comments_Add_Bullet != ''
 			let &l:comments .= ',' .
-			\ g:Comments_Add_Opt_Bullet
+			\ g:Comments_Add_Bullet
 		endif
-		if g:Comments_Overwrite_Opt_Bullet != ''
+		if g:Comments_Overwrite_Bullet != ''
 			let &l:comments =
-			\ g:Comments_Overwrite_Opt_Bullet
+			\ g:Comments_Overwrite_Bullet
 		endif
 
 		" protect lines, pattern
@@ -405,163 +404,107 @@ function s:BulletMode() "{{{
 
 endfunction "}}}
 
-autocmd VimEnter * call <sid>BulletMode()
+function s:ShowValue(name) "{{{
 
-function s:NoTextWidth_Local(mode,pos) "{{{
-
-	" normal mode
-	if a:mode == 0
-
-		if a:pos == 1
-			call move_cursor#KeepPos(0)
-		endif
-
-	if move_cursor#DeteceMarkJK() != 0
-		call move_cursor#KeepPos(1)
-		return
-	endif
-
-	call <sid>DelBullet(0)
-	call <sid>SubsBullet_Core()
-	call <sid>DelBullet(1)
-
-	if a:pos == 1
-		call move_cursor#KeepPos(1)
-	endif
-
-	" visual mode
-	elseif a:mode == 1
-
-		'<mark j
-		'>mark k
-		call <sid>NoTextWidth_Local(0,1)
-
-	endif
+	echo a:name . " == '" . eval(a:name) ."'"
 
 endfunction "}}}
 
-function s:TextWidth_Local(pos) "{{{
+ "}}}3
+" main "{{{3
 
-	if a:pos == 1
-		call move_cursor#KeepPos(0)
-	endif
-	call <sid>LoadSettings(0)
-
-	" mark lines to be deleted
-	call move_cursor#Para_SetMarkJK()
-	call <sid>DelBullet(0)
-
-	" substitute bullets
-	call <sid>SubsBullet_Core()
-
-	" delete marked lines
-	call <sid>DelBullet(1)
-	" set marker j & k again
-	" (in case marked lines are deleted)
-	call move_cursor#Para_SetMarkJK()
-
-	'j
-	execute 'normal gqip'
-
-	call <sid>LoadSettings(1)
-	if a:pos == 1
-		call move_cursor#KeepPos(1)
-	endif
-
-endfunction "}}}
-
-function s:SubsBullet_Whole(textwidth) "{{{
+function s:SubsBullet_NoTW(range) "{{{
 
 	call move_cursor#KeepPos(0)
-	let l:fold_save = &foldenable
-	set nofoldenable
 
-	while 1
+	" set mark j & k
+	" paragraph
+	if a:range == 0
+		call move_cursor#Para_SetMarkJK()
+	" whole text
+	elseif a:range == 1
+		1mark j
+		$mark k
+	endif
 
-		if search(s:SearchPat,'wc') == 0
-			let &foldenable = l:fold_save
-			call move_cursor#KeepPos(1)
-			return
-		endif
+	" mark lines to be deleted
+	call <sid>DelBullet(0)
+	" substitute bullets
+	call <sid>SubsBullet_Core()
+	" delete marked lines
+	call <sid>DelBullet(1)
 
-		" notextwidth
-		if a:textwidth == 0
-			1mark j
-			$mark k
-			call <sid>NoTextWidth_Local(0,0)
-		" textwidth
-		elseif a:textwidth == 1
-			call <sid>TextWidth_Local(0)
-		endif
-
-	endwhile
+	call move_cursor#KeepPos(1)
 
 endfunction "}}}
 
-function s:FormatText(range) "{{{
+function s:SubsBullet_TW(range) "{{{
 
 	" save cursor position
 	call move_cursor#KeepPos(0)
 	" load settings
 	call <sid>LoadSettings(0)
 
-	" mark format range
-	" paragraph
-	if a:range == 0
-		call move_cursor#Para_SetMarkJK()
-	" fold block
-	elseif a:range == 1
-		if move_cursor#Fold_SetMarkJK() != 0
-			call <sid>LoadSettings(1)
-			call move_cursor#KeepPos(1)
-			return
+	let l:i = 0
+
+	while 1
+
+		" set mark j & k
+		" paragraph
+		if a:range == 0
+			call move_cursor#Para_SetMarkJK()
+		" whole text
+		elseif a:range == 1
+			1mark j
+			$mark k
 		endif
-	" whole text
-	elseif a:range == 2
-		1mark j
-		$mark k
-	endif
+
+		" substitute bullets once
+		" set marks twice (before and after
+		" substitution), in case marked lines 'j
+		" and 'k are deleted
+		if l:i > 0
+			break
+		endif
+
+		" mark lines to be deleted
+		call <sid>DelBullet(0)
+		" substitute bullets
+		call <sid>SubsBullet_Core()
+		" delete marked lines
+		call <sid>DelBullet(1)
+
+		let l:i = l:i +1
+
+	endwhile
 
 	" protect lines
 	'j
 	if search(s:Pat_Protect_Final,'c',line("'k"))
-	\ != 0
 		execute "'j,'kg/" . s:Pat_Protect_Final .
 		\ '/s/^/' . s:Cha_Protect . '/'
 	endif
 
 	" format
-	" 'jgq'k doesn't reach the last line 'k
-	" add a blank line following 'k
-	'ks/$/\r/
-	'k+1mark k
-	'j
-	execute "normal gq'k"
-	'j
+	if a:range == 0
+		execute "normal 'jgqip"
+	elseif a:range == 1
+		execute "normal gggqG"
+	endif
 
 	" unprotect lines
 	if a:range == 0
 		call move_cursor#Para_SetMarkJK()
 	elseif a:range == 1
-		call move_cursor#Fold_SetMarkJK()
-	elseif a:range == 2
 		1mark j
-		$-1mark k
+		$mark k
 	endif
-	execute "'j,'ks/^" . s:Cha_Protect .
-	\ '//e'
-	'k+1delete
+	execute "'j,'ks/^" . s:Cha_Protect . '//e'
 
 	" unload settings
 	call <sid>LoadSettings(1)
 	" reset cursor position
 	call move_cursor#KeepPos(1)
-
-endfunction "}}}
-
-function s:ShowValue(name) "{{{
-
-	echo a:name . " == '" . eval(a:name) ."'"
 
 endfunction "}}}
 
@@ -578,20 +521,21 @@ function s:EchoVars() "{{{
 
 	echo '------------------------------'
 	call <sid>ShowValue('&formatoptions')
-	call <sid>ShowValue(
-	\'g:FormatOptions_Opt_Bullet')
+	call <sid>ShowValue('g:FormatOptions_Bullet')
+	call <sid>ShowValue('g:FormatOptions_Minus
+	\_Bullet')
 
 	echo '------------------------------'
 	call <sid>ShowValue('&textwidth')
 	call <sid>ShowValue(
-	\'g:TextWidth_Opt_Bullet')
+	\'g:TextWidth_Bullet')
 
 	echo '------------------------------'
 	call <sid>ShowValue('&comments')
 	call <sid>ShowValue(
-	\'g:Comments_Add_Opt_Bullet')
+	\'g:Comments_Add_Bullet')
 	call <sid>ShowValue(
-	\'g:Comments_Overwrite_Opt_Bullet')
+	\'g:Comments_Overwrite_Bullet')
 
 	echo '------------------------------'
 	call <sid>ShowValue('s:Pat_Protect_Final')
@@ -618,77 +562,32 @@ function s:EchoVars() "{{{
 
 endfunction "}}}
 
- "}}}2
-" key mappings "{{{2
-
-" nno <a-b> :call <sid>SubsBullet_Whole(0)<cr>
-" vno <a-b>
-" \ <esc>:call <sid>NoTextWidth_Local(1,1)<cr>
-
-" check user settings
-
-if !hasmapto('<plug>BulletNormal')
-	nmap <unique> <silent> <a-b>
-	\ <plug>BulletNormal
-endif
-
-if !hasmapto('<plug>BulletVisual')
-	vmap <unique> <silent> <a-b>
-	\ <plug>BulletVisual
-endif
-
-" call functions
-
-nnoremap <unique> <script> <plug>BulletNormal
-\ <sid>Normal
-vnoremap <unique> <script> <plug>BulletVisual
-\ <sid>Visual
-
-nnoremap <sid>Normal
-\ :call <sid>SubsBullet_Whole(0)<cr>
-vnoremap <sid>Visual
-\ <esc>:call <sid>NoTextWidth_Local(1,1)<cr>
-
+ "}}}3
  "}}}2
 " commands "{{{2
 
-if !exists(':BuLocalNoTW')
-	command BuLocalNoTW
-	\ call <sid>NoTextWidth_Local(0,1)
+autocmd VimEnter * call <sid>BulletMode()
+
+if !exists(':BuParaTW')
+	command BuParaTW call <sid>SubsBullet_TW(0)
 endif
 
-if !exists(':BuLocalTW')
-	command BuLocalTW
-	\ call <sid>TextWidth_Local(1)
+if !exists(':BuParaNoTW')
+	command BuParaNoTW
+	\ call <sid>SubsBullet_NoTW(0)
 endif
 
-if !exists(':BuGlobalNoTW')
-	command BuGlobalNoTW
-	\ call <sid>SubsBullet_Whole(0)
+if !exists(':BuWholeNoTW')
+	command BuWholeNoTW
+	\ call <sid>SubsBullet_NoTW(1)
 endif
 
-if !exists(':BuGlobalTW')
-	command BuGlobalTW
-	\ call <sid>SubsBullet_Whole(1)
+if !exists(':BuWholeTW')
+	command BuWholeTW call <sid>SubsBullet_TW(1)
 endif
 
-if !exists(':FoParagraph')
-	command FoParagraph
-	\ call <sid>FormatText(0)
-endif
-
-if !exists(':FoFoldBlock')
-	command FoFoldBlock
-	\ call <sid>FormatText(1)
-endif
-
-if !exists(':FoWholeText')
-	command FoWholeText
-	\ call <sid>FormatText(2)
-endif
-
-if !exists(':BuEchoVars')
-	command BuEchoVars call <sid>EchoVars()
+if !exists(':BuEcho')
+	command BuEcho call <sid>EchoVars()
 endif
 
  "}}}2
