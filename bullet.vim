@@ -1,61 +1,17 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 16, Thu | 16:34:39 | 2014
+" Last Update: Oct 16, Thu | 17:00:04 | 2014
 
-" user manual "{{{2
+" summary "{{{2
 
-" summary "{{{3
+" License: GPL v2
+" Author: Bozar
 
 " Vim global plugin
 
 " substitute characters with bullet points
 " format paragraph/fold block/whole text
 
-" License: GPL v2
-" Author: Bozar
-
- "}}}3
-" turn off this plugin "{{{3
-
-" let g:Loaded_Bullet = 1
-
- "}}}3
-" change settings "{{{3
-
-" substitute ### with your own setting
-" in the .vimrc, leave the rest part unchanged
-
-" bullet characters "{{{4
-
-" let g:Cha_List_Pre_Bullet = '###'
-" let g:Cha_List_After_Bullet = '###'
-
-" let g:Cha_Para_Pre_Bullet = '###'
-" let g:Cha_Para_After_Bullet = '###'
-
-" let g:Cha_SubList_Pre_Bullet = '###'
-" let g:Cha_SubList_After_Bullet = '###'
-
-" let g:Cha_SubPara_Pre_Bullet = '###'
-" let g:Cha_SubPara_After_Bullet = '###'
-
- "}}}4
-" bullet search patterns "{{{4
-
-" let g:Pat_List_Pre_Bullet = '###'
-" let g:Pat_List_After_Bullet = '###'
-
-" let g:Pat_Para_Pre_Bullet = '###'
-" let g:Pat_Para_After_Bullet = '###'
-
-" let g:Pat_SubList_Pre_Bullet = '###'
-" let g:Pat_SubList_After_Bullet = '###'
-
-" let g:Pat_SubPara_Pre_Bullet = '###'
-" let g:Pat_SubPara_After_Bullet = '###'
-
- "}}}4
- "}}}3
  "}}}2
 " load & cpoptions "{{{2
 
@@ -156,6 +112,7 @@ endif
 if !exists('g:FormatOptions_Add_Bullet')
 	let g:FormatOptions_Add_Bullet = ''
 endif
+
 if !exists('g:FormatOptions_Substract_Bullet')
 	let g:FormatOptions_Substract_Bullet = ''
 endif
@@ -163,21 +120,23 @@ endif
  "}}}3
 " comments "{{{3
 
-if !exists('g:Comments_Add_Bullet')
-	let g:Comments_Add_Bullet = ''
-endif
 if !exists('g:Comments_Overwrite_Bullet')
 	let g:Comments_Overwrite_Bullet = ''
+endif
+
+if !exists('g:Comments_Add_Bullet')
+	let g:Comments_Add_Bullet = ''
 endif
 
  "}}}3
 " protect lines, global "{{{3
 
-if !exists('g:Pat_Protect_Add_Bullet')
-	let g:Pat_Protect_Add_Bullet = ''
-endif
 if !exists('g:Pat_Protect_Overwrite_Bullet')
 	let g:Pat_Protect_Overwrite_Bullet = ''
+endif
+
+if !exists('g:Pat_Protect_Add_Bullet')
+	let g:Pat_Protect_Add_Bullet = ''
 endif
 
 if !exists('g:Cha_Protect_Bullet')
@@ -339,14 +298,17 @@ function s:DelBullet(when) "{{{
 	" :help format-comments
 
 	if a:when == 0
+
 		" only bullet
 		execute "'j,'ks/\\(" .
 		\ s:SearchPat . '\)\(' .
 		\ s:EndComment . '\|\s*\)$/' .
 		\ s:Mark . '/e'
+
 		" only s:EndComment
 		execute "'j,'ks/^" . s:EndComment . '$/'
 		\ s:Mark . '/e'
+
 		" s:EndComment at the end of line
 		let l:pattern = '\(' . s:SearchPat .
 		\ '\).*' . s:EndComment . '$'
@@ -355,6 +317,7 @@ function s:DelBullet(when) "{{{
 			execute "'j,'kg/" . s:SearchPat .
 			\ '/s/' . s:EndComment . '$//'
 		endif
+
 	endif
 
 	" delete marked lines after substitution
@@ -402,6 +365,12 @@ function s:BulletMode() "{{{
 	execute 'autocmd BufRead,BufNewFile ' .
 	\ g:Pat_File_Bullet .
 	\ ' call <sid>LoadSettings(0)'
+
+endfunction "}}}
+
+function s:EchoVars(name) "{{{
+
+	echo a:name . " == '" . eval(a:name) ."'"
 
 endfunction "}}}
 
@@ -500,12 +469,6 @@ function s:SubsBullet_TW(range) "{{{
 	call <sid>LoadSettings(1)
 	" reset cursor position
 	call move_cursor#KeepPos(1)
-
-endfunction "}}}
-
-function s:EchoVars(name) "{{{
-
-	echo a:name . " == '" . eval(a:name) ."'"
 
 endfunction "}}}
 
