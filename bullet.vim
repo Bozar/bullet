@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 16, Thu | 17:00:04 | 2014
+" Last Update: Oct 16, Thu | 20:01:17 | 2014
 
 " summary "{{{2
 
