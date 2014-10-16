@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 16, Thu | 00:38:42 | 2014
+" Last Update: Oct 16, Thu | 16:34:39 | 2014
 
 " user manual "{{{2
 
@@ -122,8 +122,8 @@ endif
 " sublist pattern, global "{{{3
 
 if !exists('g:Pat_SubList_Pre_Bullet')
-	let g:Pat_SubList_Pre_Bullet
-	\ = '^\s*==\(=\)\@!\s*'
+	let g:Pat_SubList_Pre_Bullet =
+	\ '^\s*==\(=\)\@!\s*'
 endif
 
 if !exists('g:Pat_SubList_After_Bullet')
@@ -131,8 +131,8 @@ if !exists('g:Pat_SubList_After_Bullet')
 endif
 
 if !exists('g:Pat_SubPara_Pre_Bullet')
-	let g:Pat_SubPara_Pre_Bullet
-	\ = '^\s*--\(-\)\@!\s*'
+	let g:Pat_SubPara_Pre_Bullet =
+	\ '^\s*--\(-\)\@!\s*'
 endif
 
 if !exists('g:Pat_SubPara_After_Bullet')
@@ -143,19 +143,22 @@ endif
 " text width, global "{{{3
 
 if !exists('g:TextWidth_Bullet')
-	let g:TextWidth_Bullet = -1
+	let g:TextWidth_Bullet = ''
 endif
 
  "}}}3
 " format options, global "{{{3
 
-if !exists('g:FormatOptions_Bullet')
-	let g:FormatOptions_Bullet = ''
-endif
-if !exists('g:FormatOptions_Minus_Bullet')
-	let g:FormatOptions_Minus_Bullet = ''
+if !exists('g:FormatOptions_Overwrite_Bullet')
+	let g:FormatOptions_Overwrite_Bullet = ''
 endif
 
+if !exists('g:FormatOptions_Add_Bullet')
+	let g:FormatOptions_Add_Bullet = ''
+endif
+if !exists('g:FormatOptions_Substract_Bullet')
+	let g:FormatOptions_Substract_Bullet = ''
+endif
 
  "}}}3
 " comments "{{{3
@@ -184,8 +187,8 @@ endif
  "}}}3
 " bullet mode, global "{{{3
 
-if !exists('g:SwitchBulletMode_Bullet')
-	let g:SwitchBulletMode_Bullet = 0
+if !exists('g:SwitchMode_Bullet')
+	let g:SwitchMode_Bullet = '0'
 endif
 
 if !exists('g:Pat_File_Bullet')
@@ -215,6 +218,30 @@ function s:LoadSettings(when) "{{{
 	" load settings
 	if a:when == 0
 
+		" protection characters
+		" such characters will appear in comments
+		" as well
+		if g:Cha_Protect_Bullet != ''
+			let s:Cha_Protect =
+			\ g:Cha_Protect_Bullet
+		else
+			let s:Cha_Protect = '@'
+		endif
+
+		" protection patterns
+		let s:Pat_Protect_Origin = '\(\({\{3}'
+		let s:Pat_Protect_Origin .=  '\|}\{3}\)'
+		let s:Pat_Protect_Origin .= '\d\{0,2}$\)'
+
+		let s:Pat_Protect_Final =
+		\ s:Pat_Protect_Origin .
+		\ g:Pat_Protect_Add_Bullet
+
+		if g:Pat_Protect_Overwrite_Bullet != ''
+			let s:Pat_Protect_Final =
+			\ g:Pat_Protect_Overwrite_Bullet
+		endif
+
 		let s:TextWidth_Save =
 		\ &textwidth
 		let s:FormatOptions_Save =
@@ -223,34 +250,22 @@ function s:LoadSettings(when) "{{{
 		\ &comments
 
 		" textwidth
-		if g:TextWidth_Bullet < 0
-			let &l:textwidth = &textwidth
-		else
-			let &l:textwidth =
-			\ g:TextWidth_Bullet
+		if g:TextWidth_Bullet >= 0
+			let &l:textwidth = g:TextWidth_Bullet
 		endif
 
 		" formatoptions
-		setl formatoptions&
-		if g:FormatOptions_Bullet != ''
+		if g:FormatOptions_Overwrite_Bullet != ''
 			let &l:formatoptions =
-			\ g:FormatOptions_Bullet
+			\ g:FormatOptions_Overwrite_Bullet
 		else
-			let &l:formatoptions .= 'ro2mB1j'
-			let g:FormatOptions_Bullet =
-			\ &l:formatoptions
+			let &l:formatoptions = 'tcqro2mB1j'
 		endif
+		let &l:formatoptions .=
+		\ g:FormatOptions_Add_Bullet
 		let &l:formatoptions =
 		\ substitute(&l:formatoptions,
-		\ g:FormatOptions_Minus_Bullet,'','')
-
-		" protect lines, character
-		if g:Cha_Protect_Bullet != ''
-			let s:Cha_Protect =
-			\ g:Cha_Protect_Bullet
-		else
-			let s:Cha_Protect = '@'
-		endif
+		\ g:FormatOptions_Substract_Bullet,'','g')
 
 		" comments
 		setl comments=
@@ -264,7 +279,7 @@ function s:LoadSettings(when) "{{{
 		" list characters, pre
 		let &l:comments .=
 		\ ',s:' . g:Cha_List_Pre_Bullet .
-		\ ',m:' . g:Cha_Para_Pre_Bullet.
+		\ ',m:' . g:Cha_Para_Pre_Bullet .
 		\ ',ex:/'
 
 		" sublist characters, after
@@ -281,27 +296,16 @@ function s:LoadSettings(when) "{{{
 		\ ',m:' . s:Cha_Protect .
 		\ ',ex:' . s:Cha_Protect
 
-		if g:Comments_Add_Bullet != ''
-			let &l:comments .= ',' .
-			\ g:Comments_Add_Bullet
-		endif
+		" overwrite comment setting
 		if g:Comments_Overwrite_Bullet != ''
 			let &l:comments =
 			\ g:Comments_Overwrite_Bullet
 		endif
 
-		" protect lines, pattern
-		let s:Pat_Protect_Origin = '\(\({\{3}'
-		let s:Pat_Protect_Origin .=  '\|}\{3}\)'
-		let s:Pat_Protect_Origin .= '\d\{0,2}$\)'
-
-		let s:Pat_Protect_Final =
-		\ s:Pat_Protect_Origin .
-		\ g:Pat_Protect_Add_Bullet
-
-		if g:Pat_Protect_Overwrite_Bullet != ''
-			let s:Pat_Protect_Final =
-			\ g:Pat_Protect_Overwrite_Bullet
+		" add new comments
+		if g:Comments_Add_Bullet != ''
+			let &l:comments .= ',' .
+			\ g:Comments_Add_Bullet
 		endif
 
 	endif
@@ -390,23 +394,14 @@ endfunction "}}}
 
 function s:BulletMode() "{{{
 
-	if g:SwitchBulletMode_Bullet == 0
-		return
-	endif
-
-	if g:Pat_File_Bullet == ''
+	if g:SwitchMode_Bullet == 0 ||
+	\ g:Pat_File_Bullet == ''
 		return
 	endif
 
 	execute 'autocmd BufRead,BufNewFile ' .
 	\ g:Pat_File_Bullet .
 	\ ' call <sid>LoadSettings(0)'
-
-endfunction "}}}
-
-function s:ShowValue(name) "{{{
-
-	echo a:name . " == '" . eval(a:name) ."'"
 
 endfunction "}}}
 
@@ -508,11 +503,17 @@ function s:SubsBullet_TW(range) "{{{
 
 endfunction "}}}
 
-function s:EchoVars() "{{{
+function s:EchoVars(name) "{{{
+
+	echo a:name . " == '" . eval(a:name) ."'"
+
+endfunction "}}}
+
+function s:EchoSettings() "{{{
 
 	call <sid>LoadSettings(0)
 
-	if g:SwitchBulletMode_Bullet != 0
+	if g:SwitchMode_Bullet != 0
 	\ && g:Pat_File_Bullet != ''
 		let l:switch = 'ON'
 	else
@@ -520,45 +521,85 @@ function s:EchoVars() "{{{
 	endif
 
 	echo '------------------------------'
-	call <sid>ShowValue('&formatoptions')
-	call <sid>ShowValue('g:FormatOptions_Bullet')
-	call <sid>ShowValue('g:FormatOptions_Minus
-	\_Bullet')
+	call <sid>EchoVars('&formatoptions')
+	call <sid>EchoVars(
+	\'g:FormatOptions_Overwrite_Bullet')
+	call <sid>EchoVars(
+	\'g:FormatOptions_Add_Bullet')
+	call <sid>EchoVars(
+	\'g:FormatOptions_Substract_Bullet')
 
 	echo '------------------------------'
-	call <sid>ShowValue('&textwidth')
-	call <sid>ShowValue(
+	call <sid>EchoVars('&textwidth')
+	call <sid>EchoVars(
 	\'g:TextWidth_Bullet')
 
 	echo '------------------------------'
-	call <sid>ShowValue('&comments')
-	call <sid>ShowValue(
-	\'g:Comments_Add_Bullet')
-	call <sid>ShowValue(
+	call <sid>EchoVars('&comments')
+	call <sid>EchoVars(
 	\'g:Comments_Overwrite_Bullet')
+	call <sid>EchoVars(
+	\'g:Comments_Add_Bullet')
 
 	echo '------------------------------'
-	call <sid>ShowValue('s:Pat_Protect_Final')
-	call <sid>ShowValue(
+	call <sid>EchoVars('&tabstop')
+	call <sid>EchoVars('&softtabstop')
+	call <sid>EchoVars('&shiftwidth')
+	call <sid>EchoVars('&expandtab')
+
+	echo '------------------------------'
+	call <sid>EchoVars('s:Pat_Protect_Final')
+	call <sid>EchoVars(
 	\'g:Pat_Protect_Add_Bullet')
-	call <sid>ShowValue(
+	call <sid>EchoVars(
 	\'g:Pat_Protect_Overwrite_Bullet')
 
 	echo '------------------------------'
-	call <sid>ShowValue('s:Cha_Protect')
-	call <sid>ShowValue(
+	call <sid>EchoVars('s:Cha_Protect')
+	call <sid>EchoVars(
 	\'g:Cha_Protect_Bullet')
 
 	echo '------------------------------'
 	echo 'Auto load bullet settings: ' . l:switch
-	call <sid>ShowValue(
-	\'g:SwitchBulletMode_Bullet')
-	call <sid>ShowValue(
+	call <sid>EchoVars(
+	\'g:SwitchMode_Bullet')
+	call <sid>EchoVars(
 	\'g:Pat_File_Bullet')
 
 	echo '------------------------------'
 
 	call <sid>LoadSettings(1)
+
+endfunction "}}}
+
+function s:EchoBullets() "{{{
+
+	echo '------------------------------'
+	call <sid>EchoVars('g:Cha_List_Pre_Bullet')
+	call <sid>EchoVars('g:Cha_List_After_Bullet')
+	call <sid>EchoVars('g:Cha_Para_Pre_Bullet')
+
+	echo '------------------------------'
+	call <sid>EchoVars('g:Cha_SubList_Pre_Bullet')
+	call <sid>EchoVars(
+	\'g:Cha_SubList_After_Bullet')
+	call <sid>EchoVars('g:Cha_SubPara_Pre_Bullet')
+
+	echo '------------------------------'
+	call <sid>EchoVars('g:Pat_List_Pre_Bullet')
+	call <sid>EchoVars('g:Pat_List_After_Bullet')
+	call <sid>EchoVars('g:Pat_Para_Pre_Bullet')
+	call <sid>EchoVars('g:Pat_Para_After_Bullet')
+
+	echo '------------------------------'
+	call <sid>EchoVars('g:Pat_SubList_Pre_Bullet')
+	call <sid>EchoVars(
+	\'g:Pat_SubList_After_Bullet')
+	call <sid>EchoVars('g:Pat_SubPara_Pre_Bullet')
+	call <sid>EchoVars(
+	\'g:Pat_SubPara_After_Bullet')
+
+	echo '------------------------------'
 
 endfunction "}}}
 
@@ -571,7 +612,6 @@ autocmd VimEnter * call <sid>BulletMode()
 if !exists(':BuParaTW')
 	command BuParaTW call <sid>SubsBullet_TW(0)
 endif
-
 if !exists(':BuParaNoTW')
 	command BuParaNoTW
 	\ call <sid>SubsBullet_NoTW(0)
@@ -581,13 +621,15 @@ if !exists(':BuWholeNoTW')
 	command BuWholeNoTW
 	\ call <sid>SubsBullet_NoTW(1)
 endif
-
 if !exists(':BuWholeTW')
 	command BuWholeTW call <sid>SubsBullet_TW(1)
 endif
 
-if !exists(':BuEcho')
-	command BuEcho call <sid>EchoVars()
+if !exists(':BuEchoSet')
+	command BuEchoSet call <sid>EchoSettings()
+endif
+if !exists(':BuEchoBullet')
+	command BuEchoBullet call <sid>EchoBullets()
 endif
 
  "}}}2
@@ -597,4 +639,4 @@ let &cpoptions = s:Save_cpo
 unlet s:Save_cpo
 
  "}}}2
-" vim: set fdm=marker fdl=20: "}}}1
+" vim: set fdm=marker fdl=20 tw=50: "}}}1
