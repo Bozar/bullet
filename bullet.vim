@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 17, Fri | 15:41:38 | 2014
+" Last Update: Oct 17, Fri | 17:06:52 | 2014
 
 " summary "{{{2
 
@@ -26,7 +26,7 @@ set cpoptions&vim
  "}}}2
 " variables "{{{2
 
-" list character, global "{{{3
+" list character "{{{3
 
 if !exists('g:Cha_List_Pre_Bullet')
 	let g:Cha_List_Pre_Bullet = ''
@@ -41,7 +41,7 @@ if !exists('g:Cha_Para_Pre_Bullet')
 endif
 
  "}}}3
-" sublist character, global "{{{3
+" sublist character "{{{3
 
 if !exists('g:Cha_SubList_Pre_Bullet')
 	let g:Cha_SubList_Pre_Bullet = ''
@@ -56,7 +56,7 @@ if !exists('g:Cha_SubPara_Pre_Bullet')
 endif
 
  "}}}3
-" list pattern, global "{{{3
+" list pattern "{{{3
 
 if !exists('g:Pat_List_Pre_Bullet')
 	let g:Pat_List_Pre_Bullet = ''
@@ -75,7 +75,7 @@ if !exists('g:Pat_Para_After_Bullet')
 endif
 
  "}}}3
-" sublist pattern, global "{{{3
+" sublist pattern "{{{3
 
 if !exists('g:Pat_SubList_Pre_Bullet')
 	let g:Pat_SubList_Pre_Bullet = ''
@@ -94,14 +94,14 @@ if !exists('g:Pat_SubPara_After_Bullet')
 endif
 
  "}}}3
-" text width, global "{{{3
+" text width "{{{3
 
 if !exists('g:TextWidth_Bullet')
 	let g:TextWidth_Bullet = ''
 endif
 
  "}}}3
-" format options, global "{{{3
+" format options "{{{3
 
 if !exists('g:FormatOptions_Overwrite_Bullet')
 	let g:FormatOptions_Overwrite_Bullet = ''
@@ -126,8 +126,16 @@ if !exists('g:Comments_Add_Bullet')
 	let g:Comments_Add_Bullet = ''
 endif
 
+if !exists('g:Cha_ComEnd_Bullet')
+	let g:Cha_ComEnd_Bullet = ''
+endif
+
+if !exists('g:Pat_ComEnd_Bullet')
+	let g:Pat_ComEnd_Bullet = ''
+endif
+
  "}}}3
-" protect lines, global "{{{3
+" protect lines "{{{3
 
 if !exists('g:Pat_Protect_Overwrite_Bullet')
 	let g:Pat_Protect_Overwrite_Bullet = ''
@@ -142,7 +150,7 @@ if !exists('g:Cha_Protect_Bullet')
 endif
 
  "}}}3
-" bullet mode, global "{{{3
+" bullet mode "{{{3
 
 if !exists('g:SwitchMode_Bullet')
 	let g:SwitchMode_Bullet = '0'
@@ -153,10 +161,11 @@ if !exists('g:Pat_File_Bullet')
 endif
 
  "}}}3
-" local "{{{3
+" placeholder "{{{3
 
-let s:Mark = '###LOOONG_PLACEHOLDER_FOR_BULLET###'
-let s:EndComment = '\s*\/\s*'
+if !exists('g:Cha_Mark_Bullet')
+	let g:Cha_Mark_Bullet = ''
+endif
 
  "}}}3
  "}}}2
@@ -276,7 +285,7 @@ function s:LoadBullets() "{{{
 		\ g:Pat_SubPara_After_Bullet
 	endif
 
-	let s:SearchPat =
+	let s:Pat_Search =
 	\ s:Pat_List_Pre . '\|' .
 	\ s:Pat_Para_Pre . '\|' .
 	\ s:Pat_SubList_Pre . '\|' .
@@ -290,6 +299,28 @@ function s:LoadSettings(when) "{{{
 	if a:when == 0
 
 		call <sid>LoadBullets()
+
+		let s:TextWidth_Save = &textwidth
+		let s:FormatOptions_Save = &formatoptions
+		let s:Comments_Save = &comments
+
+		" textwidth
+		if g:TextWidth_Bullet >= 0
+			let &l:textwidth = g:TextWidth_Bullet
+		endif
+
+		" formatoptions
+		if g:FormatOptions_Overwrite_Bullet != ''
+			let &l:formatoptions =
+			\ g:FormatOptions_Overwrite_Bullet
+		else
+			let &l:formatoptions = 'tcqro2mB1j'
+		endif
+		let &l:formatoptions .=
+		\ g:FormatOptions_Add_Bullet
+		let &l:formatoptions =
+		\ substitute(&l:formatoptions,
+		\ g:FormatOptions_Substract_Bullet,'','g')
 
 		" protection characters
 		" such characters will appear in comments
@@ -316,27 +347,19 @@ function s:LoadSettings(when) "{{{
 			\ g:Pat_Protect_Add_Bullet
 		endif
 
-		let s:TextWidth_Save = &textwidth
-		let s:FormatOptions_Save = &formatoptions
-		let s:Comments_Save = &comments
-
-		" textwidth
-		if g:TextWidth_Bullet >= 0
-			let &l:textwidth = g:TextWidth_Bullet
-		endif
-
-		" formatoptions
-		if g:FormatOptions_Overwrite_Bullet != ''
-			let &l:formatoptions =
-			\ g:FormatOptions_Overwrite_Bullet
+		" comment end character
+		if g:Cha_ComEnd_Bullet == ''
+			let s:Cha_ComEnd = '/'
 		else
-			let &l:formatoptions = 'tcqro2mB1j'
+			let s:Cha_ComEnd = g:Cha_ComEnd_Bullet
 		endif
-		let &l:formatoptions .=
-		\ g:FormatOptions_Add_Bullet
-		let &l:formatoptions =
-		\ substitute(&l:formatoptions,
-		\ g:FormatOptions_Substract_Bullet,'','g')
+
+		" comment end pattern
+		if g:Pat_ComEnd_Bullet == ''
+			let s:Pat_ComEnd = '\s*\/\s*'
+		else
+			let s:Pat_ComEnd = g:Pat_ComEnd_Bullet
+		endif
 
 		" comments
 		setl comments=
@@ -345,13 +368,13 @@ function s:LoadSettings(when) "{{{
 		let &l:comments .=
 		\ 's:' . s:Cha_SubList_Pre .
 		\ ',m:' . s:Cha_SubPara_Pre.
-		\ ',ex:/'
+		\ ',ex:' . s:Cha_ComEnd
 
 		" list characters, pre
 		let &l:comments .=
 		\ ',s:' . s:Cha_List_Pre .
 		\ ',m:' . s:Cha_Para_Pre .
-		\ ',ex:/'
+		\ ',ex:' . s:Cha_ComEnd
 
 		" sublist characters, after
 		let &l:comments .=
@@ -377,6 +400,14 @@ function s:LoadSettings(when) "{{{
 		if g:Comments_Add_Bullet != ''
 			let &l:comments .= ',' .
 			\ g:Comments_Add_Bullet
+		endif
+
+		" place holder mark
+		if g:Cha_Mark_Bullet == ''
+			let s:Cha_Mark =
+			\ '###LONG_PLACEHOLDER_FOR_BULLET###'
+		else
+			let s:Cha_Mark = g:Cha_Mark_Bullet
 		endif
 
 	endif
@@ -411,21 +442,21 @@ function s:DelBullet(when) "{{{
 
 		" only bullet
 		execute "'j,'ks/\\(" .
-		\ s:SearchPat . '\)\(' .
-		\ s:EndComment . '\|\s*\)$/' .
-		\ s:Mark . '/e'
+		\ s:Pat_Search . '\)\(' .
+		\ s:Pat_ComEnd . '\|\s*\)$/' .
+		\ s:Cha_Mark . '/e'
 
-		" only s:EndComment
-		execute "'j,'ks/^" . s:EndComment . '$/'
-		\ s:Mark . '/e'
+		" only s:Pat_ComEnd
+		execute "'j,'ks/^" . s:Pat_ComEnd . '$/'
+		\ s:Cha_Mark . '/e'
 
-		" s:EndComment at the end of line
-		let l:pattern = '\(' . s:SearchPat .
-		\ '\).*' . s:EndComment . '$'
+		" s:Pat_ComEnd at the end of line
+		let l:pattern = '\(' . s:Pat_Search .
+		\ '\).*' . s:Pat_ComEnd . '$'
 		'j
 		if search(l:pattern,'c',line("'k")) != 0
-			execute "'j,'kg/" . s:SearchPat .
-			\ '/s/' . s:EndComment . '$//'
+			execute "'j,'kg/" . s:Pat_Search .
+			\ '/s/' . s:Pat_ComEnd . '$//'
 		endif
 
 	endif
@@ -434,8 +465,9 @@ function s:DelBullet(when) "{{{
 	" in case line 'j/'k contains mark
 	if a:when == 1
 		'j
-		if search(s:Mark,'c',line("'k")) != 0
-			execute "'j,'kg/" . s:Mark . '/delete'
+		if search(s:Cha_Mark,'c',line("'k")) != 0
+			execute "'j,'kg/" . s:Cha_Mark .
+			\ '/delete'
 		endif
 	endif
 
@@ -593,53 +625,77 @@ function s:EchoSettings() "{{{
 		let l:switch = 'OFF'
 	endif
 
-	echo '------------------------------'
+	echo '=============================='
+
 	call <sid>EchoVars('&formatoptions')
+	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:FormatOptions_Overwrite_Bullet')
 	call <sid>EchoVars(
 	\'g:FormatOptions_Add_Bullet')
 	call <sid>EchoVars(
 	\'g:FormatOptions_Substract_Bullet')
+	echo '=============================='
 
-	echo '------------------------------'
 	call <sid>EchoVars('&textwidth')
+	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:TextWidth_Bullet')
+	echo '=============================='
 
-	echo '------------------------------'
 	call <sid>EchoVars('&comments')
+	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:Comments_Overwrite_Bullet')
 	call <sid>EchoVars(
 	\'g:Comments_Add_Bullet')
+	echo '=============================='
 
-	echo '------------------------------'
 	call <sid>EchoVars('&tabstop')
 	call <sid>EchoVars('&softtabstop')
 	call <sid>EchoVars('&shiftwidth')
 	call <sid>EchoVars('&expandtab')
+	echo '=============================='
 
+	call <sid>EchoVars('s:Pat_Search')
+	echo '=============================='
+
+	call <sid>EchoVars('s:Cha_ComEnd')
 	echo '------------------------------'
+	call <sid>EchoVars('g:Cha_ComEnd_Bullet')
+	echo '=============================='
+
+	call <sid>EchoVars('s:Pat_ComEnd')
+	echo '------------------------------'
+	call <sid>EchoVars('g:Pat_ComEnd_Bullet')
+	echo '=============================='
+
+	call <sid>EchoVars('s:Cha_Mark')
+	echo '------------------------------'
+	call <sid>EchoVars('g:Cha_Mark_Bullet')
+	echo '=============================='
+
+	call <sid>EchoVars('s:Cha_Protect')
+	echo '------------------------------'
+	call <sid>EchoVars(
+	\'g:Cha_Protect_Bullet')
+	echo '=============================='
+
 	call <sid>EchoVars('s:Pat_Protect_Final')
+	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:Pat_Protect_Overwrite_Bullet')
 	call <sid>EchoVars(
 	\'g:Pat_Protect_Add_Bullet')
+	echo '=============================='
 
-	echo '------------------------------'
-	call <sid>EchoVars('s:Cha_Protect')
-	call <sid>EchoVars(
-	\'g:Cha_Protect_Bullet')
-
-	echo '------------------------------'
 	echo 'Auto load bullet settings: ' . l:switch
+	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:SwitchMode_Bullet')
 	call <sid>EchoVars(
 	\'g:Pat_File_Bullet')
-
-	echo '------------------------------'
+	echo '=============================='
 
 	call <sid>LoadSettings(1)
 
