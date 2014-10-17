@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 17, Fri | 17:38:59 | 2014
+" Last Update: Oct 17, Fri | 22:31:42 | 2014
 
 " summary "{{{2
 
@@ -15,11 +15,14 @@
  "}}}2
 " load & cpoptions "{{{2
 
-if exists('g:Loaded_Bullet')
+if !exists('g:Loaded_Bullet')
+	let g:Loaded_Bullet = 0
+endif
+if g:Loaded_Bullet > 0
 	finish
 endif
-
 let g:Loaded_Bullet = 1
+
 let s:Save_cpo = &cpoptions
 set cpoptions&vim
 
@@ -173,7 +176,7 @@ endif
 
 " parts "{{{3
 
-function s:LoadBullets() "{{{
+function s:LoadBullets() "{{{4
 
 	" list character, pre
 	if g:Cha_List_Pre_Bullet == ''
@@ -291,14 +294,66 @@ function s:LoadBullets() "{{{
 	\ s:Pat_SubList_Pre . '\|' .
 	\ s:Pat_SubPara_Pre
 
-endfunction "}}}
+endfunction "}}}4
 
-function s:LoadSettings(when) "{{{
+function s:LoadStrings() "{{{4
+
+	" comment end character
+	if g:Cha_ComEnd_Bullet == ''
+		let s:Cha_ComEnd = '/'
+	else
+		let s:Cha_ComEnd = g:Cha_ComEnd_Bullet
+	endif
+
+	" comment end pattern
+	if g:Pat_ComEnd_Bullet == ''
+		let s:Pat_ComEnd = '\s*\/\s*'
+	else
+		let s:Pat_ComEnd = g:Pat_ComEnd_Bullet
+	endif
+
+	" protection characters
+	" such characters will appear in comments
+	" as well
+	if g:Cha_Protect_Bullet != ''
+		let s:Cha_Protect =
+		\ g:Cha_Protect_Bullet
+	else
+		let s:Cha_Protect = '@'
+	endif
+
+	" protection patterns
+	let s:Pat_Protect_Origin = '\(\({\{3}'
+	let s:Pat_Protect_Origin .=  '\|}\{3}\)'
+	let s:Pat_Protect_Origin .= '\d\{0,2}$\)'
+
+	let s:Pat_Protect_Final =
+	\ s:Pat_Protect_Origin .
+	\ g:Pat_Protect_Add_Bullet
+
+	if g:Pat_Protect_Overwrite_Bullet != ''
+		let s:Pat_Protect_Final =
+		\ g:Pat_Protect_Overwrite_Bullet .
+		\ g:Pat_Protect_Add_Bullet
+	endif
+
+	" place holder mark
+	if g:Cha_Mark_Bullet == ''
+		let s:Cha_Mark =
+		\ '###LONG_PLACEHOLDER_FOR_BULLET###'
+	else
+		let s:Cha_Mark = g:Cha_Mark_Bullet
+	endif
+
+endfunction "}}}4
+
+function s:LoadSettings(when) "{{{4
+
+	call <sid>LoadBullets()
+	call <sid>LoadStrings()
 
 	" load settings
 	if a:when == 0
-
-		call <sid>LoadBullets()
 
 		let s:TextWidth_Save = &textwidth
 		let s:FormatOptions_Save = &formatoptions
@@ -321,45 +376,6 @@ function s:LoadSettings(when) "{{{
 		let &l:formatoptions =
 		\ substitute(&l:formatoptions,
 		\ g:FormatOptions_Substract_Bullet,'','g')
-
-		" protection characters
-		" such characters will appear in comments
-		" as well
-		if g:Cha_Protect_Bullet != ''
-			let s:Cha_Protect =
-			\ g:Cha_Protect_Bullet
-		else
-			let s:Cha_Protect = '@'
-		endif
-
-		" protection patterns
-		let s:Pat_Protect_Origin = '\(\({\{3}'
-		let s:Pat_Protect_Origin .=  '\|}\{3}\)'
-		let s:Pat_Protect_Origin .= '\d\{0,2}$\)'
-
-		let s:Pat_Protect_Final =
-		\ s:Pat_Protect_Origin .
-		\ g:Pat_Protect_Add_Bullet
-
-		if g:Pat_Protect_Overwrite_Bullet != ''
-			let s:Pat_Protect_Final =
-			\ g:Pat_Protect_Overwrite_Bullet .
-			\ g:Pat_Protect_Add_Bullet
-		endif
-
-		" comment end character
-		if g:Cha_ComEnd_Bullet == ''
-			let s:Cha_ComEnd = '/'
-		else
-			let s:Cha_ComEnd = g:Cha_ComEnd_Bullet
-		endif
-
-		" comment end pattern
-		if g:Pat_ComEnd_Bullet == ''
-			let s:Pat_ComEnd = '\s*\/\s*'
-		else
-			let s:Pat_ComEnd = g:Pat_ComEnd_Bullet
-		endif
 
 		" comments
 		setl comments=
@@ -402,14 +418,6 @@ function s:LoadSettings(when) "{{{
 			\ g:Comments_Add_Bullet
 		endif
 
-		" place holder mark
-		if g:Cha_Mark_Bullet == ''
-			let s:Cha_Mark =
-			\ '###LONG_PLACEHOLDER_FOR_BULLET###'
-		else
-			let s:Cha_Mark = g:Cha_Mark_Bullet
-		endif
-
 	endif
 
 	" unload settings
@@ -427,15 +435,15 @@ function s:LoadSettings(when) "{{{
 
 	endif
 
-endfunction "}}}
+endfunction "}}}4
 
-function s:DelBullet(when) "{{{
+function s:DelBullet(when) "{{{4
 
 	" suppose '=' will be replaced with bullet '*'
 	" delete lines containing only such characters
 	" '^\s*=\s*$' or '^\s*\/\s*$'
 	" '/' appears in a three-piece comment
-	" which is defined in s:LoadSettings()
+	" which is defined in s:LoadStrings()
 	" :help format-comments
 
 	if a:when == 0
@@ -471,9 +479,9 @@ function s:DelBullet(when) "{{{
 		endif
 	endif
 
-endfunction "}}}
+endfunction "}}}4
 
-function s:SubsBullet_Core() "{{{
+function s:SubsBullet_Core() "{{{4
 
 	" list
 	" substitute '=' with '*' and indent 1 tab
@@ -495,9 +503,9 @@ function s:SubsBullet_Core() "{{{
 	\ s:Pat_SubPara_Pre . '/' .
 	\ s:Pat_SubPara_After . '/e'
 
-endfunction "}}}
+endfunction "}}}4
 
-function s:BulletMode() "{{{
+function s:BulletMode() "{{{4
 
 	if g:SwitchMode_Bullet == 0 ||
 	\ g:Pat_File_Bullet == ''
@@ -508,20 +516,22 @@ function s:BulletMode() "{{{
 	\ g:Pat_File_Bullet .
 	\ ' call <sid>LoadSettings(0)'
 
-endfunction "}}}
+endfunction "}}}4
 
-function s:EchoVars(name) "{{{
+function s:EchoVars(name) "{{{4
 
 	echo a:name . " == '" . eval(a:name) ."'"
 
-endfunction "}}}
+endfunction "}}}4
 
  "}}}3
 " main "{{{3
 
-function s:SubsBullet_NoTW(range) "{{{
+function s:SubsBullet_NoTW(range) "{{{4
 
 	call move_cursor#KeepPos(0)
+	call <sid>LoadBullets()
+	call <sid>LoadStrings()
 
 	" set mark j & k
 	" paragraph
@@ -542,13 +552,11 @@ function s:SubsBullet_NoTW(range) "{{{
 
 	call move_cursor#KeepPos(1)
 
-endfunction "}}}
+endfunction "}}}4
 
-function s:SubsBullet_TW(range) "{{{
+function s:SubsBullet_TW(range) "{{{4
 
-	" save cursor position
 	call move_cursor#KeepPos(0)
-	" load settings
 	call <sid>LoadSettings(0)
 
 	let l:i = 0
@@ -612,9 +620,9 @@ function s:SubsBullet_TW(range) "{{{
 	" reset cursor position
 	call move_cursor#KeepPos(1)
 
-endfunction "}}}
+endfunction "}}}4
 
-function s:EchoSettings() "{{{
+function s:EchoSettings() "{{{4
 
 	call <sid>LoadSettings(0)
 
@@ -699,9 +707,9 @@ function s:EchoSettings() "{{{
 
 	call <sid>LoadSettings(1)
 
-endfunction "}}}
+endfunction "}}}4
 
-function s:EchoBullets() "{{{
+function s:EchoBullets() "{{{4
 
 	call <sid>LoadSettings(0)
 	call <sid>LoadSettings(1)
@@ -717,16 +725,6 @@ function s:EchoBullets() "{{{
 	call <sid>EchoVars('g:Cha_Para_Pre_Bullet')
 	echo '=============================='
 
-	call <sid>EchoVars('s:Cha_SubList_Pre')
-	call <sid>EchoVars('s:Cha_SubList_After')
-	call <sid>EchoVars('s:Cha_SubPara_Pre')
-	echo '------------------------------'
-	call <sid>EchoVars('g:Cha_SubList_Pre_Bullet')
-	call <sid>EchoVars(
-	\'g:Cha_SubList_After_Bullet')
-	call <sid>EchoVars('g:Cha_SubPara_Pre_Bullet')
-	echo '=============================='
-
 	call <sid>EchoVars('s:Pat_List_Pre')
 	call <sid>EchoVars('s:Pat_List_After')
 	call <sid>EchoVars('s:Pat_Para_Pre')
@@ -736,6 +734,16 @@ function s:EchoBullets() "{{{
 	call <sid>EchoVars('g:Pat_List_After_Bullet')
 	call <sid>EchoVars('g:Pat_Para_Pre_Bullet')
 	call <sid>EchoVars('g:Pat_Para_After_Bullet')
+	echo '=============================='
+
+	call <sid>EchoVars('s:Cha_SubList_Pre')
+	call <sid>EchoVars('s:Cha_SubList_After')
+	call <sid>EchoVars('s:Cha_SubPara_Pre')
+	echo '------------------------------'
+	call <sid>EchoVars('g:Cha_SubList_Pre_Bullet')
+	call <sid>EchoVars(
+	\'g:Cha_SubList_After_Bullet')
+	call <sid>EchoVars('g:Cha_SubPara_Pre_Bullet')
 	echo '=============================='
 
 	call <sid>EchoVars('s:Pat_SubList_Pre')
@@ -751,7 +759,7 @@ function s:EchoBullets() "{{{
 	\'g:Pat_SubPara_After_Bullet')
 	echo '=============================='
 
-endfunction "}}}
+endfunction "}}}4
 
  "}}}3
  "}}}2
