@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 17, Fri | 17:06:52 | 2014
+" Last Update: Oct 17, Fri | 17:38:59 | 2014
 
 " summary "{{{2
 
@@ -526,7 +526,7 @@ function s:SubsBullet_NoTW(range) "{{{
 	" set mark j & k
 	" paragraph
 	if a:range == 0
-		call move_cursor#Para_SetMarkJK()
+		call move_cursor#SetMarkJK_Para()
 	" whole text
 	elseif a:range == 1
 		1mark j
@@ -558,7 +558,7 @@ function s:SubsBullet_TW(range) "{{{
 		" set mark j & k
 		" paragraph
 		if a:range == 0
-			call move_cursor#Para_SetMarkJK()
+			call move_cursor#SetMarkJK_Para()
 		" whole text
 		elseif a:range == 1
 			1mark j
@@ -600,7 +600,7 @@ function s:SubsBullet_TW(range) "{{{
 
 	" unprotect lines
 	if a:range == 0
-		call move_cursor#Para_SetMarkJK()
+		call move_cursor#SetMarkJK_Para()
 	elseif a:range == 1
 		1mark j
 		$mark k
