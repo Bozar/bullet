@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 16, Thu | 22:12:10 | 2014
+" Last Update: Oct 17, Fri | 15:41:38 | 2014
 
 " summary "{{{2
 
@@ -312,7 +312,8 @@ function s:LoadSettings(when) "{{{
 
 		if g:Pat_Protect_Overwrite_Bullet != ''
 			let s:Pat_Protect_Final =
-			\ g:Pat_Protect_Overwrite_Bullet
+			\ g:Pat_Protect_Overwrite_Bullet .
+			\ g:Pat_Protect_Add_Bullet
 		endif
 
 		let s:TextWidth_Save = &textwidth
@@ -622,9 +623,9 @@ function s:EchoSettings() "{{{
 	echo '------------------------------'
 	call <sid>EchoVars('s:Pat_Protect_Final')
 	call <sid>EchoVars(
-	\'g:Pat_Protect_Add_Bullet')
-	call <sid>EchoVars(
 	\'g:Pat_Protect_Overwrite_Bullet')
+	call <sid>EchoVars(
+	\'g:Pat_Protect_Add_Bullet')
 
 	echo '------------------------------'
 	call <sid>EchoVars('s:Cha_Protect')
@@ -702,27 +703,30 @@ endfunction "}}}
 
 autocmd VimEnter * call <sid>BulletMode()
 
-if !exists(':BuParaTW')
-	command BuParaTW call <sid>SubsBullet_TW(0)
+if !exists(':BuPara1TW')
+	command BuPara1TW call <sid>SubsBullet_TW(0)
 endif
-if !exists(':BuParaNoTW')
-	command BuParaNoTW
+
+if !exists(':BuPara2NoTW')
+	command BuPara2NoTW
 	\ call <sid>SubsBullet_NoTW(0)
 endif
 
-if !exists(':BuWholeNoTW')
-	command BuWholeNoTW
-	\ call <sid>SubsBullet_NoTW(1)
-endif
-if !exists(':BuWholeTW')
-	command BuWholeTW call <sid>SubsBullet_TW(1)
+if !exists(':BuWhole1TW')
+	command BuWhole1TW call <sid>SubsBullet_TW(1)
 endif
 
-if !exists(':BuEchoSet')
-	command BuEchoSet call <sid>EchoSettings()
+if !exists(':BuWhole2NoTW')
+	command BuWhole2NoTW
+	\ call <sid>SubsBullet_NoTW(1)
 endif
-if !exists(':BuEchoBullet')
-	command BuEchoBullet call <sid>EchoBullets()
+
+if !exists(':BuEcho1Set')
+	command BuEcho1Set call <sid>EchoSettings()
+endif
+
+if !exists(':BuEcho2Bullet')
+	command BuEcho2Bullet call <sid>EchoBullets()
 endif
 
  "}}}2
