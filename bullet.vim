@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 18, Sat | 12:25:12 | 2014
+" Last Update: Oct 18, Sat | 14:47:58 | 2014
 
 " summary "{{{2
 
@@ -830,30 +830,30 @@ endfunction "}}}4
 
 autocmd VimEnter * call <sid>BulletMode()
 
-if !exists(':BuPara1TW')
-	command BuPara1TW call <sid>SubsBullet_TW(0)
+if !exists(':BuPara0TW')
+	command BuPara0TW call <sid>SubsBullet_TW(0)
 endif
 
-if !exists(':BuPara2NoTW')
-	command BuPara2NoTW
+if !exists(':BuPara1NoTW')
+	command BuPara1NoTW
 	\ call <sid>SubsBullet_NoTW(0)
 endif
 
-if !exists(':BuWhole1TW')
-	command BuWhole1TW call <sid>SubsBullet_TW(1)
+if !exists(':BuWhole0TW')
+	command BuWhole0TW call <sid>SubsBullet_TW(1)
 endif
 
-if !exists(':BuWhole2NoTW')
-	command BuWhole2NoTW
+if !exists(':BuWhole1NoTW')
+	command BuWhole1NoTW
 	\ call <sid>SubsBullet_NoTW(1)
 endif
 
-if !exists(':BuEcho1Set')
-	command BuEcho1Set call <sid>EchoSettings()
+if !exists(':BuEcho0Set')
+	command BuEcho0Set call <sid>EchoSettings()
 endif
 
-if !exists(':BuEcho2Bullet')
-	command BuEcho2Bullet call <sid>EchoBullets()
+if !exists(':BuEcho1Bullet')
+	command BuEcho1Bullet call <sid>EchoBullets()
 endif
 
  "}}}2
