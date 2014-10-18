@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 18, Sat | 09:29:08 | 2014
+" Last Update: Oct 18, Sat | 12:25:12 | 2014
 
 " summary "{{{2
 
@@ -35,8 +35,8 @@ if !exists('g:Cha_List_Pre_Bullet')
 	let g:Cha_List_Pre_Bullet = ''
 endif
 
-if !exists('g:Cha_List_After_Bullet')
-	let g:Cha_List_After_Bullet = ''
+if !exists('g:Cha_List_Post_Bullet')
+	let g:Cha_List_Post_Bullet = ''
 endif
 
 if !exists('g:Cha_Para_Pre_Bullet')
@@ -50,8 +50,8 @@ if !exists('g:Cha_SubList_Pre_Bullet')
 	let g:Cha_SubList_Pre_Bullet = ''
 endif
 
-if !exists('g:Cha_SubList_After_Bullet')
-	let g:Cha_SubList_After_Bullet = ''
+if !exists('g:Cha_SubList_Post_Bullet')
+	let g:Cha_SubList_Post_Bullet = ''
 endif
 
 if !exists('g:Cha_SubPara_Pre_Bullet')
@@ -65,16 +65,16 @@ if !exists('g:Pat_List_Pre_Bullet')
 	let g:Pat_List_Pre_Bullet = ''
 endif
 
-if !exists('g:Pat_List_After_Bullet')
-	let g:Pat_List_After_Bullet = ''
+if !exists('g:Pat_List_Post_Bullet')
+	let g:Pat_List_Post_Bullet = ''
 endif
 
 if !exists('g:Pat_Para_Pre_Bullet')
 	let g:Pat_Para_Pre_Bullet = ''
 endif
 
-if !exists('g:Pat_Para_After_Bullet')
-	let g:Pat_Para_After_Bullet = ''
+if !exists('g:Pat_Para_Post_Bullet')
+	let g:Pat_Para_Post_Bullet = ''
 endif
 
  "}}}3
@@ -84,16 +84,16 @@ if !exists('g:Pat_SubList_Pre_Bullet')
 	let g:Pat_SubList_Pre_Bullet = ''
 endif
 
-if !exists('g:Pat_SubList_After_Bullet')
-	let g:Pat_SubList_After_Bullet = ''
+if !exists('g:Pat_SubList_Post_Bullet')
+	let g:Pat_SubList_Post_Bullet = ''
 endif
 
 if !exists('g:Pat_SubPara_Pre_Bullet')
 	let g:Pat_SubPara_Pre_Bullet = ''
 endif
 
-if !exists('g:Pat_SubPara_After_Bullet')
-	let g:Pat_SubPara_After_Bullet = ''
+if !exists('g:Pat_SubPara_Post_Bullet')
+	let g:Pat_SubPara_Post_Bullet = ''
 endif
 
  "}}}3
@@ -156,7 +156,7 @@ endif
 " autocommands "{{{3
 
 if !exists('g:Switch_Auto_Bullet')
-	let g:Switch_Auto_Bullet = '0'
+	let g:Switch_Auto_Bullet = ''
 endif
 
 if !exists('g:Pat_File_Bullet')
@@ -166,8 +166,8 @@ endif
  "}}}3
 " load space#DelSpace_Trail() "{{{3
 
-if !exists('g:Switch_DelSpace_Bullet')
-	let g:Switch_DelSpace_Bullet = ''
+if !exists('g:Switch_NotDelSpace_Bullet')
+	let g:Switch_NotDelSpace_Bullet = ''
 endif
 
  "}}}3
@@ -186,113 +186,113 @@ endif
 function s:LoadBullets() "{{{4
 
 	" list character, pre
-	if g:Cha_List_Pre_Bullet == ''
-		let s:Cha_List_Pre = '='
-	else
+	if g:Cha_List_Pre_Bullet != ''
 		let s:Cha_List_Pre = g:Cha_List_Pre_Bullet
+	else
+		let s:Cha_List_Pre = '='
 	endif
 
 	" list character, after
-	if g:Cha_List_After_Bullet == ''
-		let s:Cha_List_After = '*'
+	if g:Cha_List_Post_Bullet != ''
+		let s:Cha_List_Post =
+		\ g:Cha_List_Post_Bullet
 	else
-		let s:Cha_List_After =
-		\ g:Cha_List_After_Bullet
+		let s:Cha_List_Post = '*'
 	endif
 
 	" para character, pre
-	if g:Cha_Para_Pre_Bullet == ''
-		let s:Cha_Para_Pre = '-'
-	else
+	if g:Cha_Para_Pre_Bullet != ''
 		let s:Cha_Para_Pre = g:Cha_Para_Pre_Bullet
+	else
+		let s:Cha_Para_Pre = '-'
 	endif
 
 	" sub-list character, pre
-	if g:Cha_SubList_Pre_Bullet == ''
-		let s:Cha_SubList_Pre = '=='
-	else
+	if g:Cha_SubList_Pre_Bullet != ''
 		let s:Cha_SubList_Pre =
 		\ g:Cha_SubList_Pre_Bullet
+	else
+		let s:Cha_SubList_Pre = '=='
 	endif
 
 	" sub-list character, after
-	if g:Cha_SubList_After_Bullet == ''
-		let s:Cha_SubList_After = '+'
+	if g:Cha_SubList_Post_Bullet != ''
+		let s:Cha_SubList_Post =
+		\ g:Cha_SubList_Post_Bullet
 	else
-		let s:Cha_SubList_After =
-		\ g:Cha_SubList_After_Bullet
+		let s:Cha_SubList_Post = '+'
 	endif
 
 	" sub-para character, pre
-	if g:Cha_SubPara_Pre_Bullet == ''
-		let s:Cha_SubPara_Pre = '--'
-	else
+	if g:Cha_SubPara_Pre_Bullet != ''
 		let s:Cha_SubPara_Pre =
 		\ g:Cha_SubPara_Pre_Bullet
+	else
+		let s:Cha_SubPara_Pre = '--'
 	endif
 
 	" list pattern, pre
-	if g:Pat_List_Pre_Bullet == ''
-		let s:Pat_List_Pre = '^\s*=\(=\)\@!\s*'
-	else
+	if g:Pat_List_Pre_Bullet != ''
 		let s:Pat_List_Pre = g:Pat_List_Pre_Bullet
+	else
+		let s:Pat_List_Pre = '^\s*=\(=\)\@!\s*'
 	endif
 
 	" list pattern, after
-	if g:Pat_List_After_Bullet == ''
-		let s:Pat_List_After = '\t*\t'
+	if g:Pat_List_Post_Bullet != ''
+		let s:Pat_List_Post =
+		\ g:Pat_List_Post_Bullet
 	else
-		let s:Pat_List_After =
-		\ g:Pat_List_After_Bullet
+		let s:Pat_List_Post = '\t*\t'
 	endif
 
 	" para pattern, pre
-	if g:Pat_Para_Pre_Bullet == ''
-		let s:Pat_Para_Pre = '^\s*-\(-\)\@!\s*'
-	else
+	if g:Pat_Para_Pre_Bullet != ''
 		let s:Pat_Para_Pre = g:Pat_Para_Pre_Bullet
+	else
+		let s:Pat_Para_Pre = '^\s*-\(-\)\@!\s*'
 	endif
 
 	" para pattern, after
-	if g:Pat_Para_After_Bullet == ''
-		let s:Pat_Para_After = '\t\t'
+	if g:Pat_Para_Post_Bullet != ''
+		let s:Pat_Para_Post =
+		\ g:Pat_Para_Post_Bullet
 	else
-		let s:Pat_Para_After =
-		\ g:Pat_Para_After_Bullet
+		let s:Pat_Para_Post = '\t\t'
 	endif
 
 	" sub-list pattern, pre
-	if g:Pat_SubList_Pre_Bullet == ''
-		let s:Pat_SubList_Pre =
-		\ '^\s*==\(=\)\@!\s*'
-	else
+	if g:Pat_SubList_Pre_Bullet != ''
 		let s:Pat_SubList_Pre =
 		\ g:Pat_SubList_Pre_Bullet
+	else
+		let s:Pat_SubList_Pre =
+		\ '^\s*==\(=\)\@!\s*'
 	endif
 
 	" sub-list pattern, after
-	if g:Pat_SubList_After_Bullet == ''
-		let s:Pat_SubList_After = '\t\t+\t'
+	if g:Pat_SubList_Post_Bullet != ''
+		let s:Pat_SubList_Post =
+		\ g:Pat_SubList_Post_Bullet
 	else
-		let s:Pat_SubList_After =
-		\ g:Pat_SubList_After_Bullet
+		let s:Pat_SubList_Post = '\t\t+\t'
 	endif
 
 	" sub-para pattern, pre
-	if g:Pat_SubPara_Pre_Bullet == ''
-		let s:Pat_SubPara_Pre =
-		\ '^\s*--\(-\)\@!\s*'
-	else
+	if g:Pat_SubPara_Pre_Bullet != ''
 		let s:Pat_SubPara_Pre =
 		\ g:Pat_SubPara_Pre_Bullet
+	else
+		let s:Pat_SubPara_Pre =
+		\ '^\s*--\(-\)\@!\s*'
 	endif
 
 	" sub-para pattern, after
-	if g:Pat_SubPara_After_Bullet == ''
-		let s:Pat_SubPara_After = '\t\t\t'
+	if g:Pat_SubPara_Post_Bullet != ''
+		let s:Pat_SubPara_Post =
+		\ g:Pat_SubPara_Post_Bullet
 	else
-		let s:Pat_SubPara_After =
-		\ g:Pat_SubPara_After_Bullet
+		let s:Pat_SubPara_Post = '\t\t\t'
 	endif
 
 	let s:Pat_Search =
@@ -306,17 +306,17 @@ endfunction "}}}4
 function s:LoadStrings() "{{{4
 
 	" comment end character
-	if g:Cha_ComEnd_Bullet == ''
-		let s:Cha_ComEnd = '/'
-	else
+	if g:Cha_ComEnd_Bullet != ''
 		let s:Cha_ComEnd = g:Cha_ComEnd_Bullet
+	else
+		let s:Cha_ComEnd = '/'
 	endif
 
 	" comment end pattern
-	if g:Pat_ComEnd_Bullet == ''
-		let s:Pat_ComEnd = '\s*\/\s*'
-	else
+	if g:Pat_ComEnd_Bullet != ''
 		let s:Pat_ComEnd = g:Pat_ComEnd_Bullet
+	else
+		let s:Pat_ComEnd = '\s*\/\s*'
 	endif
 
 	" protection characters
@@ -330,34 +330,42 @@ function s:LoadStrings() "{{{4
 	endif
 
 	" protection patterns
-	let s:Pat_Protect_Origin = '\(\({\{3}'
-	let s:Pat_Protect_Origin .=  '\|}\{3}\)'
-	let s:Pat_Protect_Origin .= '\d\{0,2}$\)'
-
-	let s:Pat_Protect_Final =
-	\ s:Pat_Protect_Origin .
-	\ g:Pat_Protect_Add_Bullet
-
 	if g:Pat_Protect_Overwrite_Bullet != ''
+
 		let s:Pat_Protect_Final =
 		\ g:Pat_Protect_Overwrite_Bullet .
 		\ g:Pat_Protect_Add_Bullet
+
+	else
+
+		let s:Pat_Protect_Origin = '\(\({\{3}'
+		let s:Pat_Protect_Origin .=  '\|}\{3}\)'
+		let s:Pat_Protect_Origin .= '\d\{0,2}$\)'
+
+		let s:Pat_Protect_Final =
+		\ s:Pat_Protect_Origin .
+		\ g:Pat_Protect_Add_Bullet
+
+	endif
+
+	" load space#DelSpace_Trail()
+	if g:Switch_NotDelSpace_Bullet > 0
+		let s:Switch_NotDelSpace = 1
+	else
+		let s:Switch_NotDelSpace = 0
 	endif
 
 	" place holder mark
-	if g:Cha_Mark_Bullet == ''
+	if g:Cha_Mark_Bullet != ''
+		let s:Cha_Mark = g:Cha_Mark_Bullet
+	else
 		let s:Cha_Mark =
 		\ '###LONG_PLACEHOLDER_FOR_BULLET###'
-	else
-		let s:Cha_Mark = g:Cha_Mark_Bullet
 	endif
 
 endfunction "}}}4
 
 function s:LoadSettings(when) "{{{4
-
-	call <sid>LoadBullets()
-	call <sid>LoadStrings()
 
 	" load settings
 	if a:when == 0
@@ -367,63 +375,68 @@ function s:LoadSettings(when) "{{{4
 		let s:Comments_Save = &comments
 
 		" textwidth
-		if g:TextWidth_Bullet >= 0
+		if g:TextWidth_Bullet > 0
 			let &l:textwidth = g:TextWidth_Bullet
 		endif
 
-		" formatoptions
+		" formatoptions, overwrite
 		if g:FormatOptions_Overwrite_Bullet != ''
 			let &l:formatoptions =
 			\ g:FormatOptions_Overwrite_Bullet
 		else
 			let &l:formatoptions = 'tcqro2mB1j'
 		endif
+
+		" formatoptions, add
 		let &l:formatoptions .=
 		\ g:FormatOptions_Add_Bullet
+
+		" formatoptions, substract
 		let &l:formatoptions =
 		\ substitute(&l:formatoptions,
 		\ g:FormatOptions_Substract_Bullet,'','g')
 
 		" comments
-		setl comments=
-
-		" sublist characters, pre
-		let &l:comments .=
-		\ 's:' . s:Cha_SubList_Pre .
-		\ ',m:' . s:Cha_SubPara_Pre.
-		\ ',ex:' . s:Cha_ComEnd
-
-		" list characters, pre
-		let &l:comments .=
-		\ ',s:' . s:Cha_List_Pre .
-		\ ',m:' . s:Cha_Para_Pre .
-		\ ',ex:' . s:Cha_ComEnd
-
-		" sublist characters, after
-		let &l:comments .=
-		\ ',f:' . s:Cha_SubList_After
-
-		" list characters, after
-		let &l:comments .=
-		\ ',f:' . s:Cha_List_After
-
-		" protect characters
-		let &l:comments .=
-		\ ',s:' . s:Cha_Protect .
-		\ ',m:' . s:Cha_Protect .
-		\ ',ex:' . s:Cha_Protect
-
 		" overwrite comment setting
 		if g:Comments_Overwrite_Bullet != ''
 			let &l:comments =
 			\ g:Comments_Overwrite_Bullet
+
+		else
+
+			setl comments=
+
+			" sublist characters, pre
+			let &l:comments .=
+			\ 's:' . s:Cha_SubList_Pre .
+			\ ',m:' . s:Cha_SubPara_Pre.
+			\ ',ex:' . s:Cha_ComEnd
+
+			" list characters, pre
+			let &l:comments .=
+			\ ',s:' . s:Cha_List_Pre .
+			\ ',m:' . s:Cha_Para_Pre .
+			\ ',ex:' . s:Cha_ComEnd
+
+			" sublist characters, after
+			let &l:comments .=
+			\ ',f:' . s:Cha_SubList_Post
+
+			" list characters, after
+			let &l:comments .=
+			\ ',f:' . s:Cha_List_Post
+
+			" protect characters
+			let &l:comments .=
+			\ ',s:' . s:Cha_Protect .
+			\ ',m:' . s:Cha_Protect .
+			\ ',ex:' . s:Cha_Protect
+
 		endif
 
 		" add new comments
-		if g:Comments_Add_Bullet != ''
-			let &l:comments .= ',' .
-			\ g:Comments_Add_Bullet
-		endif
+		let &l:comments .= ',' .
+		\ g:Comments_Add_Bullet
 
 	endif
 
@@ -440,6 +453,21 @@ function s:LoadSettings(when) "{{{4
 		" comments
 		let &l:comments = s:Comments_Save
 
+	endif
+
+endfunction "}}}4
+
+function s:LoadWhich(fun,when) "{{{4
+
+	if a:fun == 's'
+		call <sid>LoadStrings()
+	elseif a:fun == 'bs'
+		call <sid>LoadBullets()
+		call <sid>LoadStrings()
+	elseif a:fun == 'bss'
+		call <sid>LoadBullets()
+		call <sid>LoadStrings()
+		call <sid>LoadSettings(a:when)
 	endif
 
 endfunction "}}}4
@@ -505,33 +533,33 @@ function s:SubsBullet_Core() "{{{4
 	" substitute '-' with '' and indent 1 tab
 	execute "'j,'ks/" .
 	\ s:Pat_List_Pre .  '/' .
-	\ s:Pat_List_After . '/e'
+	\ s:Pat_List_Post . '/e'
 	execute "'j,'ks/" .
 	\ s:Pat_Para_Pre . '/' .
-	\ s:Pat_Para_After . '/e'
+	\ s:Pat_Para_Post . '/e'
 
 	" sub list
 	" substitute '==' with '+' and indent 2 tabs
 	" substitute '--' with '' and indent 2 tabs
 	execute "'j,'ks/" .
 	\ s:Pat_SubList_Pre . '/' .
-	\ s:Pat_SubList_After . '/e'
+	\ s:Pat_SubList_Post . '/e'
 	execute "'j,'ks/" .
 	\ s:Pat_SubPara_Pre . '/' .
-	\ s:Pat_SubPara_After . '/e'
+	\ s:Pat_SubPara_Post . '/e'
 
 endfunction "}}}4
 
 function s:BulletMode() "{{{4
 
-	if g:Switch_Auto_Bullet == 0 ||
+	if g:Switch_Auto_Bullet <= 0 ||
 	\ g:Pat_File_Bullet == ''
 		return
+	else
+		execute 'autocmd BufRead,BufNewFile ' .
+		\ g:Pat_File_Bullet .
+		\ " call <sid>LoadWhich('bss',0)"
 	endif
-
-	execute 'autocmd BufRead,BufNewFile ' .
-	\ g:Pat_File_Bullet .
-	\ ' call <sid>LoadSettings(0)'
 
 endfunction "}}}4
 
@@ -547,10 +575,11 @@ endfunction "}}}4
 function s:SubsBullet_NoTW(range) "{{{4
 
 	call move_cursor#KeepPos(0)
-	call <sid>LoadBullets()
-	call <sid>LoadStrings()
+	call <sid>LoadWhich('bs',0)
 
-	call <sid>DelSpace()
+	if s:Switch_NotDelSpace == 0
+		call <sid>DelSpace()
+	endif
 
 	" set mark j & k
 	" paragraph
@@ -569,6 +598,7 @@ function s:SubsBullet_NoTW(range) "{{{4
 	" delete marked lines
 	call <sid>DelBullet(1)
 
+	call <sid>LoadWhich('bs',1)
 	call move_cursor#KeepPos(1)
 
 endfunction "}}}4
@@ -576,9 +606,11 @@ endfunction "}}}4
 function s:SubsBullet_TW(range) "{{{4
 
 	call move_cursor#KeepPos(0)
-	call <sid>LoadSettings(0)
+	call <sid>LoadWhich('bss',0)
 
-	call <sid>DelSpace()
+	if s:Switch_NotDelSpace == 0
+		call <sid>DelSpace()
+	endif
 
 	let l:i = 0
 
@@ -637,7 +669,7 @@ function s:SubsBullet_TW(range) "{{{4
 	execute "'j,'ks/^" . s:Cha_Protect . '//e'
 
 	" unload settings
-	call <sid>LoadSettings(1)
+	call <sid>LoadWhich('bss',1)
 	" reset cursor position
 	call move_cursor#KeepPos(1)
 
@@ -645,13 +677,21 @@ endfunction "}}}4
 
 function s:EchoSettings() "{{{4
 
-	call <sid>LoadSettings(0)
+	call <sid>LoadWhich('bss',0)
 
-	if g:Switch_Auto_Bullet != 0
+	let l:auto =  'Auto load bullet settings: '
+	if g:Switch_Auto_Bullet > 0
 	\ && g:Pat_File_Bullet != ''
-		let l:switch_auto = 'ON'
+		let l:command = 'ON'
 	else
-		let l:switch_auto = 'OFF'
+		let l:command = 'OFF'
+	endif
+
+	let l:del = 'Delete trailing spaces: '
+	if s:Switch_NotDelSpace == 0
+		let l:space = 'Yes'
+	elseif s:Switch_NotDelSpace == 1
+		let l:space = 'No'
 	endif
 
 	echo '=============================='
@@ -668,16 +708,14 @@ function s:EchoSettings() "{{{4
 
 	call <sid>EchoVars('&textwidth')
 	echo '------------------------------'
-	call <sid>EchoVars(
-	\'g:TextWidth_Bullet')
+	call <sid>EchoVars('g:TextWidth_Bullet')
 	echo '=============================='
 
 	call <sid>EchoVars('&comments')
 	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:Comments_Overwrite_Bullet')
-	call <sid>EchoVars(
-	\'g:Comments_Add_Bullet')
+	call <sid>EchoVars('g:Comments_Add_Bullet')
 	echo '=============================='
 
 	call <sid>EchoVars('&tabstop')
@@ -706,8 +744,7 @@ function s:EchoSettings() "{{{4
 
 	call <sid>EchoVars('s:Cha_Protect')
 	echo '------------------------------'
-	call <sid>EchoVars(
-	\'g:Cha_Protect_Bullet')
+	call <sid>EchoVars('g:Cha_Protect_Bullet')
 	echo '=============================='
 
 	call <sid>EchoVars('s:Pat_Protect_Final')
@@ -718,68 +755,72 @@ function s:EchoSettings() "{{{4
 	\'g:Pat_Protect_Add_Bullet')
 	echo '=============================='
 
-	echo 'Auto load bullet settings: ' .
-	\ l:switch_auto
+	echo l:del . l:space
 	echo '------------------------------'
 	call <sid>EchoVars(
-	\'g:Switch_Auto_Bullet')
-	call <sid>EchoVars(
-	\'g:Pat_File_Bullet')
+	\'g:Switch_NotDelSpace_Bullet')
 	echo '=============================='
 
-	call <sid>LoadSettings(1)
+	echo l:auto . l:command
+	echo '------------------------------'
+	call <sid>EchoVars('g:Switch_Auto_Bullet')
+	call <sid>EchoVars('g:Pat_File_Bullet')
+	echo '=============================='
+
+	call <sid>LoadWhich('bss',1)
 
 endfunction "}}}4
 
 function s:EchoBullets() "{{{4
 
-	call <sid>LoadSettings(0)
-	call <sid>LoadSettings(1)
+	call <sid>LoadWhich('bs',0)
 
 	echo '=============================='
 
 	call <sid>EchoVars('s:Cha_List_Pre')
-	call <sid>EchoVars('s:Cha_List_After')
+	call <sid>EchoVars('s:Cha_List_Post')
 	call <sid>EchoVars('s:Cha_Para_Pre')
 	echo '------------------------------'
 	call <sid>EchoVars('g:Cha_List_Pre_Bullet')
-	call <sid>EchoVars('g:Cha_List_After_Bullet')
+	call <sid>EchoVars('g:Cha_List_Post_Bullet')
 	call <sid>EchoVars('g:Cha_Para_Pre_Bullet')
 	echo '=============================='
 
 	call <sid>EchoVars('s:Pat_List_Pre')
-	call <sid>EchoVars('s:Pat_List_After')
+	call <sid>EchoVars('s:Pat_List_Post')
 	call <sid>EchoVars('s:Pat_Para_Pre')
-	call <sid>EchoVars('s:Pat_Para_After')
+	call <sid>EchoVars('s:Pat_Para_Post')
 	echo '------------------------------'
 	call <sid>EchoVars('g:Pat_List_Pre_Bullet')
-	call <sid>EchoVars('g:Pat_List_After_Bullet')
+	call <sid>EchoVars('g:Pat_List_Post_Bullet')
 	call <sid>EchoVars('g:Pat_Para_Pre_Bullet')
-	call <sid>EchoVars('g:Pat_Para_After_Bullet')
+	call <sid>EchoVars('g:Pat_Para_Post_Bullet')
 	echo '=============================='
 
 	call <sid>EchoVars('s:Cha_SubList_Pre')
-	call <sid>EchoVars('s:Cha_SubList_After')
+	call <sid>EchoVars('s:Cha_SubList_Post')
 	call <sid>EchoVars('s:Cha_SubPara_Pre')
 	echo '------------------------------'
 	call <sid>EchoVars('g:Cha_SubList_Pre_Bullet')
 	call <sid>EchoVars(
-	\'g:Cha_SubList_After_Bullet')
+	\'g:Cha_SubList_Post_Bullet')
 	call <sid>EchoVars('g:Cha_SubPara_Pre_Bullet')
 	echo '=============================='
 
 	call <sid>EchoVars('s:Pat_SubList_Pre')
-	call <sid>EchoVars('s:Pat_SubList_After')
+	call <sid>EchoVars('s:Pat_SubList_Post')
 	call <sid>EchoVars('s:Pat_SubPara_Pre')
-	call <sid>EchoVars('s:Pat_SubPara_After')
+	call <sid>EchoVars('s:Pat_SubPara_Post')
 	echo '------------------------------'
 	call <sid>EchoVars('g:Pat_SubList_Pre_Bullet')
 	call <sid>EchoVars(
-	\'g:Pat_SubList_After_Bullet')
+	\'g:Pat_SubList_Post_Bullet')
 	call <sid>EchoVars('g:Pat_SubPara_Pre_Bullet')
 	call <sid>EchoVars(
-	\'g:Pat_SubPara_After_Bullet')
+	\'g:Pat_SubPara_Post_Bullet')
 	echo '=============================='
+
+	call <sid>LoadWhich('bs',1)
 
 endfunction "}}}4
 
