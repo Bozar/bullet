@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 18, Sat | 14:47:58 | 2014
+" Last Update: Oct 18, Sat | 17:25:01 | 2014
 
 " summary "{{{2
 
@@ -457,18 +457,11 @@ function s:LoadSettings(when) "{{{4
 
 endfunction "}}}4
 
-function s:LoadWhich(fun,when) "{{{4
+function s:LoadAll_Bul_Str_Set(when) "{{{4
 
-	if a:fun == 's'
-		call <sid>LoadStrings()
-	elseif a:fun == 'bs'
-		call <sid>LoadBullets()
-		call <sid>LoadStrings()
-	elseif a:fun == 'bss'
-		call <sid>LoadBullets()
-		call <sid>LoadStrings()
-		call <sid>LoadSettings(a:when)
-	endif
+	call <sid>LoadBullets()
+	call <sid>LoadStrings()
+	call <sid>LoadSettings(a:when)
 
 endfunction "}}}4
 
@@ -550,7 +543,7 @@ function s:SubsBullet_Core() "{{{4
 
 endfunction "}}}4
 
-function s:BulletMode() "{{{4
+function s:AutoCommand() "{{{4
 
 	if g:Switch_Auto_Bullet <= 0 ||
 	\ g:Pat_File_Bullet == ''
@@ -558,7 +551,7 @@ function s:BulletMode() "{{{4
 	else
 		execute 'autocmd BufRead,BufNewFile ' .
 		\ g:Pat_File_Bullet .
-		\ " call <sid>LoadWhich('bss',0)"
+		\ " call <sid>LoadAll_Bul_Str_Set(0)"
 	endif
 
 endfunction "}}}4
@@ -575,7 +568,8 @@ endfunction "}}}4
 function s:SubsBullet_NoTW(range) "{{{4
 
 	call move_cursor#KeepPos(0)
-	call <sid>LoadWhich('bs',0)
+	call <sid>LoadAll_Bul_Str_Set(0)
+	call <sid>LoadAll_Bul_Str_Set(1)
 
 	if s:Switch_NotDelSpace == 0
 		call <sid>DelSpace()
@@ -598,7 +592,6 @@ function s:SubsBullet_NoTW(range) "{{{4
 	" delete marked lines
 	call <sid>DelBullet(1)
 
-	call <sid>LoadWhich('bs',1)
 	call move_cursor#KeepPos(1)
 
 endfunction "}}}4
@@ -606,7 +599,7 @@ endfunction "}}}4
 function s:SubsBullet_TW(range) "{{{4
 
 	call move_cursor#KeepPos(0)
-	call <sid>LoadWhich('bss',0)
+	call <sid>LoadAll_Bul_Str_Set(0)
 
 	if s:Switch_NotDelSpace == 0
 		call <sid>DelSpace()
@@ -669,7 +662,7 @@ function s:SubsBullet_TW(range) "{{{4
 	execute "'j,'ks/^" . s:Cha_Protect . '//e'
 
 	" unload settings
-	call <sid>LoadWhich('bss',1)
+	call <sid>LoadAll_Bul_Str_Set(1)
 	" reset cursor position
 	call move_cursor#KeepPos(1)
 
@@ -677,7 +670,7 @@ endfunction "}}}4
 
 function s:EchoSettings() "{{{4
 
-	call <sid>LoadWhich('bss',0)
+	call <sid>LoadAll_Bul_Str_Set(0)
 
 	let l:auto =  'Auto load bullet settings: '
 	if g:Switch_Auto_Bullet > 0
@@ -767,13 +760,14 @@ function s:EchoSettings() "{{{4
 	call <sid>EchoVars('g:Pat_File_Bullet')
 	echo '=============================='
 
-	call <sid>LoadWhich('bss',1)
+	call <sid>LoadAll_Bul_Str_Set(1)
 
 endfunction "}}}4
 
 function s:EchoBullets() "{{{4
 
-	call <sid>LoadWhich('bs',0)
+	call <sid>LoadAll_Bul_Str_Set(0)
+	call <sid>LoadAll_Bul_Str_Set(1)
 
 	echo '=============================='
 
@@ -820,15 +814,13 @@ function s:EchoBullets() "{{{4
 	\'g:Pat_SubPara_Post_Bullet')
 	echo '=============================='
 
-	call <sid>LoadWhich('bs',1)
-
 endfunction "}}}4
 
  "}}}3
  "}}}2
 " commands "{{{2
 
-autocmd VimEnter * call <sid>BulletMode()
+autocmd VimEnter * call <sid>AutoCommand()
 
 if !exists(':BuPara0TW')
 	command BuPara0TW call <sid>SubsBullet_TW(0)
