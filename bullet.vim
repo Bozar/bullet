@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 17, Fri | 22:31:42 | 2014
+" Last Update: Oct 18, Sat | 09:29:08 | 2014
 
 " summary "{{{2
 
@@ -153,14 +153,21 @@ if !exists('g:Cha_Protect_Bullet')
 endif
 
  "}}}3
-" bullet mode "{{{3
+" autocommands "{{{3
 
-if !exists('g:SwitchMode_Bullet')
-	let g:SwitchMode_Bullet = '0'
+if !exists('g:Switch_Auto_Bullet')
+	let g:Switch_Auto_Bullet = '0'
 endif
 
 if !exists('g:Pat_File_Bullet')
 	let g:Pat_File_Bullet = ''
+endif
+
+ "}}}3
+" load space#DelSpace_Trail() "{{{3
+
+if !exists('g:Switch_DelSpace_Bullet')
+	let g:Switch_DelSpace_Bullet = ''
 endif
 
  "}}}3
@@ -437,6 +444,16 @@ function s:LoadSettings(when) "{{{4
 
 endfunction "}}}4
 
+function s:DelSpace() "{{{4
+
+	" delete trailing blank characters: tabs,
+	" half-width spaces and full-width spaces
+	" NOTE: cursor position must be set first!
+	call space#DelSpace_Trail()
+	call move_cursor#KeepPos(1)
+
+endfunction "}}}4
+
 function s:DelBullet(when) "{{{4
 
 	" suppose '=' will be replaced with bullet '*'
@@ -507,7 +524,7 @@ endfunction "}}}4
 
 function s:BulletMode() "{{{4
 
-	if g:SwitchMode_Bullet == 0 ||
+	if g:Switch_Auto_Bullet == 0 ||
 	\ g:Pat_File_Bullet == ''
 		return
 	endif
@@ -532,6 +549,8 @@ function s:SubsBullet_NoTW(range) "{{{4
 	call move_cursor#KeepPos(0)
 	call <sid>LoadBullets()
 	call <sid>LoadStrings()
+
+	call <sid>DelSpace()
 
 	" set mark j & k
 	" paragraph
@@ -558,6 +577,8 @@ function s:SubsBullet_TW(range) "{{{4
 
 	call move_cursor#KeepPos(0)
 	call <sid>LoadSettings(0)
+
+	call <sid>DelSpace()
 
 	let l:i = 0
 
@@ -626,11 +647,11 @@ function s:EchoSettings() "{{{4
 
 	call <sid>LoadSettings(0)
 
-	if g:SwitchMode_Bullet != 0
+	if g:Switch_Auto_Bullet != 0
 	\ && g:Pat_File_Bullet != ''
-		let l:switch = 'ON'
+		let l:switch_auto = 'ON'
 	else
-		let l:switch = 'OFF'
+		let l:switch_auto = 'OFF'
 	endif
 
 	echo '=============================='
@@ -697,10 +718,11 @@ function s:EchoSettings() "{{{4
 	\'g:Pat_Protect_Add_Bullet')
 	echo '=============================='
 
-	echo 'Auto load bullet settings: ' . l:switch
+	echo 'Auto load bullet settings: ' .
+	\ l:switch_auto
 	echo '------------------------------'
 	call <sid>EchoVars(
-	\'g:SwitchMode_Bullet')
+	\'g:Switch_Auto_Bullet')
 	call <sid>EchoVars(
 	\'g:Pat_File_Bullet')
 	echo '=============================='
