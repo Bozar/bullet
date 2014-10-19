@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 19, Sun | 18:42:44 | 2014
+" Last Update: Oct 19, Sun | 20:30:49 | 2014
 
 " summary "{{{2
 
@@ -512,7 +512,7 @@ function s:DelBullet(when) "{{{4
 		" s:Pat_ComEnd at the end of line
 		let l:pattern = '\(' . s:Pat_Search .
 		\ '\).*' . s:Pat_ComEnd . '$'
-		'j
+		call move_cursor#MoveToMark("'j")
 		if search(l:pattern,'c',line("'k")) != 0
 			execute "'j,'kg/" . s:Pat_Search .
 			\ '/s/' . s:Pat_ComEnd . '$//'
@@ -523,7 +523,7 @@ function s:DelBullet(when) "{{{4
 	" delete marked lines after substitution
 	" in case line 'j/'k contains mark
 	if a:when == 1
-		'j
+		call move_cursor#MoveToMark("'j")
 		if search(s:Cha_Mark,'c',line("'k")) != 0
 			execute "'j,'kg/" . s:Cha_Mark .
 			\ '/delete'
@@ -659,7 +659,7 @@ function s:SubsBullet_TW(range) "{{{4
 	endwhile
 
 	" protect lines
-	'j
+	call move_cursor#MoveToMark("'j")
 	if search(s:Pat_Protect_Final,'c',line("'k"))
 		execute "'j,'kg/" . s:Pat_Protect_Final .
 		\ '/s/^/' . s:Cha_Protect . '/'
