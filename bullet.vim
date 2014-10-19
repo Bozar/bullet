@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 19, Sun | 14:36:19 | 2014
+" Last Update: Oct 19, Sun | 15:20:32 | 2014
 
 " summary "{{{2
 
@@ -607,8 +607,8 @@ function s:SubsBullet_NoTW(range) "{{{4
 	call <sid>DelBullet(1)
 
 	" delete spaces between two CJK characters
-	" delete spaces between CJK punctuation and
-	" Western character
+	" delete spaces between CJK punctuation mark
+	" and Western character
 	if s:Switch_DelSpace_CJK == 1
 		call space#DelSpace_CJK()
 	endif
@@ -684,8 +684,8 @@ function s:SubsBullet_TW(range) "{{{4
 	execute "'j,'ks/^" . s:Cha_Protect . '//e'
 
 	" delete spaces between two CJK characters
-	" delete spaces between CJK punctuation and
-	" Western character
+	" delete spaces between CJK punctuation mark
+	" and Western character
 	if s:Switch_DelSpace_CJK == 1
 		call space#DelSpace_CJK()
 	endif
@@ -742,7 +742,7 @@ function s:EchoSettings() "{{{4
 	let l:cjk = 'Delete spaces between two CJK'
 	let l:cjk .= ' characters: '
 	let l:punc = 'Delete spaces between CJK'
-	let l:punc .= ' punctuation'
+	let l:punc .= ' punctuation mark'
 	let l:tuation = 'and western character: '
 	if s:Switch_DelSpace_CJK == 1
 		let l:western = 'YES'
