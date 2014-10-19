@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 19, Sun | 15:20:32 | 2014
+" Last Update: Oct 19, Sun | 18:42:44 | 2014
 
 " summary "{{{2
 
@@ -595,8 +595,7 @@ function s:SubsBullet_NoTW(range) "{{{4
 		call move_cursor#SetMarkJK_Para()
 	" whole text
 	elseif a:range == 1
-		1mark j
-		$mark k
+		call move_cursor#SetMarkJK_Whole()
 	endif
 
 	" mark lines to be deleted
@@ -637,8 +636,7 @@ function s:SubsBullet_TW(range) "{{{4
 			call move_cursor#SetMarkJK_Para()
 		" whole text
 		elseif a:range == 1
-			1mark j
-			$mark k
+			call move_cursor#SetMarkJK_Whole()
 		endif
 
 		" substitute bullets once
@@ -667,28 +665,39 @@ function s:SubsBullet_TW(range) "{{{4
 		\ '/s/^/' . s:Cha_Protect . '/'
 	endif
 
-	" format
-	if a:range == 0
-		execute "normal 'jgqip"
-	elseif a:range == 1
-		execute "normal gggqG"
-	endif
+	let l:j = 0
 
-	" unprotect lines
-	if a:range == 0
-		call move_cursor#SetMarkJK_Para()
-	elseif a:range == 1
-		1mark j
-		$mark k
-	endif
-	execute "'j,'ks/^" . s:Cha_Protect . '//e'
+	while 1
 
-	" delete spaces between two CJK characters
-	" delete spaces between CJK punctuation mark
-	" and Western character
-	if s:Switch_DelSpace_CJK == 1
-		call space#DelSpace_CJK()
-	endif
+		" delete spaces between two CJK characters
+		" delete spaces between CJK punctuation
+		" mark and Western character
+		if s:Switch_DelSpace_CJK == 1
+			call space#DelSpace_CJK()
+		endif
+
+		if l:j > 0
+			break
+		endif
+
+		" format
+		if a:range == 0
+			execute "normal 'jgqip"
+		elseif a:range == 1
+			execute "normal gggqG"
+		endif
+
+		" unprotect lines
+		if a:range == 0
+			call move_cursor#SetMarkJK_Para()
+		elseif a:range == 1
+			call move_cursor#SetMarkJK_Whole()
+		endif
+		execute "'j,'ks/^" . s:Cha_Protect . '//e'
+
+		let l:j = l:j +1
+
+	endwhile
 
 	" unload settings
 	call <sid>LoadAll_Bul_Str_Set(1)
