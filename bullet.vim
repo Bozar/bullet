@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 18, Sat | 17:25:01 | 2014
+" Last Update: Oct 19, Sun | 11:39:28 | 2014
 
 " summary "{{{2
 
@@ -558,7 +558,7 @@ endfunction "}}}4
 
 function s:EchoVars(name) "{{{4
 
-	echo a:name . " == '" . eval(a:name) ."'"
+	echo a:name . " == '" . eval(a:name) . "'"
 
 endfunction "}}}4
 
@@ -672,6 +672,29 @@ function s:EchoSettings() "{{{4
 
 	call <sid>LoadAll_Bul_Str_Set(0)
 
+	let l:format = "&formatoptions == '"
+	let l:options = &formatoptions
+
+	let l:text = "&textwidth == '"
+	let l:width = &textwidth
+
+	let l:com = "&comments == '"
+	let l:ments = &comments
+
+	" NOTE: Reload default settings before echoing
+	" lines.
+
+	" If the number of lines to be echohed are
+	" greater than the screen height, and user
+	" break the 'echo function' half-way,
+
+	" Vim will not process the unechoed part.
+
+	" Such as lines to be echoed and functions to
+	" be called.
+
+	call <sid>LoadAll_Bul_Str_Set(1)
+
 	let l:auto =  'Auto load bullet settings: '
 	if g:Switch_Auto_Bullet > 0
 	\ && g:Pat_File_Bullet != ''
@@ -689,7 +712,7 @@ function s:EchoSettings() "{{{4
 
 	echo '=============================='
 
-	call <sid>EchoVars('&formatoptions')
+	echo l:format . l:options . "'"
 	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:FormatOptions_Overwrite_Bullet')
@@ -699,12 +722,12 @@ function s:EchoSettings() "{{{4
 	\'g:FormatOptions_Substract_Bullet')
 	echo '=============================='
 
-	call <sid>EchoVars('&textwidth')
+	echo l:text . l:width . "'"
 	echo '------------------------------'
 	call <sid>EchoVars('g:TextWidth_Bullet')
 	echo '=============================='
 
-	call <sid>EchoVars('&comments')
+	echo l:com . l:ments . "'"
 	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:Comments_Overwrite_Bullet')
@@ -759,8 +782,6 @@ function s:EchoSettings() "{{{4
 	call <sid>EchoVars('g:Switch_Auto_Bullet')
 	call <sid>EchoVars('g:Pat_File_Bullet')
 	echo '=============================='
-
-	call <sid>LoadAll_Bul_Str_Set(1)
 
 endfunction "}}}4
 
