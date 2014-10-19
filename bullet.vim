@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 19, Sun | 11:39:28 | 2014
+" Last Update: Oct 19, Sun | 14:36:19 | 2014
 
 " summary "{{{2
 
@@ -164,10 +164,16 @@ if !exists('g:Pat_File_Bullet')
 endif
 
  "}}}3
-" load space#DelSpace_Trail() "{{{3
+" load delete-space functions "{{{3
 
-if !exists('g:Switch_NotDelSpace_Bullet')
-	let g:Switch_NotDelSpace_Bullet = ''
+" load space#DelSpace_Trail()
+if !exists('g:Switch_DelSpace_Trail_Bullet')
+	let g:Switch_DelSpace_Trail_Bullet = ''
+endif
+
+" load space#DelSpace_CJK()
+if !exists('g:Switch_DelSpace_CJK_Bullet')
+	let g:Switch_DelSpace_CJK_Bullet = ''
 endif
 
  "}}}3
@@ -349,10 +355,17 @@ function s:LoadStrings() "{{{4
 	endif
 
 	" load space#DelSpace_Trail()
-	if g:Switch_NotDelSpace_Bullet > 0
-		let s:Switch_NotDelSpace = 1
+	if g:Switch_DelSpace_Trail_Bullet < 0
+		let s:Switch_DelSpace_Trail = 0
 	else
-		let s:Switch_NotDelSpace = 0
+		let s:Switch_DelSpace_Trail = 1
+	endif
+
+	" load space#DelSpace_CJK()
+	if g:Switch_DelSpace_CJK_Bullet < 0
+		let s:Switch_DelSpace_CJK = 0
+	else
+		let s:Switch_DelSpace_CJK = 1
 	endif
 
 	" place holder mark
@@ -465,7 +478,7 @@ function s:LoadAll_Bul_Str_Set(when) "{{{4
 
 endfunction "}}}4
 
-function s:DelSpace() "{{{4
+function s:DelSpace_Trail() "{{{4
 
 	" delete trailing blank characters: tabs,
 	" half-width spaces and full-width spaces
@@ -571,8 +584,9 @@ function s:SubsBullet_NoTW(range) "{{{4
 	call <sid>LoadAll_Bul_Str_Set(0)
 	call <sid>LoadAll_Bul_Str_Set(1)
 
-	if s:Switch_NotDelSpace == 0
-		call <sid>DelSpace()
+	" delete trailing spaces
+	if s:Switch_DelSpace_Trail == 1
+		call <sid>DelSpace_Trail()
 	endif
 
 	" set mark j & k
@@ -592,6 +606,13 @@ function s:SubsBullet_NoTW(range) "{{{4
 	" delete marked lines
 	call <sid>DelBullet(1)
 
+	" delete spaces between two CJK characters
+	" delete spaces between CJK punctuation and
+	" Western character
+	if s:Switch_DelSpace_CJK == 1
+		call space#DelSpace_CJK()
+	endif
+
 	call move_cursor#KeepPos(1)
 
 endfunction "}}}4
@@ -601,8 +622,9 @@ function s:SubsBullet_TW(range) "{{{4
 	call move_cursor#KeepPos(0)
 	call <sid>LoadAll_Bul_Str_Set(0)
 
-	if s:Switch_NotDelSpace == 0
-		call <sid>DelSpace()
+	" delete trailing spaces
+	if s:Switch_DelSpace_Trail == 1
+		call <sid>DelSpace_Trail()
 	endif
 
 	let l:i = 0
@@ -661,6 +683,13 @@ function s:SubsBullet_TW(range) "{{{4
 	endif
 	execute "'j,'ks/^" . s:Cha_Protect . '//e'
 
+	" delete spaces between two CJK characters
+	" delete spaces between CJK punctuation and
+	" Western character
+	if s:Switch_DelSpace_CJK == 1
+		call space#DelSpace_CJK()
+	endif
+
 	" unload settings
 	call <sid>LoadAll_Bul_Str_Set(1)
 	" reset cursor position
@@ -698,16 +727,27 @@ function s:EchoSettings() "{{{4
 	let l:auto =  'Auto load bullet settings: '
 	if g:Switch_Auto_Bullet > 0
 	\ && g:Pat_File_Bullet != ''
-		let l:command = 'ON'
+		let l:command = 'YES'
 	else
-		let l:command = 'OFF'
+		let l:command = 'NO'
 	endif
 
 	let l:del = 'Delete trailing spaces: '
-	if s:Switch_NotDelSpace == 0
-		let l:space = 'Yes'
-	elseif s:Switch_NotDelSpace == 1
-		let l:space = 'No'
+	if s:Switch_DelSpace_Trail == 1
+		let l:space = 'YES'
+	elseif s:Switch_DelSpace_Trail == 0
+		let l:space = 'NO'
+	endif
+
+	let l:cjk = 'Delete spaces between two CJK'
+	let l:cjk .= ' characters: '
+	let l:punc = 'Delete spaces between CJK'
+	let l:punc .= ' punctuation'
+	let l:tuation = 'and western character: '
+	if s:Switch_DelSpace_CJK == 1
+		let l:western = 'YES'
+	elseif s:Switch_DelSpace_CJK == 0
+		let l:western = 'NO'
 	endif
 
 	echo '=============================='
@@ -774,7 +814,15 @@ function s:EchoSettings() "{{{4
 	echo l:del . l:space
 	echo '------------------------------'
 	call <sid>EchoVars(
-	\'g:Switch_NotDelSpace_Bullet')
+	\'g:Switch_DelSpace_Trail_Bullet')
+	echo '=============================='
+
+	echo l:cjk . l:western
+	echo l:punc
+	echo l:tuation . l:western
+	echo '------------------------------'
+	call <sid>EchoVars(
+	\'g:Switch_DelSpace_CJK_Bullet')
 	echo '=============================='
 
 	echo l:auto . l:command
