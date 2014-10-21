@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 21, Tue | 16:53:39 | 2014
+" Last Update: Oct 21, Tue | 17:39:47 | 2014
 
 " summary "{{{2
 
@@ -733,7 +733,7 @@ function s:EchoSettings() "{{{4
 	call <sid>LoadAll_Bul_Str_Set(1)
 
 	let l:put = 'Put &formatoptions into'
-	let l:put .= ' register ": '
+	let l:put .= ' register @": '
 	if s:Switch_FormatOptions_Put == 1
 		let l:register = 'YES'
 	elseif s:Switch_FormatOptions_Put == 0
