@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Oct 19, Sun | 21:01:13 | 2014
+" Last Update: Oct 21, Tue | 16:53:39 | 2014
 
 " summary "{{{2
 
@@ -110,12 +110,8 @@ if !exists('g:FormatOptions_Overwrite_Bullet')
 	let g:FormatOptions_Overwrite_Bullet = ''
 endif
 
-if !exists('g:FormatOptions_Add_Bullet')
-	let g:FormatOptions_Add_Bullet = ''
-endif
-
-if !exists('g:FormatOptions_Substract_Bullet')
-	let g:FormatOptions_Substract_Bullet = ''
+if !exists('g:Switch_FormatOptions_Put_Bullet')
+	let g:Switch_FormatOptions_Put_Bullet = ''
 endif
 
  "}}}3
@@ -311,6 +307,13 @@ endfunction "}}}4
 
 function s:LoadStrings() "{{{4
 
+	" put &formatoptions into register
+	if g:Switch_FormatOptions_Put_Bullet > 0
+		let s:Switch_FormatOptions_Put = 1
+	else
+		let s:Switch_FormatOptions_Put = 0
+	endif
+
 	" comment end character
 	if g:Cha_ComEnd_Bullet != ''
 		let s:Cha_ComEnd = g:Cha_ComEnd_Bullet
@@ -400,14 +403,10 @@ function s:LoadSettings(when) "{{{4
 			let &l:formatoptions = 'tcqro2mB1j'
 		endif
 
-		" formatoptions, add
-		let &l:formatoptions .=
-		\ g:FormatOptions_Add_Bullet
-
-		" formatoptions, substract
-		let &l:formatoptions =
-		\ substitute(&l:formatoptions,
-		\ g:FormatOptions_Substract_Bullet,'','g')
+		" put &formatoptions into register
+		if s:Switch_FormatOptions_Put == 1
+			let @" = &l:formatoptions
+		endif
 
 		" comments
 		" overwrite comment setting
@@ -733,6 +732,14 @@ function s:EchoSettings() "{{{4
 
 	call <sid>LoadAll_Bul_Str_Set(1)
 
+	let l:put = 'Put &formatoptions into'
+	let l:put .= ' register ": '
+	if s:Switch_FormatOptions_Put == 1
+		let l:register = 'YES'
+	elseif s:Switch_FormatOptions_Put == 0
+		let l:register = 'NO'
+	endif
+
 	let l:auto =  'Auto load bullet settings: '
 	if g:Switch_Auto_Bullet > 0
 	\ && g:Pat_File_Bullet != ''
@@ -762,13 +769,12 @@ function s:EchoSettings() "{{{4
 	echo '=============================='
 
 	echo l:format . l:options . "'"
+	echo l:put . l:register
 	echo '------------------------------'
 	call <sid>EchoVars(
 	\'g:FormatOptions_Overwrite_Bullet')
 	call <sid>EchoVars(
-	\'g:FormatOptions_Add_Bullet')
-	call <sid>EchoVars(
-	\'g:FormatOptions_Substract_Bullet')
+	\'g:Switch_FormatOptions_Put_Bullet')
 	echo '=============================='
 
 	echo l:text . l:width . "'"
