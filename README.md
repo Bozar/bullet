@@ -6,7 +6,11 @@ Time recording {{{2
 
 	End writing:
 
-	Time spent: 0.5 hours
+	Time spent: 4 hours
+
+	10.20-11.2: 4
+
+	11.10-11.23:
 
  }}}2
 Text {{{2
@@ -36,18 +40,18 @@ Introduction {{{4
 	[here](http://trow.cc/forum/index.php?showtopic=27171).
 
  }}}4
-Copy files {{{4
+Installation {{{4
 
-	You need three files for this plugin to run.
+	 This plugin requires three files to run.
 
-	Copy
+	Please creat the following two directories if
+	they don't exist.
+
+	Download
 	[bullet.vim](https://github.com/Bozar/bullet)
 	and put it into ~/.vim/plugin/.
 
-	If the directory ~/.vim/autoload/ doesn't
-	exist, creat it.
-
-	Copy
+	Download
 	[move_cursor.vim](https://github.com/Bozar/movecursor)
 	and
 	[space.vim](https://github.com/Bozar/space)
@@ -56,8 +60,8 @@ Copy files {{{4
  }}}4
 Your first command {{{4
 
-	Restart Vim.  If there are no errors, then you
-	have been well ready for the test drive.
+	Restart Vim.  If there are no errors, you have
+	been well ready for the test drive.
 
 	Copy the following text and put it into
 	a blank file.
@@ -66,12 +70,12 @@ Your first command {{{4
 
 	Set "textwidth" first:
 
-		setl textwidth=50
+		+	setl textwidth=50
 
 	And then type this command (auto completion
 	will do you a favor):
 
-		BuWhole0TW
+		+	BuWhole0TW
 
 	If the new text looks like this, it means
 	everything has been properly set.
@@ -97,29 +101,25 @@ Two steps, and three more commands {{{4
 
 	List and paragraph, before substitution:
 
-		@=This is a list.
-
-		@-This is a paragraph.
+		+	=This is a list.
+		+	-This is a paragraph.
 
 	List and paragraph, after substitution:
 
-		@*	This is a list.
-
-		@	This is a paragraph.
+		+	*	This is a list.
+		+		This is a paragraph.
 
 	Sub-list and sub-paragraph, before
 	substitution:
 
-		@==This is a sub-list.
-
-		@--This is a sub-paragraph.
+		+	==This is a sub-list.
+		+	--This is a sub-paragraph.
 
 	Sub-list and sub-paragraph, after
 	substitution:
 
-			@+	This is a sub-list.
-
-			@	This is a sub-paragraph.
+		+		+	This is a sub-list.
+		+			This is a sub-paragraph.
 
 	Blank characters (spaces and tabs) before and
 	after pre-defined characters will be deleted.
@@ -127,25 +127,25 @@ Two steps, and three more commands {{{4
 	substitution.
 
 	All these characters mentioned above can be
-	set to your own value (see "Guide for Geeks",
-	below).  The plugin will do some more
-	substitutions in order to (hopefully) avoid
-	unexpected behaviors.  But for now, you don't
-	need to care about that.
+	set to your own value.  Besides, the plugin
+	will do some more substitutions in order to
+	(hopefully) avoid unexpected behaviors (see
+	"Guide for Geeks", below).
 
 	Step two.  The plugin provides you with six
 	commands.  Four of them substitute characters
 	and format text.  The rest two echo
-	plugin-related varibles.  Let's focus on the
+	plugin-related variables.  Let's focus on the
 	"editing" commands first.
 
 	The four "editing" commands fall into two
-	groups according to substitution range: inside
-	a paragraph or around the whole text.  Type
-	"bup" or "buw" in command-line mode, and then
-	press tab key to auto-complete the command.
-	You will see two options, in which "TW" stands
-	for "text width".
+	groups, according to substitution range:
+	inside a paragraph or around the whole text.
+	Type "BuP" or "BuW" in command-line mode (they
+	are not case-sensitive), and then press tab
+	key to auto-complete the command.  You will
+	see two options, in which "TW" stands for
+	"text width".
 
 		+	BuPara0TW
 		+	BuPara1NoTW
@@ -166,18 +166,20 @@ Two steps, and three more commands {{{4
 	move cursor into the paragraph you want to
 	edit, or the blank lines below it, not the
 	blank lines above it, in which case the
-	previous paragraph will be edited.
+	previous paragraph will be edited instead.
 
-	In addition to substitute characters inside
-	a paragraph, "BuPara1NoTW" will also delete
-	some specific blank characters in the whole
-	text: spaces between two CJK characters,
-	spaces between CJK punctuation mark and
-	western character, continous blank characters
-	(spaces and/or tabs) at the end of line.  All
-	three deletions can be turned off by setting
-	global variables (see "Guide for Geeks",
-	below).
+	"BuPara1NoTW" will also delete three kinds of
+	blank characters in the whole text:
+
+	*	spaces between two CJK characters
+	*	spaces between CJK punctuation mark and
+		western character
+	*	continous blank characters (spaces and/or
+		tabs) at the end of line
+
+	All these deletions can be turned off by
+	setting global variables (see "Guide for
+	Geeks", below).
 
 	"BuPara0TW" will do one more thing besides
 	substitution and deletion.  It will format the
@@ -186,8 +188,7 @@ Two steps, and three more commands {{{4
 		+	h gq
 
 	If global variable "g:TextWidth_Bullet" is not
-	set, buffer local option "textwidth" is used
-	instead.
+	set, Vim option "textwidth" is used instead.
 
 	Please note that even when there are no
 	pre-defined characters inside a paragraph,
@@ -195,15 +196,15 @@ Two steps, and three more commands {{{4
 	"BuPara0TW" will delete spaces and format
 	paragraph.
 
-	The "buw" commands do the same thing as their
-	"bup" counterparts, except that substitution
+	The "BuW" commands do the same thing as their
+	"BuP" counterparts, except that substitution
 	and format affect the whole text.
 
 	Following these two steps, you can easily
 	insert bullets and format text.  Now let's see
 	how to use two "echoing" commands to list
-	variables and use autocommand to load settings
-	for specific files.
+	variables and autocommand to load settings for
+	specific files.
 
 		+	BuEcho0Set
 		+	BuEcho1Bullet
@@ -229,9 +230,13 @@ Two steps, and three more commands {{{4
 	reading old files or creating new ones, add
 	such lines into your .vimrc:
 
+		+	" enable autocommand
 		+	let g:Switch_Auto_Bullet = 1
-		+	let g:Pat_File_Bullet = '*.write'
-		+	let g:Pat_File_Bullet .= ',*.read'
+
+		+	" load settings for files with suffix
+			.read/write
+		+	let g:Pat_File_Bullet = ',*.read'
+		+	let g:Pat_File_Bullet .= '*.write'
 
 	See Vim help file for more imformation.
 
@@ -244,7 +249,7 @@ Two steps, and three more commands {{{4
 
 	Auto load will not work unless
 	"g:Switch_Auto_Bullet" is set to a positive
-	value and "g:Pat_File_Bullet" is not blank.
+	value and "g:Pat_File_Bullet" is not empty.
 	Type "BuEcho0Set", then scroll to the bottom.
 	If "Auto load bullet settings:" says "YES",
 	you have done things right.
@@ -254,57 +259,335 @@ If something goes wrong... {{{4
 
 	Don't panic, of course. Here are some
 	suggestions for you if there are more
-	characters deleted than expected, or lines
-	shouldn't be joined become one paragraph.
+	characters being deleted than expected, or
+	lines shouldn't be joined become one
+	paragraph.
 
-	Narrow the range.  Try "paragraph" commands
-	first, then put several paragraphs into
-	a blank buffer and use "whole text" commands
-	to see if things happend as expected.
+	Narrow the range.  Try "BuP" commands first,
+	then put several paragraphs into a blank
+	buffer and use "BuW" commands to see if things
+	happend as expected.
 
 	Beware of pre-defined characters.  Lines
 	beginning with zero or more blank characters
 	and following such characters ("=", "-", "=="
-	and "--") will be processed (substituted into
-	bullets or nothing, depending on whether there
-	are other non-blank characters after such
-	pre-defined ones).
+	and "--") will be substituted into bullets or
+	nothing, depending on whether there are other
+	non-blank characters after such pre-defined
+	ones (see "Guide for Geeks", below).
 
-	Define protection lines.  Every line longer
-	than textwidth will be broken into shorter
-	ones when formatting.  Every line shorter than
-	textwidth will join with other lines when
-	formatting, excluding lines containing
-	foldmarkers.  You can define your own
-	protection lines, that is, lines you don't
-	want to have them joined, by setting
-	"g:Pat_Protect_Add_Bullet" and
+	Define protection lines.  When formatting,
+	every line longer than textwidth will be
+	broken into shorter ones; every line shorter
+	than textwidth will join with other lines
+	, excluding lines containing foldmarkers.  You
+	can define your own protection lines, that is,
+	lines you don't want to have them joined, by
+	setting "g:Pat_Protect_Add_Bullet" and
 	"g:Pat_Protect_Overwrite_Bullet".  See more
 	details below.
 
+		+	h 'foldmarker'
+
 	To delete spaces or not.  As mentioned in Step
 	two, three kinds of "spaces" will be deleted
-	(substituted into nothing).
+	(substituted into nothing).  You can tell the
+	plugin not to do extra deletions.
+
+	Re-join lines.  If you want to un-format text,
+	that is, to join all lines in a paragraph into
+	one, try this trick.
+
+		+	let g:TextWidth_Bullet = 9999
+		+	BuWhole0TW
 
  }}}4
  }}}3
 Guide for Geeks {{{3
 
-customize this plugin
+Things you should know first... {{{4
 
-	*	learn regular expression
-	*	read Vim user manual
+	I assume that you have learnt the ABCs of
+	regular expressions.  And don't forget to read
+	those help documents mentioned above.  They
+	are critical to the command "BuEcho0Set".
 
-	*	what does 'default setting' mean?
+ }}}4
+"BuP" and "BuW" commands {{{4
 
-	*	change bullet character/patttern
+Summary {{{5
 
-	*	formatoptions, textwidth and comments
-	*	tabstop
-	*	comment end
-	*	mark
-	*	protection
+	Here are two brief summaries of editing
+	process.  More details will be explained in
+	the "BuEcho0Set" and "BuEcho1Bullet" section.
 
+ }}}5
+"NoTW" commands {{{5
+
+	"BuPara1NoTW" and "BuWhole1NoTW" substitute
+	pre-defined characters into bullets.
+
+	*	Load script variables
+
+		+	Vim option: formatoptions
+		+	Vim option: textwidth
+		+	Vim option: comments
+
+		+	Bullet characters/patterns
+		+	Comment end character/pattern
+		+	Hold position mark
+		+	Line protection mark
+
+	*	Reset Vim options to their previous value
+
+	*	Delete continous spaces and/or tabs at the
+		end of line
+
+	*	Set mark j and k around the paragraph or
+		whole text
+
+	*	Mark lines that will be deleted
+
+	*	Substitute pre-defined characters into
+		bullets
+
+	*	Delete marked lines
+
+	*	Delete spaces between two CJK characters
+
+	*	Delete spaces between CJK punctuation mark
+		and Western character
+
+ }}}5
+"TW" commands {{{5
+
+	"BuPara0TW" and "BuWhole0TW" format text after
+	substitution.
+
+	*	Load script variables
+
+	*	Do NOT reset Vim options to their previous
+		value yet
+
+	*	Substitute pre-defined characters into
+		bullets just as in "NoTW" commands
+
+	*	Protect lines that should not be formatted
+		(insert protection mark in the beginning
+		of line)
+
+	*	Format text
+
+	*	Unprotect lines (delete protection mark)
+
+	*	Reset Vim options to their previous value
+
+ }}}5
+ }}}4
+Variables listed by "echoing" commands {{{4
+
+	You can browse variables and settings by using
+	two "echoing" commands:
+
+		+	BuEcho0Set
+		+	BuEcho1Bullet
+
+	There are four kinds of "variables":
+
+	*	Vim options (number/string)
+	*	script options (boolean)
+	*	script variables (number/string)
+	*	global variables (number/string)
+
+		+	h s:var
+		+	h g:var
+
+	You can set Vim options and global variables
+	in .vimrc or before inputing commands.
+
+	Some global variables have similar functions
+	as Vim options.  When both of them are set,
+	the plugin will use global variables rather
+	than Vim options.
+
+		+	" global variable
+		+	let g:TextWidth_Bullet = 50
+
+		+	" Vim option
+		+	let &textwidth = 72
+
+	When using "BuPara0TW" to format text, the
+	textwidth will be 50.
+
+	The plugin only use Vim options and script
+	variables to process text.  When global
+	variables are empty, script variables have
+	their default values.  So if you screw up with
+	some settings, it could be useful to re-set
+	global variables to empty values.
+
+		+	let g:TextWidth_Bullet = ''
+
+	Global variables from bullet.vim plugin end
+	with "_Bullet".  They also have four kinds of
+	"prefixes" for you to recognize them.
+
+	"Cha_" means character. There are no regular
+	expressions in such variables.
+
+	"Pat_" means pattern. These variables contain
+	both characters and regular expressions.
+
+	"Switch_" variables turn on/off some boolean
+	settings.  They only accpet number as legal
+	value.
+
+	There are four variables beginning with Vim
+	option names, which are "formatoptions",
+	"textwidth" and "comments".  Unless required
+	by autocommand, they won't change Vim
+	settings.  If these variables are not empty,
+	they will affect the format result of
+	"BuPara0TW" and "BuWhole0TW".
+
+ }}}4
+BuEcho1Bullet {{{4
+
+	"BuEcho1Bullet" lists all bullet
+	characters/patterns before and after
+	substitution.
+
+	These variables affect all four commands:
+
+		+	BuPara0TW
+		+	BuPara1NoTW
+
+		+	BuWhole0TW
+		+	BuWhole1NoTW
+
+	If you want to make some changes, both
+	characters and patterns should be changed.
+	Let's see an example.
+
+	Text, before substitution:
+
+		+	=This is a list.
+
+	Variables, before substitution:
+
+		+	let s:Cha_List_Pre = '='
+		+	let s:Pat_List_Pre =
+		+	\ '^\s*=\(=\)\@!\s*'
+
+	Text, after substitution:
+
+		+	*	This is a list.
+
+	Variables, after substitution:
+
+		+	let s:Cha_List_Post = '*'
+		+	let s:Pat_List_Post = '\t*\t'
+
+	Here is what you want:
+
+	*	Use "-" instead of "=" as pre-defined
+		character.
+	*	The pre-defined character must be followed
+		by at least one space.
+	*	Insert two spaces instead of one tab
+		before and after bullet.
+
+	 Text, before substitution:
+
+		+	- This is a list.
+		+	-This is NOT a list.
+
+	Text, after substitution:
+
+		+	*  This is a list.
+		+	-This is NOT a list.
+
+	You have to set three global variables to your
+	own value:
+
+		+	let g:Cha_List_Pre_Bullet = '-'
+		+	let g:Pat_List_Pre_Bullet = '^\s*-\s+'
+		+	let g:Pat_List_Post_Bullet = '  -  '
+
+	You might have already noticed that there are
+	six new variable "keywords".
+
+	*	_Pre
+	*	_Post
+	*	List
+	*	Para
+	*	SubList
+	*	SubPara
+
+	"_Pre" refers to characters/patterns before
+	substitution.  "_Post" refers to
+	characters/patterns after substitution.
+
+	"List" refers to lines beginning with bullets.
+	There could be blank characters before and/or
+	after bullets.  "Para" refers to lines in the
+	same paragraph with "List" lines but begin
+	with no bullets.
+
+	"SubList" and "SubPara" have more indentions
+	than their counterparts.
+
+ }}}4
+BuEcho0Set {{{4
+
+Summary {{{5
+
+	"BuEcho0Set" lists variables that can be
+	classified to four groups:
+
+	*	Vim options
+
+		+	formatoptions
+		+	textwidth
+		+	comments
+		+	tabstop
+		+	comment end
+
+	*	special marks
+
+		+	hold position mark
+		+	line protection
+
+	*	delete spaces
+
+	*	autocommand
+
+	The first group (Vim options) only affects
+	"textwidth" commands:
+
+		+	BuPara0TW
+		+	BuWhole0TW
+
+	The rest affect all four commands.
+
+ }}}5
+Vim options {{{5
+
+
+ }}}5
+Special marks {{{5
+
+
+ }}}5
+Delete spaces {{{5
+
+
+ }}}5
+Autocommand {{{5
+
+
+ }}}5
+ }}}4
  }}}3
  }}}2
  }}}1
