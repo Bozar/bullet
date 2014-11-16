@@ -1,10 +1,10 @@
-* User manual for bullet.vim
+# User manual for bullet.vim
 
-** Text
+## Text
 
-*** Note for Newbies
+### Note for Newbies
 
-**** Introduction
+#### Introduction
 
 "bullet.vim" is a global plugin which can substitute pre-defined characters into bullets and format text if required.
 
@@ -21,7 +21,7 @@ There are six new commands to change the text and over twenty global variables t
 
 You can read the simplified Chinese version [here](http://trow.cc/forum/index.php?showtopic=27171).
 
-**** Installation
+#### Installation
 
 This plugin requires three files to run.
 
@@ -31,7 +31,7 @@ Download [bullet.vim](https://github.com/Bozar/bullet) and put it into ~/.vim/pl
 
 Download [move_cursor.vim](https://github.com/Bozar/movecursor) and [space.vim](https://github.com/Bozar/space) and put them into ~/.vim/autoload/.
 
-**** Your first command
+#### Your first command
 
 Restart Vim.  If there are no errors, you have been well ready for the test drive.
 
@@ -53,9 +53,9 @@ If the new text looks like this, it means everything has been properly set.
 
 Sit back and read on.  Mr. Kite's show will start in no time.  :)
 
-*** Handbook for Hitchhikers
+### Handbook for Hitchhikers
 
-**** Two steps, and three more commands
+#### Two steps, and three more commands
 
 Step one.  As mentioned above, you have to insert pre-defined characters so that the plugin can find and replace them.  There are four pre-defined characters and two bullets.  The last special character inserted by user (comment-end character "/") will be explained later.
 
@@ -152,7 +152,7 @@ See Vim help file for more imformation.
 
 Auto load will not work unless "g:Switch_Auto_Bullet" is set to a positive value and "g:Pat_File_Bullet" is not empty.  Type "BuEcho0Set", then scroll to the bottom.  If "Auto load bullet settings:" says "YES", you have done things right.
 
-**** If something goes wrong...
+#### If something goes wrong...
 
 Don't panic, of course. Here are some suggestions for you if there are more characters being deleted than expected, or lines shouldn't be joined become one paragraph.
 
@@ -171,19 +171,19 @@ Re-join lines.  If you want to un-format text, that is, to join all lines in a p
 	+	let g:TextWidth_Bullet = 9999
 	+	BuWhole0TW
 
-*** Guide for Geeks
+### Guide for Geeks
 
-**** Things you should know first...
+#### Things you should know first...
 
 I assume that you have learnt the ABCs of regular expressions.  And don't forget to read those help documents mentioned above.
 
-**** "BuP" and "BuW" commands
+#### "BuP" and "BuW" commands
 
-***** Summary
+##### Summary
 
 Here are two brief summaries of editing process.  More details will be explained in the "BuEcho0Set" and "BuEcho1Bullet" section.
 
-***** "NoTW" commands
+##### "NoTW" commands
 
 "BuPara1NoTW" and "BuWhole1NoTW" substitute pre-defined characters into bullets.
 
@@ -214,7 +214,7 @@ Here are two brief summaries of editing process.  More details will be explained
 
 *	Delete spaces between CJK punctuation mark and Western character
 
-***** "TW" commands
+##### "TW" commands
 
 "BuPara0TW" and "BuWhole0TW" format text after substitution.
 
@@ -232,7 +232,7 @@ Here are two brief summaries of editing process.  More details will be explained
 
 *	Reset Vim options to their previous value
 
-**** Variables listed by "echoing" commands
+#### Variables listed by "echoing" commands
 
 You can browse variables and settings by using two "echoing" commands:
 
@@ -275,7 +275,7 @@ Global variables from bullet.vim plugin end with "_Bullet".  They also have four
 
 There are four variables beginning with Vim option names, which are "formatoptions", "textwidth" and "comments".  Unless required by autocommand, they won't change Vim settings.  If these variables are not empty, they will affect the format result of "BuPara0TW" and "BuWhole0TW".
 
-**** BuEcho1Bullet
+#### BuEcho1Bullet
 
 "BuEcho1Bullet" lists all bullet characters/patterns before and after substitution.
 
@@ -345,9 +345,9 @@ You might have already noticed that there are six new variable "keywords".
 
 "SubList" and "SubPara" have more indentions than their counterparts.
 
-**** BuEcho0Set
+#### BuEcho0Set
 
-***** Summary
+##### Summary
 
 "BuEcho0Set" lists variables that can be classified to four groups:
 
@@ -375,7 +375,7 @@ The first group (Vim options) only affects "textwidth" commands:
 
 The rest affect all four commands.
 
-***** Vim options
+##### Vim options
 
 There are three Vim options which will affect the "gq" behavior:
 
@@ -396,10 +396,12 @@ If you want to put the formatoptions string into register @" whenever you execut
 
 	+	g:Switch_FormatOptions_Put_Bullet
 
-***** Special marks
+##### Special marks
 
 
-***** Delete spaces
+##### Delete spaces
 
 
-***** Autocommand
+##### Autocommand
+
+
