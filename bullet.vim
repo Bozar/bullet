@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 18, Tue | 23:49:46 | 2014
+" Last Update: Nov 21, Fri | 21:53:44 | 2014
 
 " summary "{{{2
 
@@ -16,11 +16,17 @@
 " load & cpoptions "{{{2
 
 if !exists('g:Loaded_Bullet')
+
     let g:Loaded_Bullet = 0
+
 endif
+
 if g:Loaded_Bullet > 0
+
     finish
+
 endif
+
 let g:Loaded_Bullet = 1
 
 let s:Save_cpo = &cpoptions
@@ -31,152 +37,212 @@ set cpoptions&vim
 
 " list character "{{{3
 
-if !exists('g:Cha_List_Pre_Bullet')
-    let g:Cha_List_Pre_Bullet = ''
+if !exists('g:StrListBefore_Bullet')
+
+    let g:StrListBefore_Bullet = ''
+
 endif
 
-if !exists('g:Cha_List_Post_Bullet')
-    let g:Cha_List_Post_Bullet = ''
+if !exists('g:StrListAfter_Bullet')
+
+    let g:StrListAfter_Bullet = ''
+
 endif
 
-if !exists('g:Cha_Para_Pre_Bullet')
-    let g:Cha_Para_Pre_Bullet = ''
+if !exists('g:StrParaBefore_Bullet')
+
+    let g:StrParaBefore_Bullet = ''
+
 endif
 
  "}}}3
 " sublist character "{{{3
 
-if !exists('g:Cha_SubList_Pre_Bullet')
-    let g:Cha_SubList_Pre_Bullet = ''
+if !exists('g:StrSubListBefore_Bullet')
+
+    let g:StrSubListBefore_Bullet = ''
+
 endif
 
-if !exists('g:Cha_SubList_Post_Bullet')
-    let g:Cha_SubList_Post_Bullet = ''
+if !exists('g:StrSubListAfter_Bullet')
+
+    let g:StrSubListAfter_Bullet = ''
+
 endif
 
-if !exists('g:Cha_SubPara_Pre_Bullet')
-    let g:Cha_SubPara_Pre_Bullet = ''
+if !exists('g:StrSubParaBefore_Bullet')
+
+    let g:StrSubParaBefore_Bullet = ''
+
 endif
 
  "}}}3
 " list pattern "{{{3
 
-if !exists('g:Pat_List_Pre_Bullet')
-    let g:Pat_List_Pre_Bullet = ''
+if !exists('g:PatListBefore_Bullet')
+
+    let g:PatListBefore_Bullet = ''
+
 endif
 
-if !exists('g:Pat_List_Post_Bullet')
-    let g:Pat_List_Post_Bullet = ''
+if !exists('g:PatListAfter_Bullet')
+
+    let g:PatListAfter_Bullet = ''
+
 endif
 
-if !exists('g:Pat_Para_Pre_Bullet')
-    let g:Pat_Para_Pre_Bullet = ''
+if !exists('g:PatParaBefore_Bullet')
+
+    let g:PatParaBefore_Bullet = ''
+
 endif
 
-if !exists('g:Pat_Para_Post_Bullet')
-    let g:Pat_Para_Post_Bullet = ''
+if !exists('g:PatParaAfter_Bullet')
+
+    let g:PatParaAfter_Bullet = ''
+
 endif
 
  "}}}3
 " sublist pattern "{{{3
 
-if !exists('g:Pat_SubList_Pre_Bullet')
-    let g:Pat_SubList_Pre_Bullet = ''
+if !exists('g:PatSubListBefore_Bullet')
+
+    let g:PatSubListBefore_Bullet = ''
+
 endif
 
-if !exists('g:Pat_SubList_Post_Bullet')
-    let g:Pat_SubList_Post_Bullet = ''
+if !exists('g:PatSubListAfter_Bullet')
+
+    let g:PatSubListAfter_Bullet = ''
+
 endif
 
-if !exists('g:Pat_SubPara_Pre_Bullet')
-    let g:Pat_SubPara_Pre_Bullet = ''
+if !exists('g:PatSubParaBefore_Bullet')
+
+    let g:PatSubParaBefore_Bullet = ''
+
 endif
 
-if !exists('g:Pat_SubPara_Post_Bullet')
-    let g:Pat_SubPara_Post_Bullet = ''
+if !exists('g:PatSubParaAfter_Bullet')
+
+    let g:PatSubParaAfter_Bullet = ''
+
 endif
 
  "}}}3
 " text width "{{{3
 
 if !exists('g:TextWidth_Bullet')
+
     let g:TextWidth_Bullet = ''
+
 endif
 
  "}}}3
 " format options "{{{3
 
-if !exists('g:FormatOptions_Overwrite_Bullet')
-    let g:FormatOptions_Overwrite_Bullet = ''
+if !exists('g:FormatOptionsOverwrite_Bullet')
+
+    let g:FormatOptionsOverwrite_Bullet = ''
+
 endif
 
-if !exists('g:Switch_FormatOptions_Put_Bullet')
-    let g:Switch_FormatOptions_Put_Bullet = ''
+if !exists('g:SwitchFormatOptionsPut_Bullet')
+
+    let g:SwitchFormatOptionsPut_Bullet = ''
+
 endif
 
  "}}}3
 " comments "{{{3
 
-if !exists('g:Comments_Overwrite_Bullet')
-    let g:Comments_Overwrite_Bullet = ''
+if !exists('g:CommentsOverwrite_Bullet')
+
+    let g:CommentsOverwrite_Bullet = ''
+
 endif
 
-if !exists('g:Comments_Add_Bullet')
-    let g:Comments_Add_Bullet = ''
+if !exists('g:CommentsAdd_Bullet')
+
+    let g:CommentsAdd_Bullet = ''
+
 endif
 
-if !exists('g:Cha_ComEnd_Bullet')
-    let g:Cha_ComEnd_Bullet = ''
+if !exists('g:StrComEnd_Bullet')
+
+    let g:StrComEnd_Bullet = ''
+
 endif
 
-if !exists('g:Pat_ComEnd_Bullet')
-    let g:Pat_ComEnd_Bullet = ''
+if !exists('g:PatComEnd_Bullet')
+
+    let g:PatComEnd_Bullet = ''
+
 endif
 
  "}}}3
 " protect lines "{{{3
 
-if !exists('g:Pat_Protect_Overwrite_Bullet')
-    let g:Pat_Protect_Overwrite_Bullet = ''
+if !exists('g:PatProtectOverwrite_Bullet')
+
+    let g:PatProtectOverwrite_Bullet = ''
+
 endif
 
-if !exists('g:Pat_Protect_Add_Bullet')
-    let g:Pat_Protect_Add_Bullet = ''
+if !exists('g:PatProtectAdd_Bullet')
+
+    let g:PatProtectAdd_Bullet = ''
+
 endif
 
-if !exists('g:Cha_Protect_Bullet')
-    let g:Cha_Protect_Bullet = ''
+if !exists('g:StrProtect_Bullet')
+
+    let g:StrProtect_Bullet = ''
+
 endif
 
  "}}}3
 " autocommands "{{{3
 
-if !exists('g:Switch_Auto_Bullet')
-    let g:Switch_Auto_Bullet = ''
+if !exists('g:SwitchAuto_Bullet')
+
+    let g:SwitchAuto_Bullet = ''
+
 endif
 
-if !exists('g:Pat_File_Bullet')
-    let g:Pat_File_Bullet = ''
+if !exists('g:PatFile_Bullet')
+
+    let g:PatFile_Bullet = ''
+
 endif
 
  "}}}3
 " load delete-space functions "{{{3
 
-" load space#DelSpace_Trail()
-if !exists('g:Switch_DelSpace_Trail_Bullet')
-    let g:Switch_DelSpace_Trail_Bullet = ''
+" load space#DelSpaceTrail()
+
+if !exists('g:SwitchDelSpaceTrail_Bullet')
+
+    let g:SwitchDelSpaceTrail_Bullet = ''
+
 endif
 
-" load space#DelSpace_CJK()
-if !exists('g:Switch_DelSpace_CJK_Bullet')
-    let g:Switch_DelSpace_CJK_Bullet = ''
+" load space#DelSpaceCJK()
+
+if !exists('g:SwitchDelSpaceCJK_Bullet')
+
+    let g:SwitchDelSpaceCJK_Bullet = ''
+
 endif
 
  "}}}3
 " placeholder "{{{3
 
-if !exists('g:Cha_Mark_Bullet')
-    let g:Cha_Mark_Bullet = ''
+if !exists('g:StrMark_Bullet')
+
+    let g:StrMark_Bullet = ''
+
 endif
 
  "}}}3
@@ -187,196 +253,306 @@ endif
 
 function s:LoadBullets() "{{{4
 
-    " list character, pre
-    if g:Cha_List_Pre_Bullet != ''
-        let s:Cha_List_Pre = g:Cha_List_Pre_Bullet
+    " list character, before
+
+    if g:StrListBefore_Bullet != ''
+
+        let s:StrListBefore =
+        \ g:StrListBefore_Bullet
+
     else
-        let s:Cha_List_Pre = '='
+
+        let s:StrListBefore = '='
+
     endif
 
     " list character, after
-    if g:Cha_List_Post_Bullet != ''
-        let s:Cha_List_Post =
-        \ g:Cha_List_Post_Bullet
+
+    if g:StrListAfter_Bullet != ''
+
+        let s:StrListAfter =
+        \ g:StrListAfter_Bullet
+
     else
-        let s:Cha_List_Post = '*'
+
+        let s:StrListAfter = '*'
+
     endif
 
-    " para character, pre
-    if g:Cha_Para_Pre_Bullet != ''
-        let s:Cha_Para_Pre = g:Cha_Para_Pre_Bullet
+    " para character, before
+
+    if g:StrParaBefore_Bullet != ''
+
+        let s:StrParaBefore =
+        \ g:StrParaBefore_Bullet
+
     else
-        let s:Cha_Para_Pre = '-'
+
+        let s:StrParaBefore = '-'
+
     endif
 
-    " sub-list character, pre
-    if g:Cha_SubList_Pre_Bullet != ''
-        let s:Cha_SubList_Pre =
-        \ g:Cha_SubList_Pre_Bullet
+    " sub-list character, before
+
+    if g:StrSubListBefore_Bullet != ''
+
+        let s:StrSubListBefore =
+        \ g:StrSubListBefore_Bullet
+
     else
-        let s:Cha_SubList_Pre = '=='
+
+        let s:StrSubListBefore = '=='
+
     endif
 
     " sub-list character, after
-    if g:Cha_SubList_Post_Bullet != ''
-        let s:Cha_SubList_Post =
-        \ g:Cha_SubList_Post_Bullet
+
+    if g:StrSubListAfter_Bullet != ''
+
+        let s:StrSubListAfter =
+        \ g:StrSubListAfter_Bullet
+
     else
-        let s:Cha_SubList_Post = '+'
+
+        let s:StrSubListAfter = '+'
+
     endif
 
-    " sub-para character, pre
-    if g:Cha_SubPara_Pre_Bullet != ''
-        let s:Cha_SubPara_Pre =
-        \ g:Cha_SubPara_Pre_Bullet
+    " sub-para character, before
+
+    if g:StrSubParaBefore_Bullet != ''
+
+        let s:StrSubParaBefore =
+        \ g:StrSubParaBefore_Bullet
+
     else
-        let s:Cha_SubPara_Pre = '--'
+
+        let s:StrSubParaBefore = '--'
+
     endif
 
-    " list pattern, pre
-    if g:Pat_List_Pre_Bullet != ''
-        let s:Pat_List_Pre = g:Pat_List_Pre_Bullet
+    " list pattern, before
+
+    if g:PatListBefore_Bullet != ''
+
+        let s:PatListBefore =
+        \ g:PatListBefore_Bullet
+
     else
-        let s:Pat_List_Pre = '^\s*=\(=\)\@!\s*'
+
+        let s:PatListBefore = '^\s*=\(=\)\@!\s*'
+
     endif
 
     " list pattern, after
-    if g:Pat_List_Post_Bullet != ''
-        let s:Pat_List_Post =
-        \ g:Pat_List_Post_Bullet
+
+    if g:PatListAfter_Bullet != ''
+
+        let s:PatListAfter =
+        \ g:PatListAfter_Bullet
+
     else
-        let s:Pat_List_Post = '    *   '
+
+        let s:PatListAfter = '    *   '
+
     endif
 
-    " para pattern, pre
-    if g:Pat_Para_Pre_Bullet != ''
-        let s:Pat_Para_Pre = g:Pat_Para_Pre_Bullet
+    " para pattern, before
+
+    if g:PatParaBefore_Bullet != ''
+
+        let s:PatParaBefore =
+        \ g:PatParaBefore_Bullet
+
     else
-        let s:Pat_Para_Pre = '^\s*-\(-\)\@!\s*'
+
+        let s:PatParaBefore = '^\s*-\(-\)\@!\s*'
+
     endif
 
     " para pattern, after
-    if g:Pat_Para_Post_Bullet != ''
-        let s:Pat_Para_Post =
-        \ g:Pat_Para_Post_Bullet
+
+    if g:PatParaAfter_Bullet != ''
+
+        let s:PatParaAfter =
+        \ g:PatParaAfter_Bullet
+
     else
-        let s:Pat_Para_Post = '        '
+
+        let s:PatParaAfter = '        '
+
     endif
 
-    " sub-list pattern, pre
-    if g:Pat_SubList_Pre_Bullet != ''
-        let s:Pat_SubList_Pre =
-        \ g:Pat_SubList_Pre_Bullet
+    " sub-list pattern, before
+
+    if g:PatSubListBefore_Bullet != ''
+
+        let s:PatSubListBefore =
+        \ g:PatSubListBefore_Bullet
+
     else
-        let s:Pat_SubList_Pre =
+
+        let s:PatSubListBefore =
         \ '^\s*==\(=\)\@!\s*'
+
     endif
 
     " sub-list pattern, after
-    if g:Pat_SubList_Post_Bullet != ''
-        let s:Pat_SubList_Post =
-        \ g:Pat_SubList_Post_Bullet
+
+    if g:PatSubListAfter_Bullet != ''
+
+        let s:PatSubListAfter =
+        \ g:PatSubListAfter_Bullet
+
     else
-        let s:Pat_SubList_Post = '        +   '
+
+        let s:PatSubListAfter = '        +   '
+
     endif
 
-    " sub-para pattern, pre
-    if g:Pat_SubPara_Pre_Bullet != ''
-        let s:Pat_SubPara_Pre =
-        \ g:Pat_SubPara_Pre_Bullet
+    " sub-para pattern, before
+
+    if g:PatSubParaBefore_Bullet != ''
+
+        let s:PatSubParaBefore =
+        \ g:PatSubParaBefore_Bullet
+
     else
-        let s:Pat_SubPara_Pre =
+
+        let s:PatSubParaBefore =
         \ '^\s*--\(-\)\@!\s*'
+
     endif
 
     " sub-para pattern, after
-    if g:Pat_SubPara_Post_Bullet != ''
-        let s:Pat_SubPara_Post =
-        \ g:Pat_SubPara_Post_Bullet
+
+    if g:PatSubParaAfter_Bullet != ''
+
+        let s:PatSubParaAfter =
+        \ g:PatSubParaAfter_Bullet
+
     else
-        let s:Pat_SubPara_Post = '            '
+
+        let s:PatSubParaAfter = '            '
+
     endif
 
-    let s:Pat_Search =
-    \ s:Pat_List_Pre . '\|' .
-    \ s:Pat_Para_Pre . '\|' .
-    \ s:Pat_SubList_Pre . '\|' .
-    \ s:Pat_SubPara_Pre
+    let s:PatSearch =
+    \ s:PatListBefore . '\|' .
+    \ s:PatParaBefore . '\|' .
+    \ s:PatSubListBefore . '\|' .
+    \ s:PatSubParaBefore
 
 endfunction "}}}4
 
 function s:LoadStrings() "{{{4
 
     " put &formatoptions into register
-    if g:Switch_FormatOptions_Put_Bullet > 0
-        let s:Switch_FormatOptions_Put = 1
+
+    if g:SwitchFormatOptionsPut_Bullet > 0
+
+        let s:SwitchFormatOptionsPut = 1
+
     else
-        let s:Switch_FormatOptions_Put = 0
+
+        let s:SwitchFormatOptionsPut = 0
+
     endif
 
     " comment end character
-    if g:Cha_ComEnd_Bullet != ''
-        let s:Cha_ComEnd = g:Cha_ComEnd_Bullet
+
+    if g:StrComEnd_Bullet != ''
+
+        let s:StrComEnd = g:StrComEnd_Bullet
+
     else
-        let s:Cha_ComEnd = '/'
+
+        let s:StrComEnd = '/'
+
     endif
 
     " comment end pattern
-    if g:Pat_ComEnd_Bullet != ''
-        let s:Pat_ComEnd = g:Pat_ComEnd_Bullet
+
+    if g:PatComEnd_Bullet != ''
+
+        let s:PatComEnd = g:PatComEnd_Bullet
+
     else
-        let s:Pat_ComEnd = '\s*\/\s*'
+
+        let s:PatComEnd = '\s*\/\s*'
+
     endif
 
     " protection characters
-    " such characters will appear in comments
+    " such strings will appear in comments
     " as well
-    if g:Cha_Protect_Bullet != ''
-        let s:Cha_Protect =
-        \ g:Cha_Protect_Bullet
+
+    if g:StrProtect_Bullet != ''
+
+        let s:StrProtect =
+        \ g:StrProtect_Bullet
+
     else
-        let s:Cha_Protect = '@'
+
+        let s:StrProtect = '@'
+
     endif
 
     " protection patterns
-    if g:Pat_Protect_Overwrite_Bullet != ''
 
-        let s:Pat_Protect_Final =
-        \ g:Pat_Protect_Overwrite_Bullet .
-        \ g:Pat_Protect_Add_Bullet
+    if g:PatProtectOverwrite_Bullet != ''
+
+        let s:PatProtectFinal =
+        \ g:PatProtectOverwrite_Bullet .
+        \ g:PatProtectAdd_Bullet
 
     else
 
-        let s:Pat_Protect_Origin = '\(\({\{3}'
-        let s:Pat_Protect_Origin .=  '\|}\{3}\)'
-        let s:Pat_Protect_Origin .= '\d\{0,2}$\)'
+        let s:PatProtectOrigin = '\(\({\{3}'
+        let s:PatProtectOrigin .=  '\|}\{3}\)'
+        let s:PatProtectOrigin .= '\d\{0,2}$\)'
 
-        let s:Pat_Protect_Final =
-        \ s:Pat_Protect_Origin .
-        \ g:Pat_Protect_Add_Bullet
+        let s:PatProtectFinal =
+        \ s:PatProtectOrigin .
+        \ g:PatProtectAdd_Bullet
 
     endif
 
-    " load space#DelSpace_Trail()
-    if g:Switch_DelSpace_Trail_Bullet < 0
-        let s:Switch_DelSpace_Trail = 0
+    " load space#DelSpaceTrail()
+
+    if g:SwitchDelSpaceTrail_Bullet < 0
+
+        let s:SwitchDelSpaceTrail = 0
+
     else
-        let s:Switch_DelSpace_Trail = 1
+
+        let s:SwitchDelSpaceTrail = 1
+
     endif
 
-    " load space#DelSpace_CJK()
-    if g:Switch_DelSpace_CJK_Bullet < 0
-        let s:Switch_DelSpace_CJK = 0
+    " load space#DelSpaceCJK()
+
+    if g:SwitchDelSpaceCJK_Bullet < 0
+
+        let s:SwitchDelSpaceCJK = 0
+
     else
-        let s:Switch_DelSpace_CJK = 1
+
+        let s:SwitchDelSpaceCJK = 1
+
     endif
 
     " place holder mark
-    if g:Cha_Mark_Bullet != ''
-        let s:Cha_Mark = g:Cha_Mark_Bullet
+
+    if g:StrMark_Bullet != ''
+
+        let s:StrMark = g:StrMark_Bullet
+
     else
-        let s:Cha_Mark =
+
+        let s:StrMark =
         \ '###LONG_PLACEHOLDER_FOR_BULLET###'
+
     endif
 
 endfunction "}}}4
@@ -384,93 +560,117 @@ endfunction "}}}4
 function s:LoadSettings(when) "{{{4
 
     " load settings
+
     if a:when == 0
 
-        let s:TextWidth_Save = &textwidth
-        let s:FormatOptions_Save = &formatoptions
-        let s:Comments_Save = &comments
+        let s:SaveTextWidth = &textwidth
+        let s:SaveFormatOptions = &formatoptions
+        let s:SaveComments = &comments
 
         " textwidth
+
         if g:TextWidth_Bullet > 0
+
             let &l:textwidth = g:TextWidth_Bullet
+
         endif
 
         " formatoptions, overwrite
-        if g:FormatOptions_Overwrite_Bullet != ''
+
+        if g:FormatOptionsOverwrite_Bullet != ''
+
             let &l:formatoptions =
-            \ g:FormatOptions_Overwrite_Bullet
+            \ g:FormatOptionsOverwrite_Bullet
+
         else
+
             let &l:formatoptions = 'tcqro2mB1j'
+
         endif
 
         " put &formatoptions into register
-        if s:Switch_FormatOptions_Put == 1
+
+        if s:SwitchFormatOptionsPut == 1
+
             let @" = &l:formatoptions
+
         endif
 
         " comments
+
         " overwrite comment setting
-        if g:Comments_Overwrite_Bullet != ''
+
+        if g:CommentsOverwrite_Bullet != ''
 
             let &l:comments =
-            \ g:Comments_Overwrite_Bullet
+            \ g:CommentsOverwrite_Bullet
 
         else
 
             setl comments=
 
-            " sublist characters, pre
-            let &l:comments .=
-            \ 's:' . s:Cha_SubList_Pre .
-            \ ',m:' . s:Cha_SubPara_Pre.
-            \ ',ex:' . s:Cha_ComEnd
+            " sublist characters, before
 
-            " list characters, pre
             let &l:comments .=
-            \ ',s:' . s:Cha_List_Pre .
-            \ ',m:' . s:Cha_Para_Pre .
-            \ ',ex:' . s:Cha_ComEnd
+            \ 's:' . s:StrSubListBefore .
+            \ ',m:' . s:StrSubParaBefore.
+            \ ',ex:' . s:StrComEnd
+
+            " list characters, before
+
+            let &l:comments .=
+            \ ',s:' . s:StrListBefore .
+            \ ',m:' . s:StrParaBefore .
+            \ ',ex:' . s:StrComEnd
 
             " sublist characters, after
+
             let &l:comments .=
-            \ ',f:' . s:Cha_SubList_Post
+            \ ',f:' . s:StrSubListAfter
 
             " list characters, after
+
             let &l:comments .=
-            \ ',f:' . s:Cha_List_Post
+            \ ',f:' . s:StrListAfter
 
             " protect characters
+
             let &l:comments .=
-            \ ',s:' . s:Cha_Protect .
-            \ ',m:' . s:Cha_Protect .
-            \ ',ex:' . s:Cha_Protect
+            \ ',s:' . s:StrProtect .
+            \ ',m:' . s:StrProtect .
+            \ ',ex:' . s:StrProtect
 
         endif
 
         " add new comments
+
         let &l:comments .= ',' .
-        \ g:Comments_Add_Bullet
+        \ g:CommentsAdd_Bullet
 
     endif
 
     " unload settings
+
     if a:when == 1
 
         " textwidth
-        let &l:textwidth = s:TextWidth_Save
+
+        let &l:textwidth = s:SaveTextWidth
 
         " formatoptions
+
         let &l:formatoptions =
-        \ s:FormatOptions_Save
+        \ s:SaveFormatOptions
 
         " comments
-        let &l:comments = s:Comments_Save
+
+        let &l:comments = s:SaveComments
 
     endif
 
 endfunction "}}}4
 
-function s:LoadAll_Bul_Str_Set(when) "{{{4
+function s:LoadAll(when) "{{{4
 
     call <sid>LoadBullets()
     call <sid>LoadStrings()
@@ -478,47 +678,54 @@ function s:LoadAll_Bul_Str_Set(when) "{{{4
 
 endfunction "}}}4
 
-function s:DelSpace_Trail() "{{{4
+function s:DelSpaceTrail() "{{{4
 
     " delete trailing blank characters: tabs,
     " half-width spaces and full-width spaces
     " NOTE: cursor position must be set first!
-    call space#DelSpace_Trail()
-    call move_cursor#KeepPos(1)
+
+    call space#DelSpaceTrail()
+    call moveCursor#KeepPos(1)
 
 endfunction "}}}4
 
 function s:DelBullet(when) "{{{4
 
     " suppose '=' will be replaced with bullet '*'
+
     " delete lines containing only such characters
     " '^\s*=\s*$' or '^\s*\/\s*$'
+
     " '/' appears in a three-piece comment
     " which is defined in s:LoadStrings()
+
     " :help format-comments
 
     if a:when == 0
 
         " only bullet
+
         execute "'j,'ks/\\(" .
-        \ s:Pat_Search . '\)\(' .
-        \ s:Pat_ComEnd . '\|\s*\)$/' .
-        \ s:Cha_Mark . '/e'
+        \ s:PatSearch . '\)\(' .
+        \ s:PatComEnd . '\|\s*\)$/' .
+        \ s:StrMark . '/e'
 
-        " only s:Pat_ComEnd
-        execute "'j,'ks/^" . s:Pat_ComEnd . '$/'
-        \ s:Cha_Mark . '/e'
+        " only s:PatComEnd
 
-        " s:Pat_ComEnd at the end of line
-        let l:pattern = '\(' . s:Pat_Search .
-        \ '\).*' . s:Pat_ComEnd . '$'
+        execute "'j,'ks/^" . s:PatComEnd . '$/'
+        \ s:StrMark . '/e'
 
-        call move_cursor#ToColumn1("'j",0)
+        " s:PatComEnd at the end of line
+
+        let l:pattern = '\(' . s:PatSearch .
+        \ '\).*' . s:PatComEnd . '$'
+
+        call moveCursor#GotoColumn1("'j",'str')
 
         if search(l:pattern,'c',line("'k")) != 0
 
-            execute "'j,'kg/" . s:Pat_Search .
-            \ '/s/' . s:Pat_ComEnd . '$//'
+            execute "'j,'kg/" . s:PatSearch .
+            \ '/s/' . s:PatComEnd . '$//'
 
         endif
 
@@ -526,52 +733,63 @@ function s:DelBullet(when) "{{{4
 
     " delete marked lines after substitution
     " in case line 'j/'k contains mark
+
     if a:when == 1
 
-        call move_cursor#ToColumn1("'j",0)
+        call moveCursor#GotoColumn1("'j",'str')
 
-        if search(s:Cha_Mark,'c',line("'k")) != 0
-            execute "'j,'kg/" . s:Cha_Mark .
+        if search(s:StrMark,'c',line("'k")) != 0
+
+            execute "'j,'kg/" . s:StrMark .
             \ '/delete'
+
         endif
 
     endif
 
 endfunction "}}}4
 
-function s:SubsBullet_Core() "{{{4
+function s:SubsBulletCore() "{{{4
 
     " list
     " substitute '=' with '*' and indent 1 tab
     " substitute '-' with '' and indent 1 tab
+
     execute "'j,'ks/" .
-    \ s:Pat_List_Pre .  '/' .
-    \ s:Pat_List_Post . '/e'
+    \ s:PatListBefore .  '/' .
+    \ s:PatListAfter . '/e'
+
     execute "'j,'ks/" .
-    \ s:Pat_Para_Pre . '/' .
-    \ s:Pat_Para_Post . '/e'
+    \ s:PatParaBefore . '/' .
+    \ s:PatParaAfter . '/e'
 
     " sub list
     " substitute '==' with '+' and indent 2 tabs
     " substitute '--' with '' and indent 2 tabs
+
     execute "'j,'ks/" .
-    \ s:Pat_SubList_Pre . '/' .
-    \ s:Pat_SubList_Post . '/e'
+    \ s:PatSubListBefore . '/' .
+    \ s:PatSubListAfter . '/e'
+
     execute "'j,'ks/" .
-    \ s:Pat_SubPara_Pre . '/' .
-    \ s:Pat_SubPara_Post . '/e'
+    \ s:PatSubParaBefore . '/' .
+    \ s:PatSubParaAfter . '/e'
 
 endfunction "}}}4
 
 function s:AutoCommand() "{{{4
 
-    if g:Switch_Auto_Bullet <= 0 ||
-    \ g:Pat_File_Bullet == ''
+    if g:SwitchAuto_Bullet <= 0 ||
+    \ g:PatFile_Bullet == ''
+
         return
+
     else
+
         execute 'autocmd BufRead,BufNewFile ' .
-        \ g:Pat_File_Bullet .
-        \ " call <sid>LoadAll_Bul_Str_Set(0)"
+        \ g:PatFile_Bullet .
+        \ " call <sid>LoadAll(0)"
+
     endif
 
 endfunction "}}}4
@@ -585,52 +803,73 @@ endfunction "}}}4
  "}}}3
 " main "{{{3
 
-function s:SubsBullet_NoTW(range) "{{{4
+function s:SubsBulletNoTW(range) "{{{4
 
-    call move_cursor#KeepPos(0)
-    call <sid>LoadAll_Bul_Str_Set(0)
-    call <sid>LoadAll_Bul_Str_Set(1)
+    call moveCursor#KeepPos(0)
+    call <sid>LoadAll(0)
+    call <sid>LoadAll(1)
 
     " delete trailing spaces
-    if s:Switch_DelSpace_Trail == 1
-        call <sid>DelSpace_Trail()
+
+    if s:SwitchDelSpaceTrail == 1
+
+        call <sid>DelSpaceTrail()
+
     endif
 
     " set mark j & k
+
     " paragraph
+
     if a:range == 0
-        call move_cursor#SetMarkJK_Para()
+
+        call moveCursor#SetMarkJKPara()
+
     " whole text
+
     elseif a:range == 1
-        call move_cursor#SetMarkJK_Whole()
+
+        call moveCursor#SetMarkJKWhole()
+
     endif
 
     " mark lines to be deleted
+
     call <sid>DelBullet(0)
+
     " substitute bullets
-    call <sid>SubsBullet_Core()
+
+    call <sid>SubsBulletCore()
+
     " delete marked lines
+
     call <sid>DelBullet(1)
 
     " delete spaces between two CJK characters
     " delete spaces between CJK punctuation mark
     " and Western character
-    if s:Switch_DelSpace_CJK == 1
-        call space#DelSpace_CJK()
+
+    if s:SwitchDelSpaceCJK == 1
+
+        call space#DelSpaceCJK()
+
     endif
 
-    call move_cursor#KeepPos(1)
+    call moveCursor#KeepPos(1)
 
 endfunction "}}}4
 
-function s:SubsBullet_TW(range) "{{{4
+function s:SubsBulletTW(range) "{{{4
 
-    call move_cursor#KeepPos(0)
-    call <sid>LoadAll_Bul_Str_Set(0)
+    call moveCursor#KeepPos(0)
+    call <sid>LoadAll(0)
 
     " delete trailing spaces
-    if s:Switch_DelSpace_Trail == 1
-        call <sid>DelSpace_Trail()
+
+    if s:SwitchDelSpaceTrail == 1
+
+        call <sid>DelSpaceTrail()
+
     endif
 
     let l:i = 0
@@ -639,26 +878,40 @@ function s:SubsBullet_TW(range) "{{{4
 
         " set mark j & k
         " paragraph
+
         if a:range == 0
-            call move_cursor#SetMarkJK_Para()
+
+            call moveCursor#SetMarkJKPara()
+
         " whole text
+
         elseif a:range == 1
-            call move_cursor#SetMarkJK_Whole()
+
+            call moveCursor#SetMarkJKWhole()
+
         endif
 
         " substitute bullets once
         " set marks twice (before and after
         " substitution), in case marked lines 'j
         " and 'k are deleted
+
         if l:i > 0
+
             break
+
         endif
 
         " mark lines to be deleted
+
         call <sid>DelBullet(0)
+
         " substitute bullets
-        call <sid>SubsBullet_Core()
+
+        call <sid>SubsBulletCore()
+
         " delete marked lines
+
         call <sid>DelBullet(1)
 
         let l:i = l:i +1
@@ -666,10 +919,14 @@ function s:SubsBullet_TW(range) "{{{4
     endwhile
 
     " protect lines
-    call move_cursor#ToColumn1("'j",0)
-    if search(s:Pat_Protect_Final,'c',line("'k"))
-        execute "'j,'kg/" . s:Pat_Protect_Final .
-        \ '/s/^/' . s:Cha_Protect . '/'
+
+    call moveCursor#GotoColumn1("'j",'str')
+
+    if search(s:PatProtectFinal,'c',line("'k"))
+
+        execute "'j,'kg/" . s:PatProtectFinal .
+        \ '/s/^/' . s:StrProtect . '/'
+
     endif
 
     let l:j = 0
@@ -679,43 +936,62 @@ function s:SubsBullet_TW(range) "{{{4
         " delete spaces between two CJK characters
         " delete spaces between CJK punctuation
         " mark and Western character
-        if s:Switch_DelSpace_CJK == 1
-            call space#DelSpace_CJK()
+
+        if s:SwitchDelSpaceCJK == 1
+
+            call space#DelSpaceCJK()
+
         endif
 
         if l:j > 0
+
             break
+
         endif
 
         " format
+
         if a:range == 0
+
             execute "normal 'jgqip"
+
         elseif a:range == 1
+
             execute "normal gggqG"
+
         endif
 
         " unprotect lines
+
         if a:range == 0
-            call move_cursor#SetMarkJK_Para()
+
+            call moveCursor#SetMarkJKPara()
+
         elseif a:range == 1
-            call move_cursor#SetMarkJK_Whole()
+
+            call moveCursor#SetMarkJKWhole()
+
         endif
-        execute "'j,'ks/^" . s:Cha_Protect . '//e'
+
+        execute "'j,'ks/^" . s:StrProtect . '//e'
 
         let l:j = l:j +1
 
     endwhile
 
     " unload settings
-    call <sid>LoadAll_Bul_Str_Set(1)
+
+    call <sid>LoadAll(1)
+
     " reset cursor position
-    call move_cursor#KeepPos(1)
+
+    call moveCursor#KeepPos(1)
 
 endfunction "}}}4
 
 function s:EchoSettings() "{{{4
 
-    call <sid>LoadAll_Bul_Str_Set(0)
+    call <sid>LoadAll(0)
 
     let l:format = "&formatoptions == '"
     let l:options = &formatoptions
@@ -738,172 +1014,273 @@ function s:EchoSettings() "{{{4
     " Such as lines to be echoed and functions to
     " be called.
 
-    call <sid>LoadAll_Bul_Str_Set(1)
+    call <sid>LoadAll(1)
 
     let l:put = 'Put &formatoptions into'
     let l:put .= ' register @": '
-    if s:Switch_FormatOptions_Put == 1
+
+    if s:SwitchFormatOptionsPut == 1
+
         let l:register = 'YES'
-    elseif s:Switch_FormatOptions_Put == 0
+
+    elseif s:SwitchFormatOptionsPut == 0
+
         let l:register = 'NO'
+
     endif
 
     let l:auto =  'Auto load bullet settings: '
-    if g:Switch_Auto_Bullet > 0
-    \ && g:Pat_File_Bullet != ''
+
+    if g:SwitchAuto_Bullet > 0
+    \ && g:PatFile_Bullet != ''
+
         let l:command = 'YES'
+
     else
+
         let l:command = 'NO'
+
     endif
 
     let l:del = 'Delete trailing spaces: '
-    if s:Switch_DelSpace_Trail == 1
+
+    if s:SwitchDelSpaceTrail == 1
+
         let l:space = 'YES'
-    elseif s:Switch_DelSpace_Trail == 0
+
+    elseif s:SwitchDelSpaceTrail == 0
+
         let l:space = 'NO'
+
     endif
 
     let l:cjk = 'Delete spaces between two CJK'
     let l:cjk .= ' characters: '
+
     let l:punc = 'Delete spaces between CJK'
     let l:punc .= ' punctuation mark'
+
     let l:tuation = 'and western character: '
-    if s:Switch_DelSpace_CJK == 1
+
+    if s:SwitchDelSpaceCJK == 1
+
         let l:western = 'YES'
-    elseif s:Switch_DelSpace_CJK == 0
+
+    elseif s:SwitchDelSpaceCJK == 0
+
         let l:western = 'NO'
+
     endif
 
     echo '=============================='
 
     echo l:format . l:options . "'"
     echo l:put . l:register
+
     echo '------------------------------'
+
     call <sid>EchoVars(
-    \'g:FormatOptions_Overwrite_Bullet')
+    \'g:FormatOptionsOverwrite_Bullet')
+
     call <sid>EchoVars(
-    \'g:Switch_FormatOptions_Put_Bullet')
+    \'g:SwitchFormatOptionsPut_Bullet')
+
     echo '=============================='
 
     echo l:text . l:width . "'"
+
     echo '------------------------------'
+
     call <sid>EchoVars('g:TextWidth_Bullet')
+
     echo '=============================='
 
     echo l:com . l:ments . "'"
+
     echo '------------------------------'
+
     call <sid>EchoVars(
-    \'g:Comments_Overwrite_Bullet')
-    call <sid>EchoVars('g:Comments_Add_Bullet')
+    \'g:CommentsOverwrite_Bullet')
+
+    call <sid>EchoVars('g:CommentsAdd_Bullet')
+
     echo '=============================='
 
     call <sid>EchoVars('&tabstop')
+
     call <sid>EchoVars('&softtabstop')
+
     call <sid>EchoVars('&shiftwidth')
+
     call <sid>EchoVars('&expandtab')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Pat_Search')
+    call <sid>EchoVars('s:PatSearch')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Cha_ComEnd')
+    call <sid>EchoVars('s:StrComEnd')
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Cha_ComEnd_Bullet')
+
+    call <sid>EchoVars('g:StrComEnd_Bullet')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Pat_ComEnd')
+    call <sid>EchoVars('s:PatComEnd')
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Pat_ComEnd_Bullet')
+
+    call <sid>EchoVars('g:PatComEnd_Bullet')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Cha_Mark')
+    call <sid>EchoVars('s:StrMark')
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Cha_Mark_Bullet')
+
+    call <sid>EchoVars('g:StrMark_Bullet')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Cha_Protect')
+    call <sid>EchoVars('s:StrProtect')
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Cha_Protect_Bullet')
+
+    call <sid>EchoVars('g:StrProtect_Bullet')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Pat_Protect_Final')
+    call <sid>EchoVars('s:PatProtectFinal')
+
     echo '------------------------------'
+
     call <sid>EchoVars(
-    \'g:Pat_Protect_Overwrite_Bullet')
+    \'g:PatProtectOverwrite_Bullet')
+
     call <sid>EchoVars(
-    \'g:Pat_Protect_Add_Bullet')
+    \'g:PatProtectAdd_Bullet')
+
     echo '=============================='
 
     echo l:del . l:space
+
     echo '------------------------------'
+
     call <sid>EchoVars(
-    \'g:Switch_DelSpace_Trail_Bullet')
+    \'g:SwitchDelSpaceTrail_Bullet')
+
     echo '=============================='
 
     echo l:cjk . l:western
+
     echo l:punc
     echo l:tuation . l:western
+
     echo '------------------------------'
+
     call <sid>EchoVars(
-    \'g:Switch_DelSpace_CJK_Bullet')
+    \'g:SwitchDelSpaceCJK_Bullet')
+
     echo '=============================='
 
     echo l:auto . l:command
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Switch_Auto_Bullet')
-    call <sid>EchoVars('g:Pat_File_Bullet')
+
+    call <sid>EchoVars('g:SwitchAuto_Bullet')
+
+    call <sid>EchoVars('g:PatFile_Bullet')
+
     echo '=============================='
 
 endfunction "}}}4
 
 function s:EchoBullets() "{{{4
 
-    call <sid>LoadAll_Bul_Str_Set(0)
-    call <sid>LoadAll_Bul_Str_Set(1)
+    call <sid>LoadAll(0)
+    call <sid>LoadAll(1)
 
     echo '=============================='
 
-    call <sid>EchoVars('s:Cha_List_Pre')
-    call <sid>EchoVars('s:Cha_List_Post')
-    call <sid>EchoVars('s:Cha_Para_Pre')
+    call <sid>EchoVars('s:StrListBefore')
+
+    call <sid>EchoVars('s:StrListAfter')
+
+    call <sid>EchoVars('s:StrParaBefore')
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Cha_List_Pre_Bullet')
-    call <sid>EchoVars('g:Cha_List_Post_Bullet')
-    call <sid>EchoVars('g:Cha_Para_Pre_Bullet')
+
+    call <sid>EchoVars('g:StrListBefore_Bullet')
+
+    call <sid>EchoVars('g:StrListAfter_Bullet')
+
+    call <sid>EchoVars('g:StrParaBefore_Bullet')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Pat_List_Pre')
-    call <sid>EchoVars('s:Pat_List_Post')
-    call <sid>EchoVars('s:Pat_Para_Pre')
-    call <sid>EchoVars('s:Pat_Para_Post')
+    call <sid>EchoVars('s:PatListBefore')
+
+    call <sid>EchoVars('s:PatListAfter')
+
+    call <sid>EchoVars('s:PatParaBefore')
+
+    call <sid>EchoVars('s:PatParaAfter')
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Pat_List_Pre_Bullet')
-    call <sid>EchoVars('g:Pat_List_Post_Bullet')
-    call <sid>EchoVars('g:Pat_Para_Pre_Bullet')
-    call <sid>EchoVars('g:Pat_Para_Post_Bullet')
+
+    call <sid>EchoVars('g:PatListBefore_Bullet')
+
+    call <sid>EchoVars('g:PatListAfter_Bullet')
+
+    call <sid>EchoVars('g:PatParaBefore_Bullet')
+
+    call <sid>EchoVars('g:PatParaAfter_Bullet')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Cha_SubList_Pre')
-    call <sid>EchoVars('s:Cha_SubList_Post')
-    call <sid>EchoVars('s:Cha_SubPara_Pre')
+    call <sid>EchoVars('s:StrSubListBefore')
+
+    call <sid>EchoVars('s:StrSubListAfter')
+
+    call <sid>EchoVars('s:StrSubParaBefore')
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Cha_SubList_Pre_Bullet')
+
     call <sid>EchoVars(
-    \'g:Cha_SubList_Post_Bullet')
-    call <sid>EchoVars('g:Cha_SubPara_Pre_Bullet')
+    \ 'g:StrSubListBefore_Bullet')
+
+    call <sid>EchoVars(
+    \'g:StrSubListAfter_Bullet')
+
+    call <sid>EchoVars(
+    \ 'g:StrSubParaBefore_Bullet')
+
     echo '=============================='
 
-    call <sid>EchoVars('s:Pat_SubList_Pre')
-    call <sid>EchoVars('s:Pat_SubList_Post')
-    call <sid>EchoVars('s:Pat_SubPara_Pre')
-    call <sid>EchoVars('s:Pat_SubPara_Post')
+    call <sid>EchoVars('s:PatSubListBefore')
+
+    call <sid>EchoVars('s:PatSubListAfter')
+
+    call <sid>EchoVars('s:PatSubParaBefore')
+
+    call <sid>EchoVars('s:PatSubParaAfter')
+
     echo '------------------------------'
-    call <sid>EchoVars('g:Pat_SubList_Pre_Bullet')
+
     call <sid>EchoVars(
-    \'g:Pat_SubList_Post_Bullet')
-    call <sid>EchoVars('g:Pat_SubPara_Pre_Bullet')
+    \ 'g:PatSubListBefore_Bullet')
+
     call <sid>EchoVars(
-    \'g:Pat_SubPara_Post_Bullet')
+    \'g:PatSubListAfter_Bullet')
+
+    call <sid>EchoVars(
+    \ 'g:PatSubParaBefore_Bullet')
+
+    call <sid>EchoVars(
+    \'g:PatSubParaAfter_Bullet')
+
     echo '=============================='
 
 endfunction "}}}4
@@ -915,29 +1292,41 @@ endfunction "}}}4
 autocmd VimEnter * call <sid>AutoCommand()
 
 if !exists(':BuPara0TW')
-    command BuPara0TW call <sid>SubsBullet_TW(0)
+
+    command BuPara0TW call <sid>SubsBulletTW(0)
+
 endif
 
 if !exists(':BuPara1NoTW')
+
     command BuPara1NoTW
-    \ call <sid>SubsBullet_NoTW(0)
+    \ call <sid>SubsBulletNoTW(0)
+
 endif
 
 if !exists(':BuWhole0TW')
-    command BuWhole0TW call <sid>SubsBullet_TW(1)
+
+    command BuWhole0TW call <sid>SubsBulletTW(1)
+
 endif
 
 if !exists(':BuWhole1NoTW')
+
     command BuWhole1NoTW
-    \ call <sid>SubsBullet_NoTW(1)
+    \ call <sid>SubsBulletNoTW(1)
+
 endif
 
 if !exists(':BuEcho0Set')
+
     command BuEcho0Set call <sid>EchoSettings()
+
 endif
 
 if !exists(':BuEcho1Bullet')
+
     command BuEcho1Bullet call <sid>EchoBullets()
+
 endif
 
  "}}}2
