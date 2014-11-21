@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 21, Fri | 21:53:44 | 2014
+" Last Update: Nov 21, Fri | 23:29:46 | 2014
 
 " summary "{{{2
 
@@ -205,15 +205,9 @@ endif
  "}}}3
 " autocommands "{{{3
 
-if !exists('g:SwitchAuto_Bullet')
+if !exists('g:AutoLoad_Bullet')
 
-    let g:SwitchAuto_Bullet = ''
-
-endif
-
-if !exists('g:PatFile_Bullet')
-
-    let g:PatFile_Bullet = ''
+    let g:AutoLoad_Bullet = ''
 
 endif
 
@@ -779,18 +773,15 @@ endfunction "}}}4
 
 function s:AutoCommand() "{{{4
 
-    if g:SwitchAuto_Bullet <= 0 ||
-    \ g:PatFile_Bullet == ''
+    if g:AutoLoad_Bullet == ''
 
         return
 
-    else
-
-        execute 'autocmd BufRead,BufNewFile ' .
-        \ g:PatFile_Bullet .
-        \ " call <sid>LoadAll(0)"
-
     endif
+
+    execute 'autocmd BufRead,BufNewFile' .
+    \ ' ' . g:AutoLoad_Bullet .
+    \ ' call <sid>LoadAll(0)'
 
 endfunction "}}}4
 
@@ -1031,8 +1022,7 @@ function s:EchoSettings() "{{{4
 
     let l:auto =  'Auto load bullet settings: '
 
-    if g:SwitchAuto_Bullet > 0
-    \ && g:PatFile_Bullet != ''
+    if g:AutoLoad_Bullet != ''
 
         let l:command = 'YES'
 
@@ -1189,9 +1179,7 @@ function s:EchoSettings() "{{{4
 
     echo '------------------------------'
 
-    call <sid>EchoVars('g:SwitchAuto_Bullet')
-
-    call <sid>EchoVars('g:PatFile_Bullet')
+    call <sid>EchoVars('g:AutoLoad_Bullet')
 
     echo '=============================='
 
