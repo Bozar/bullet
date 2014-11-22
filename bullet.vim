@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 21, Fri | 23:29:46 | 2014
+" Last Update: Nov 22, Sat | 12:48:57 | 2014
 
 " summary "{{{2
 
@@ -980,6 +980,62 @@ function s:SubsBulletTW(range) "{{{4
 
 endfunction "}}}4
 
+function s:SelectFuns(...) "{{{4
+
+    " paragraph, textwidth: no args
+
+    if !exists('a:1')
+
+        call <sid>SubsBulletTW(0)
+
+    " paragraph, textwidth
+
+    elseif a:1 == 'p'
+
+        call <sid>SubsBulletTW(0)
+
+    " paragraph, no textwidth
+
+    elseif a:1 == 'pn'
+
+        call <sid>SubsBulletNoTW(0)
+
+    " whole text, textwidth
+
+    elseif a:1 == 'w'
+
+        call <sid>SubsBulletTW(1)
+
+    " whole text, no textwidth
+
+    elseif a:1 == 'wn'
+
+        call <sid>SubsBulletNoTW(1)
+
+    " echo bullet variables
+
+    elseif a:1 == 'b'
+
+        call <sid>EchoBullets()
+
+    " echo settings
+
+    elseif a:1 == 's'
+
+        call <sid>EchoSettings()
+
+    elseif a:1 == 'h'
+
+        call <sid>EchoCommandArgs(0)
+
+    else
+
+        call <sid>EchoCommandArgs(1)
+
+    endif
+
+endfunction "}}}4
+
 function s:EchoSettings() "{{{4
 
     call <sid>LoadAll(0)
@@ -1273,47 +1329,58 @@ function s:EchoBullets() "{{{4
 
 endfunction "}}}4
 
+function s:EchoCommandArgs(help) "{{{4
+
+    if a:help == 1
+
+        echo '------------------------------'
+
+        echo 'ERROR: Wrong arguments!'
+
+    endif
+
+    echo '------------------------------'
+
+    echo 'Quick Reference:'
+
+    echo '------------------------------'
+
+    echo 'Format: Bullet [args]'
+    echo 'Example: Bullet p'
+
+    echo '------------------------------'
+
+    echo 'Paragraph, textwidth: [no args] || p'
+    echo 'Paragraph, no textwidth: pn'
+
+    echo '------------------------------'
+
+    echo 'Whole text, textwidth: w'
+    echo 'Whole text, no textwidth: wn'
+
+    echo '------------------------------'
+
+    echo 'Echo bullet variables: b'
+    echo 'Echo settings: s'
+
+    echo '------------------------------'
+
+    echo 'Show help: h'
+
+    echo '------------------------------'
+
+endfunction "}}}4
+
  "}}}3
  "}}}2
 " commands "{{{2
 
 autocmd VimEnter * call <sid>AutoCommand()
 
-if !exists(':BuPara0TW')
+if !exists(':Bullet')
 
-    command BuPara0TW call <sid>SubsBulletTW(0)
-
-endif
-
-if !exists(':BuPara1NoTW')
-
-    command BuPara1NoTW
-    \ call <sid>SubsBulletNoTW(0)
-
-endif
-
-if !exists(':BuWhole0TW')
-
-    command BuWhole0TW call <sid>SubsBulletTW(1)
-
-endif
-
-if !exists(':BuWhole1NoTW')
-
-    command BuWhole1NoTW
-    \ call <sid>SubsBulletNoTW(1)
-
-endif
-
-if !exists(':BuEcho0Set')
-
-    command BuEcho0Set call <sid>EchoSettings()
-
-endif
-
-if !exists(':BuEcho1Bullet')
-
-    command BuEcho1Bullet call <sid>EchoBullets()
+    command -nargs=? Bullet
+    \ call <sid>SelectFuns(<f-args>)
 
 endif
 
