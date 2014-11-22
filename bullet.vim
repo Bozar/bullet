@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 22, Sat | 12:48:57 | 2014
+" Last Update: Nov 23, Sun | 07:40:55 | 2014
 
 " summary "{{{2
 
@@ -699,14 +699,19 @@ function s:DelBullet(when) "{{{4
 
         " only bullet
 
-        execute "'j,'ks/\\(" .
-        \ s:PatSearch . '\)\(' .
-        \ s:PatComEnd . '\|\s*\)$/' .
+        call moveCursor#SetLineRange('J','K')
+
+        execute g:LineRange_moveCursor .
+        \ 's/\(' . s:PatSearch . '\)' .
+        \ '\(' . s:PatComEnd . '\|\s*\)$/' .
         \ s:StrMark . '/e'
 
         " only s:PatComEnd
 
-        execute "'j,'ks/^" . s:PatComEnd . '$/'
+        call moveCursor#SetLineRange('J','K')
+
+        execute g:LineRange_moveCursor .
+        \ 's/^' . s:PatComEnd . '$/'
         \ s:StrMark . '/e'
 
         " s:PatComEnd at the end of line
@@ -714,28 +719,35 @@ function s:DelBullet(when) "{{{4
         let l:pattern = '\(' . s:PatSearch .
         \ '\).*' . s:PatComEnd . '$'
 
-        call moveCursor#GotoColumn1("'j",'str')
+        call moveCursor#GotoColumn1(
+        \ g:LineNrJ_moveCursor,'num')
 
-        if search(l:pattern,'c',line("'k")) != 0
+        if search(
+        \ l:pattern,'c', g:LineNrK_moveCursor)
+        \ != 0
 
-            execute "'j,'kg/" . s:PatSearch .
-            \ '/s/' . s:PatComEnd . '$//'
+            execute g:LineRange_moveCursor .
+            \ 'g/' . s:PatSearch . '/' .
+            \ 's/' . s:PatComEnd . '$//'
 
         endif
 
     endif
 
     " delete marked lines after substitution
-    " in case line 'j/'k contains mark
+    " in case the first/last line contains mark
 
     if a:when == 1
 
-        call moveCursor#GotoColumn1("'j",'str')
+        call moveCursor#GotoColumn1(
+        \ g:LineNrJ_moveCursor,'num')
 
-        if search(s:StrMark,'c',line("'k")) != 0
+        if search(s:StrMark,'c',
+        \ g:LineNrK_moveCursor) != 0
 
-            execute "'j,'kg/" . s:StrMark .
-            \ '/delete'
+            call moveCursor#SetLineRange('J','K')
+            execute g:LineRange_moveCursor .
+            \ 'g/' . s:StrMark . '/delete'
 
         endif
 
@@ -749,11 +761,13 @@ function s:SubsBulletCore() "{{{4
     " substitute '=' with '*' and indent 1 tab
     " substitute '-' with '' and indent 1 tab
 
-    execute "'j,'ks/" .
+    call moveCursor#SetLineRange('J','K')
+
+    execute g:LineRange_moveCursor . 's/' .
     \ s:PatListBefore .  '/' .
     \ s:PatListAfter . '/e'
 
-    execute "'j,'ks/" .
+    execute g:LineRange_moveCursor . 's/' .
     \ s:PatParaBefore . '/' .
     \ s:PatParaAfter . '/e'
 
@@ -761,11 +775,11 @@ function s:SubsBulletCore() "{{{4
     " substitute '==' with '+' and indent 2 tabs
     " substitute '--' with '' and indent 2 tabs
 
-    execute "'j,'ks/" .
+    execute g:LineRange_moveCursor . 's/' .
     \ s:PatSubListBefore . '/' .
     \ s:PatSubListAfter . '/e'
 
-    execute "'j,'ks/" .
+    execute g:LineRange_moveCursor . 's/' .
     \ s:PatSubParaBefore . '/' .
     \ s:PatSubParaAfter . '/e'
 
@@ -808,19 +822,19 @@ function s:SubsBulletNoTW(range) "{{{4
 
     endif
 
-    " set mark j & k
+    " set format range
 
     " paragraph
 
     if a:range == 0
 
-        call moveCursor#SetMarkJKPara()
+        call moveCursor#SetLineJKPara()
 
     " whole text
 
     elseif a:range == 1
 
-        call moveCursor#SetMarkJKWhole()
+        call moveCursor#SetLineJKWhole()
 
     endif
 
@@ -867,25 +881,25 @@ function s:SubsBulletTW(range) "{{{4
 
     while 1
 
-        " set mark j & k
+        " set format range
+
         " paragraph
 
         if a:range == 0
 
-            call moveCursor#SetMarkJKPara()
+            call moveCursor#SetLineJKPara()
 
         " whole text
 
         elseif a:range == 1
 
-            call moveCursor#SetMarkJKWhole()
+            call moveCursor#SetLineJKWhole()
 
         endif
 
-        " substitute bullets once
-        " set marks twice (before and after
-        " substitution), in case marked lines 'j
-        " and 'k are deleted
+        " substitute bullets once set marks twice
+        " (before and after substitution), in case
+        " the first/last line is deleted
 
         if l:i > 0
 
@@ -911,12 +925,17 @@ function s:SubsBulletTW(range) "{{{4
 
     " protect lines
 
-    call moveCursor#GotoColumn1("'j",'str')
+    call moveCursor#GotoColumn1(
+    \ g:LineNrJ_moveCursor,'num')
 
-    if search(s:PatProtectFinal,'c',line("'k"))
+    if search(s:PatProtectFinal,'c',
+    \ g:LineNrK_moveCursor)
 
-        execute "'j,'kg/" . s:PatProtectFinal .
-        \ '/s/^/' . s:StrProtect . '/'
+        call moveCursor#SetLineRange('J','K')
+
+        execute g:LineRange_moveCursor . 'g/' .
+        \ s:PatProtectFinal . '/' .
+        \ 's/^/' . s:StrProtect . '/'
 
     endif
 
@@ -944,7 +963,8 @@ function s:SubsBulletTW(range) "{{{4
 
         if a:range == 0
 
-            execute "normal 'jgqip"
+            execute g:LineNrJ_moveCursor
+            execute "normal gqip"
 
         elseif a:range == 1
 
@@ -956,15 +976,18 @@ function s:SubsBulletTW(range) "{{{4
 
         if a:range == 0
 
-            call moveCursor#SetMarkJKPara()
+            call moveCursor#SetLineJKPara()
 
         elseif a:range == 1
 
-            call moveCursor#SetMarkJKWhole()
+            call moveCursor#SetLineJKWhole()
 
         endif
 
-        execute "'j,'ks/^" . s:StrProtect . '//e'
+        call moveCursor#SetLineRange('J','K')
+
+        execute g:LineRange_moveCursor . 's/' .
+        \ '^' . s:StrProtect . '//e'
 
         let l:j = l:j +1
 
