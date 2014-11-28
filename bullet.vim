@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 28, Fri | 18:12:18 | 2014
+" Last Update: Nov 28, Fri | 19:09:53 | 2014
 
 " summary "{{{2
 
@@ -716,7 +716,7 @@ function s:DelBullet(when) "{{{4
         \ '\).*' . s:PatComEnd . '$'
 
         call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''),'num')
+        \ moveCursor#TakeLineNr('J',''))
 
         if search(l:pattern,'c',
         \ moveCursor#TakeLineNr('K',''))
@@ -737,7 +737,7 @@ function s:DelBullet(when) "{{{4
     if a:when == 1
 
         call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''),'num')
+        \ moveCursor#TakeLineNr('J',''))
 
         if search(s:StrMark,'c',
         \ moveCursor#TakeLineNr('K','')) != 0
@@ -925,7 +925,7 @@ function s:SubsBulletTW(range) "{{{4
     " protect lines
 
     call moveCursor#GotoColumn1(
-    \ moveCursor#TakeLineNr('J',''),'num')
+    \ moveCursor#TakeLineNr('J',''))
 
     if search(s:PatProtectFinal,'c',
     \ moveCursor#TakeLineNr('K',''))
