@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 28, Fri | 17:51:08 | 2014
+" Last Update: Nov 28, Fri | 18:12:18 | 2014
 
 " summary "{{{2
 
@@ -716,10 +716,10 @@ function s:DelBullet(when) "{{{4
         \ '\).*' . s:PatComEnd . '$'
 
         call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J'),'num')
+        \ moveCursor#TakeLineNr('J',''),'num')
 
         if search(l:pattern,'c',
-        \ moveCursor#TakeLineNr('K'))
+        \ moveCursor#TakeLineNr('K',''))
         \ != 0
 
             execute
@@ -737,10 +737,10 @@ function s:DelBullet(when) "{{{4
     if a:when == 1
 
         call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J'),'num')
+        \ moveCursor#TakeLineNr('J',''),'num')
 
         if search(s:StrMark,'c',
-        \ moveCursor#TakeLineNr('K')) != 0
+        \ moveCursor#TakeLineNr('K','')) != 0
 
             execute
             \ moveCursor#TakeLineNr('J','K') .
@@ -925,10 +925,10 @@ function s:SubsBulletTW(range) "{{{4
     " protect lines
 
     call moveCursor#GotoColumn1(
-    \ moveCursor#TakeLineNr('J'),'num')
+    \ moveCursor#TakeLineNr('J',''),'num')
 
     if search(s:PatProtectFinal,'c',
-    \ moveCursor#TakeLineNr('K'))
+    \ moveCursor#TakeLineNr('K',''))
 
         execute moveCursor#TakeLineNr('J','K') .
         \ 'g/' .
@@ -961,7 +961,7 @@ function s:SubsBulletTW(range) "{{{4
 
         if a:range == 0
 
-            execute moveCursor#TakeLineNr('J')
+            execute moveCursor#TakeLineNr('J','')
             execute "normal gqip"
 
         elseif a:range == 1
