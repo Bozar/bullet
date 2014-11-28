@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 23, Sun | 07:40:55 | 2014
+" Last Update: Nov 28, Fri | 17:51:08 | 2014
 
 " summary "{{{2
 
@@ -699,18 +699,14 @@ function s:DelBullet(when) "{{{4
 
         " only bullet
 
-        call moveCursor#SetLineRange('J','K')
-
-        execute g:LineRange_moveCursor .
+        execute moveCursor#TakeLineNr('J','K') .
         \ 's/\(' . s:PatSearch . '\)' .
         \ '\(' . s:PatComEnd . '\|\s*\)$/' .
         \ s:StrMark . '/e'
 
         " only s:PatComEnd
 
-        call moveCursor#SetLineRange('J','K')
-
-        execute g:LineRange_moveCursor .
+        execute moveCursor#TakeLineNr('J','K') .
         \ 's/^' . s:PatComEnd . '$/'
         \ s:StrMark . '/e'
 
@@ -720,13 +716,14 @@ function s:DelBullet(when) "{{{4
         \ '\).*' . s:PatComEnd . '$'
 
         call moveCursor#GotoColumn1(
-        \ g:LineNrJ_moveCursor,'num')
+        \ moveCursor#TakeLineNr('J'),'num')
 
-        if search(
-        \ l:pattern,'c', g:LineNrK_moveCursor)
+        if search(l:pattern,'c',
+        \ moveCursor#TakeLineNr('K'))
         \ != 0
 
-            execute g:LineRange_moveCursor .
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
             \ 'g/' . s:PatSearch . '/' .
             \ 's/' . s:PatComEnd . '$//'
 
@@ -740,13 +737,13 @@ function s:DelBullet(when) "{{{4
     if a:when == 1
 
         call moveCursor#GotoColumn1(
-        \ g:LineNrJ_moveCursor,'num')
+        \ moveCursor#TakeLineNr('J'),'num')
 
         if search(s:StrMark,'c',
-        \ g:LineNrK_moveCursor) != 0
+        \ moveCursor#TakeLineNr('K')) != 0
 
-            call moveCursor#SetLineRange('J','K')
-            execute g:LineRange_moveCursor .
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
             \ 'g/' . s:StrMark . '/delete'
 
         endif
@@ -761,13 +758,13 @@ function s:SubsBulletCore() "{{{4
     " substitute '=' with '*' and indent 1 tab
     " substitute '-' with '' and indent 1 tab
 
-    call moveCursor#SetLineRange('J','K')
-
-    execute g:LineRange_moveCursor . 's/' .
+    execute moveCursor#TakeLineNr('J','K') .
+    \ 's/' .
     \ s:PatListBefore .  '/' .
     \ s:PatListAfter . '/e'
 
-    execute g:LineRange_moveCursor . 's/' .
+    execute moveCursor#TakeLineNr('J','K') .
+    \ 's/' .
     \ s:PatParaBefore . '/' .
     \ s:PatParaAfter . '/e'
 
@@ -775,11 +772,13 @@ function s:SubsBulletCore() "{{{4
     " substitute '==' with '+' and indent 2 tabs
     " substitute '--' with '' and indent 2 tabs
 
-    execute g:LineRange_moveCursor . 's/' .
+    execute moveCursor#TakeLineNr('J','K') .
+    \ 's/' .
     \ s:PatSubListBefore . '/' .
     \ s:PatSubListAfter . '/e'
 
-    execute g:LineRange_moveCursor . 's/' .
+    execute moveCursor#TakeLineNr('J','K') .
+    \ 's/' .
     \ s:PatSubParaBefore . '/' .
     \ s:PatSubParaAfter . '/e'
 
@@ -926,14 +925,13 @@ function s:SubsBulletTW(range) "{{{4
     " protect lines
 
     call moveCursor#GotoColumn1(
-    \ g:LineNrJ_moveCursor,'num')
+    \ moveCursor#TakeLineNr('J'),'num')
 
     if search(s:PatProtectFinal,'c',
-    \ g:LineNrK_moveCursor)
+    \ moveCursor#TakeLineNr('K'))
 
-        call moveCursor#SetLineRange('J','K')
-
-        execute g:LineRange_moveCursor . 'g/' .
+        execute moveCursor#TakeLineNr('J','K') .
+        \ 'g/' .
         \ s:PatProtectFinal . '/' .
         \ 's/^/' . s:StrProtect . '/'
 
@@ -963,7 +961,7 @@ function s:SubsBulletTW(range) "{{{4
 
         if a:range == 0
 
-            execute g:LineNrJ_moveCursor
+            execute moveCursor#TakeLineNr('J')
             execute "normal gqip"
 
         elseif a:range == 1
@@ -984,10 +982,8 @@ function s:SubsBulletTW(range) "{{{4
 
         endif
 
-        call moveCursor#SetLineRange('J','K')
-
-        execute g:LineRange_moveCursor . 's/' .
-        \ '^' . s:StrProtect . '//e'
+        execute moveCursor#TakeLineNr('J','K') . 
+        \ 's/^' . s:StrProtect . '//e'
 
         let l:j = l:j +1
 
