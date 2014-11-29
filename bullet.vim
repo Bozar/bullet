@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 28, Fri | 19:09:53 | 2014
+" Last Update: Nov 29, Sat | 22:41:30 | 2014
 
 " summary "{{{2
 
@@ -966,7 +966,46 @@ function s:SubsBulletTW(range) "{{{4
 
         elseif a:range == 1
 
-            execute "normal gggqG"
+            1
+
+            let l:k = 0
+
+            while l:k < 2
+
+                exe 'normal gqip'
+
+                '}
+                +1
+
+                if line('.') == line('$')
+
+                    let l:k = l:k + 1
+
+                endif
+
+            endwhile
+
+            " execute 'normal gggqG'
+
+            " use 'gqip' instead of 'gqG'
+
+            "   indent line 1
+            " DO NOT indent line 2
+            "
+            " * text 1
+            " * text 2
+            "
+            "   indent line 3
+            " DO NOT indent line 4
+
+            " let &comments = 's:*,m:*,ex:*'
+            " let &formatoptions = 'tq2'
+            " gqG
+
+            " if there are at least two continous
+            " lines beginning with stars(*), 'gqG'
+            " will NOT indent 'line 2', but it
+            " will indent 'line 4'
 
         endif
 
@@ -982,7 +1021,7 @@ function s:SubsBulletTW(range) "{{{4
 
         endif
 
-        execute moveCursor#TakeLineNr('J','K') . 
+        execute moveCursor#TakeLineNr('J','K') .
         \ 's/^' . s:StrProtect . '//e'
 
         let l:j = l:j +1
