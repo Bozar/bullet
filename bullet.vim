@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 29, Sat | 22:41:30 | 2014
+" Last Update: Nov 30, Sun | 11:28:52 | 2014
 
 " summary "{{{2
 
@@ -697,30 +697,45 @@ function s:DelBullet(when) "{{{4
 
     if a:when == 0
 
-        " only bullet
-
-        execute moveCursor#TakeLineNr('J','K') .
-        \ 's/\(' . s:PatSearch . '\)' .
-        \ '\(' . s:PatComEnd . '\|\s*\)$/' .
-        \ s:StrMark . '/e'
-
-        " only s:PatComEnd
-
-        execute moveCursor#TakeLineNr('J','K') .
-        \ 's/^' . s:PatComEnd . '$/'
-        \ s:StrMark . '/e'
-
-        " s:PatComEnd at the end of line
-
-        let l:pattern = '\(' . s:PatSearch .
-        \ '\).*' . s:PatComEnd . '$'
-
         call moveCursor#GotoColumn1(
         \ moveCursor#TakeLineNr('J',''))
 
-        if search(l:pattern,'c',
+        " only bullet
+
+        let l:bullet =
+        \ '\(' . s:PatSearch . '\)' .
+        \ '\(' . s:PatComEnd . '\|\s*\)$'
+
+        if search(l:bullet,'cn',
         \ moveCursor#TakeLineNr('K',''))
-        \ != 0
+
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
+            \ 's/' . l:bullet . '/' . s:StrMark .
+            \ '/'
+
+        endif
+
+        " only s:PatComEnd
+
+        let l:end = '^' . s:PatComEnd . '$/'
+
+        if search(l:end,'cn',
+        \ moveCursor#TakeLineNr('K',''))
+
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
+            \ 's/' . l:end . '/' . s:StrMark . '/'
+
+        endif
+
+        " s:PatComEnd at the end of line
+
+        let l:eol = '\(' . s:PatSearch .
+        \ '\).*' . s:PatComEnd . '$'
+
+        if search(l:eol,'cn',
+        \ moveCursor#TakeLineNr('K',''))
 
             execute
             \ moveCursor#TakeLineNr('J','K') .
@@ -754,33 +769,80 @@ endfunction "}}}4
 
 function s:SubsBulletCore() "{{{4
 
-    " list
-    " substitute '=' with '*' and indent 1 tab
-    " substitute '-' with '' and indent 1 tab
+    let l:i = 0
 
-    execute moveCursor#TakeLineNr('J','K') .
-    \ 's/' .
-    \ s:PatListBefore .  '/' .
-    \ s:PatListAfter . '/e'
+    while l:i < 4
 
-    execute moveCursor#TakeLineNr('J','K') .
-    \ 's/' .
-    \ s:PatParaBefore . '/' .
-    \ s:PatParaAfter . '/e'
+        call moveCursor#GotoColumn1(
+        \ moveCursor#TakeLineNr('J',''))
 
-    " sub list
-    " substitute '==' with '+' and indent 2 tabs
-    " substitute '--' with '' and indent 2 tabs
+        " list
 
-    execute moveCursor#TakeLineNr('J','K') .
-    \ 's/' .
-    \ s:PatSubListBefore . '/' .
-    \ s:PatSubListAfter . '/e'
+        " substitute '=' with '*'
+        " indent 4 spaecs
 
-    execute moveCursor#TakeLineNr('J','K') .
-    \ 's/' .
-    \ s:PatSubParaBefore . '/' .
-    \ s:PatSubParaAfter . '/e'
+        " substitute '-' with ''
+        " indent 4 spaecs
+
+        if l:i == 0 && 
+        \ search(s:PatListBefore,'c',
+        \ moveCursor#TakeLineNr('K',''))
+
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
+            \ 's/' .
+            \ s:PatListBefore .  '/' .
+            \ s:PatListAfter . '/'
+
+        endif
+
+        if l:i == 1 && 
+        \ search(s:PatParaBefore,'c',
+        \ moveCursor#TakeLineNr('K',''))
+
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
+            \ 's/' .
+            \ s:PatParaBefore . '/' .
+            \ s:PatParaAfter . '/'
+
+        endif
+
+        " sub list
+
+        " substitute '==' with '+'
+        " indent 8 spaces
+
+        " substitute '--' with ''
+        " indent 8 spaces
+
+        if l:i == 2 && 
+        \ search(s:PatSubListBefore,'c',
+        \ moveCursor#TakeLineNr('K',''))
+
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
+            \ 's/' .
+            \ s:PatSubListBefore . '/' .
+            \ s:PatSubListAfter . '/'
+
+        endif
+
+        if l:i == 3 && 
+        \ search(s:PatSubParaBefore,'c',
+        \ moveCursor#TakeLineNr('K',''))
+
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
+            \ 's/' .
+            \ s:PatSubParaBefore . '/' .
+            \ s:PatSubParaAfter . '/'
+
+        endif
+
+        let l:i = l:i + 1
+
+    endwhile
 
 endfunction "}}}4
 
@@ -896,9 +958,12 @@ function s:SubsBulletTW(range) "{{{4
 
         endif
 
-        " substitute bullets once set marks twice
-        " (before and after substitution), in case
-        " the first/last line is deleted
+        " substitute bullets once
+
+        " set marks twice (before and after
+        " substitution)
+
+        " in case the first/last line is deleted
 
         if l:i > 0
 
@@ -942,6 +1007,7 @@ function s:SubsBulletTW(range) "{{{4
     while 1
 
         " delete spaces between two CJK characters
+
         " delete spaces between CJK punctuation
         " mark and Western character
 
@@ -1021,8 +1087,17 @@ function s:SubsBulletTW(range) "{{{4
 
         endif
 
-        execute moveCursor#TakeLineNr('J','K') .
-        \ 's/^' . s:StrProtect . '//e'
+        call moveCursor#GotoColumn1(
+        \ moveCursor#TakeLineNr('J',''))
+
+        if search(s:StrProtect,'c',
+        \ moveCursor#TakeLineNr('K',''))
+
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
+            \ 's/^' . s:StrProtect . '//'
+
+        endif
 
         let l:j = l:j +1
 
