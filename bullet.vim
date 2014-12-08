@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Nov 30, Sun | 11:28:52 | 2014
+" Last Update: Dec 08, Mon | 15:23:38 | 2014
 
 " summary "{{{2
 
@@ -1115,11 +1115,11 @@ endfunction "}}}4
 
 function s:SelectFuns(...) "{{{4
 
-    " paragraph, textwidth: no args
+    " report error and show help
 
     if !exists('a:1')
 
-        call <sid>SubsBulletTW(0)
+        call <sid>EchoCommandArgs(1)
 
     " paragraph, textwidth
 
@@ -1157,9 +1157,13 @@ function s:SelectFuns(...) "{{{4
 
         call <sid>EchoSettings()
 
+    " show help
+
     elseif a:1 == 'h'
 
         call <sid>EchoCommandArgs(0)
+
+    " report error and show help
 
     else
 
@@ -1483,7 +1487,7 @@ function s:EchoCommandArgs(help) "{{{4
 
     echo '------------------------------'
 
-    echo 'Paragraph, textwidth: [no args] || p'
+    echo 'Paragraph, textwidth: p'
     echo 'Paragraph, no textwidth: pn'
 
     echo '------------------------------'
