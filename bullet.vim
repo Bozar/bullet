@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Dec 08, Mon | 15:23:38 | 2014
+" Last Update: Dec 08, Mon | 15:30:43 | 2014
 
 " summary "{{{2
 
@@ -1115,11 +1115,11 @@ endfunction "}}}4
 
 function s:SelectFuns(...) "{{{4
 
-    " report error and show help
+    " show help
 
     if !exists('a:1')
 
-        call <sid>EchoCommandArgs(1)
+        call <sid>EchoCommandArgs(0)
 
     " paragraph, textwidth
 
