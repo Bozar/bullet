@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Dec 08, Mon | 15:30:43 | 2014
+" Last Update: Dec 08, Mon | 16:54:15 | 2014
 
 " summary "{{{2
 
@@ -718,6 +718,9 @@ function s:DelBullet(when) "{{{4
 
         " only s:PatComEnd
 
+        call moveCursor#GotoColumn1(
+        \ moveCursor#TakeLineNr('J',''))
+
         let l:end = '^' . s:PatComEnd . '$/'
 
         if search(l:end,'cn',
@@ -730,6 +733,9 @@ function s:DelBullet(when) "{{{4
         endif
 
         " s:PatComEnd at the end of line
+
+        call moveCursor#GotoColumn1(
+        \ moveCursor#TakeLineNr('J',''))
 
         let l:eol = '\(' . s:PatSearch .
         \ '\).*' . s:PatComEnd . '$'
