@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Dec 08, Mon | 16:54:15 | 2014
+" Last Update: Dec 10, Wed | 16:22:55 | 2014
 
 " summary "{{{2
 
@@ -1096,7 +1096,7 @@ function s:SubsBulletTW(range) "{{{4
         call moveCursor#GotoColumn1(
         \ moveCursor#TakeLineNr('J',''))
 
-        if search(s:StrProtect,'c',
+        if search('^' . s:StrProtect,'c',
         \ moveCursor#TakeLineNr('K',''))
 
             execute
