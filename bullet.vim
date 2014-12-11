@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Dec 10, Wed | 16:22:55 | 2014
+" Last Update: Dec 11, Thu | 11:40:13 | 2014
 
 " summary "{{{2
 
@@ -919,7 +919,7 @@ function s:SubsBulletNoTW(range) "{{{4
 
     " delete spaces between two CJK characters
     " delete spaces between CJK punctuation mark
-    " and Western character
+    " and '\w' character
 
     if s:SwitchDelSpaceCJK == 1
 
@@ -1015,7 +1015,7 @@ function s:SubsBulletTW(range) "{{{4
         " delete spaces between two CJK characters
 
         " delete spaces between CJK punctuation
-        " mark and Western character
+        " mark and '\w' character
 
         if s:SwitchDelSpaceCJK == 1
 
@@ -1244,20 +1244,22 @@ function s:EchoSettings() "{{{4
     endif
 
     let l:cjk = 'Delete spaces between two CJK'
-    let l:cjk .= ' characters: '
+    let l:cjk .= ' characters:'
+    let l:cjk .= ' '
 
     let l:punc = 'Delete spaces between CJK'
     let l:punc .= ' punctuation mark'
 
-    let l:tuation = 'and western character: '
+    let l:tuation = "and '\\w' character:"
+    let l:tuation .= ' '
 
     if s:SwitchDelSpaceCJK == 1
 
-        let l:western = 'YES'
+        let l:wordCha = 'YES'
 
     elseif s:SwitchDelSpaceCJK == 0
 
-        let l:western = 'NO'
+        let l:wordCha = 'NO'
 
     endif
 
@@ -1362,10 +1364,10 @@ function s:EchoSettings() "{{{4
 
     echo '=============================='
 
-    echo l:cjk . l:western
+    echo l:cjk . l:wordCha
 
     echo l:punc
-    echo l:tuation . l:western
+    echo l:tuation . l:wordCha
 
     echo '------------------------------'
 
