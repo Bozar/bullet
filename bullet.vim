@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Dec 11, Thu | 11:40:13 | 2014
+" Last Update: Dec 11, Thu | 16:13:25 | 2014
 
 " summary "{{{2
 
@@ -473,7 +473,7 @@ function s:LoadStrings() "{{{4
 
     else
 
-        let s:PatComEnd = '\s*\/\s*'
+        let s:PatComEnd = '\s*\/'
 
     endif
 
@@ -697,14 +697,31 @@ function s:DelBullet(when) "{{{4
 
     if a:when == 0
 
+        " delete character, s:PatComEnd at the end
+        " of line
+
         call moveCursor#GotoColumn1(
         \ moveCursor#TakeLineNr('J',''))
 
-        " only bullet
+        let l:eol = '\(' . s:PatSearch . '\).*'
+        let l:eol .= s:PatComEnd . '$'
 
-        let l:bullet =
-        \ '\(' . s:PatSearch . '\)' .
-        \ '\(' . s:PatComEnd . '\|\s*\)$'
+        if search(l:eol,'cn',
+        \ moveCursor#TakeLineNr('K',''))
+
+            execute
+            \ moveCursor#TakeLineNr('J','K') .
+            \ 'g/' . l:eol . '/' .
+            \ 's/' . s:PatComEnd . '//'
+
+        endif
+
+        " delete line, only bullet
+
+        call moveCursor#GotoColumn1(
+        \ moveCursor#TakeLineNr('J',''))
+
+        let l:bullet = '\(' . s:PatSearch . '\)$'
 
         if search(l:bullet,'cn',
         \ moveCursor#TakeLineNr('K',''))
@@ -716,37 +733,19 @@ function s:DelBullet(when) "{{{4
 
         endif
 
-        " only s:PatComEnd
+        " delete line, only s:PatComEnd
 
         call moveCursor#GotoColumn1(
         \ moveCursor#TakeLineNr('J',''))
 
-        let l:end = '^' . s:PatComEnd . '$/'
+        let l:com = '^' . s:PatComEnd . '$'
 
-        if search(l:end,'cn',
+        if search(l:com,'cn',
         \ moveCursor#TakeLineNr('K',''))
 
             execute
             \ moveCursor#TakeLineNr('J','K') .
-            \ 's/' . l:end . '/' . s:StrMark . '/'
-
-        endif
-
-        " s:PatComEnd at the end of line
-
-        call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''))
-
-        let l:eol = '\(' . s:PatSearch .
-        \ '\).*' . s:PatComEnd . '$'
-
-        if search(l:eol,'cn',
-        \ moveCursor#TakeLineNr('K',''))
-
-            execute
-            \ moveCursor#TakeLineNr('J','K') .
-            \ 'g/' . s:PatSearch . '/' .
-            \ 's/' . s:PatComEnd . '$//'
+            \ 's/' . l:com . '/' . s:StrMark . '/'
 
         endif
 
