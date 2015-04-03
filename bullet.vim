@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Dec 11, Thu | 16:13:25 | 2014
+" Last Update: Apr 03, Fri | 15:26:56 | 2015
 
 " summary "{{{2
 
@@ -700,8 +700,8 @@ function s:DelBullet(when) "{{{4
         " delete character, s:PatComEnd at the end
         " of line
 
-        call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''))
+        execute moveCursor#TakeLineNr('J','')
+        execute 'normal! 0'
 
         let l:eol = '\(' . s:PatSearch . '\).*'
         let l:eol .= s:PatComEnd . '$'
@@ -718,8 +718,8 @@ function s:DelBullet(when) "{{{4
 
         " delete line, only bullet
 
-        call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''))
+        execute moveCursor#TakeLineNr('J','')
+        execute 'normal! 0'
 
         let l:bullet = '\(' . s:PatSearch . '\)$'
 
@@ -735,8 +735,8 @@ function s:DelBullet(when) "{{{4
 
         " delete line, only s:PatComEnd
 
-        call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''))
+        execute moveCursor#TakeLineNr('J','')
+        execute 'normal! 0'
 
         let l:com = '^' . s:PatComEnd . '$'
 
@@ -756,8 +756,8 @@ function s:DelBullet(when) "{{{4
 
     if a:when == 1
 
-        call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''))
+        execute moveCursor#TakeLineNr('J','')
+        execute 'normal! 0'
 
         if search(s:StrMark,'c',
         \ moveCursor#TakeLineNr('K','')) != 0
@@ -778,8 +778,8 @@ function s:SubsBulletCore() "{{{4
 
     while l:i < 4
 
-        call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''))
+        execute moveCursor#TakeLineNr('J','')
+        execute 'normal! 0'
 
         " list
 
@@ -994,8 +994,8 @@ function s:SubsBulletTW(range) "{{{4
 
     " protect lines
 
-    call moveCursor#GotoColumn1(
-    \ moveCursor#TakeLineNr('J',''))
+    execute moveCursor#TakeLineNr('J','')
+    execute 'normal! 0'
 
     if search(s:PatProtectFinal,'c',
     \ moveCursor#TakeLineNr('K',''))
@@ -1092,8 +1092,8 @@ function s:SubsBulletTW(range) "{{{4
 
         endif
 
-        call moveCursor#GotoColumn1(
-        \ moveCursor#TakeLineNr('J',''))
+        execute moveCursor#TakeLineNr('J','')
+        execute 'normal! 0'
 
         if search('^' . s:StrProtect,'c',
         \ moveCursor#TakeLineNr('K',''))
