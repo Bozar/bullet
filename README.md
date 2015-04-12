@@ -2,7 +2,7 @@
 
 ## Requirement
 
-    *   autoload/moveCursor.vim
+*   autoload/moveCursor.vim
 
 ## Text
 
