@@ -1,5 +1,9 @@
 # User manual for bullet.vim
 
+## Requirement
+
+    *   autoload/moveCursor.vim
+
 ## Text
 
 ### Note for Newbies
