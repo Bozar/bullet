@@ -1,6 +1,6 @@
 " bullet.vim "{{{1
 
-" Last Update: Apr 03, Fri | 15:26:56 | 2015
+" Last Update: Apr 22, Wed | 17:57:31 | 2015
 
 " summary "{{{2
 
@@ -578,7 +578,7 @@ function s:LoadSettings(when) "{{{4
 
         else
 
-            let &l:formatoptions = 'tcqro2mB1j'
+            let &l:formatoptions = 'tcqromB1j'
 
         endif
 
